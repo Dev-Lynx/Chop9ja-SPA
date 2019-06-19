@@ -16,13 +16,26 @@ const theme = {
 		},
 		font: {
 			family: "HelveticaNeue"
-		}
+		},
+	},
+	select: {
+		options: {
+			text: {
+				color: "black"
+			},
+			control: {
+				extend: {
+					border: "solid 10px black !important",
+				},
+			},
+		},
+
 	},
 	text: {
 		extend: {
 			textDecoration: "none !important"
-		}
-	}
+		},
+	},
 };
 
 export default theme;

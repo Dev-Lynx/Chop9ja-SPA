@@ -29,7 +29,7 @@ const LandingPageComponent = () => {
 						}
 					}
 				>
-					<Heading>
+					<Heading margin="medium">
 						Welcome what do you want to do?
 					</Heading>
 
@@ -50,7 +50,7 @@ const LandingPageComponent = () => {
 					</Text>
 				</Box>
 			</HeaderHeight>
-			<Box>
+			<Box margin="medium">
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.

@@ -3,7 +3,7 @@ import { Box, Heading, Button, ResponsiveContext, TextInput, Text } from 'gromme
 // @ts-ignore
 import { defaultProps } from "grommet";
 import AppBar from '../../Components/AppBar/AppBar';
-import { FormClose } from 'grommet-icons';
+import { Menu } from 'grommet-icons';
 import theme from "../../theme";
 import styled from 'styled-components';
 import Services from '../../Services';
@@ -43,7 +43,7 @@ const AppBodyComponent: React.FC = ({ children }) => {
 			<AppBar>
 				<Heading color="white" level='3' margin='none'>My App</Heading>
 				{size === "small" ? (
-					<Button icon={<FormClose />} onClick={() => { setSidebar(!showSidebar) }} />
+					<Button icon={<Menu />} onClick={() => { setSidebar(!showSidebar) }} />
 				) : (
 						<InputsWrapper>
 							<Box direction="row" flex={true} justify="between" align="baseline">
@@ -51,13 +51,13 @@ const AppBodyComponent: React.FC = ({ children }) => {
 									<TextInput
 										placeholder="E-mail"
 										plain={true}
-										style={{ background: "white" }}
+										style={{ background: "white", color: "black" }}
 										value={email}
 										dropHeight="large"
 										type="email"
 										onChange={event => setEmail(event.target.value)}
 									/>
-									<Link to="/forgot-password">
+									<Link to="#">
 										<Text
 											tag="small"
 											size="small"
@@ -71,7 +71,7 @@ const AppBodyComponent: React.FC = ({ children }) => {
 									<TextInput
 										placeholder="password"
 										plain={true}
-										style={{ background: "white" }}
+										style={{ background: "white", color: "black" }}
 										value={password}
 										type="password"
 										onChange={event => setPassword(event.target.value)}
