@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useContext } from 'react';
+import { Grommet } from 'grommet';
+import theme from './theme';
+import { Switch, Route } from 'react-router-dom';
+import LandingPage from './Views/LandingPage/LandingPage';
+import loadable from '@loadable/component';
+import styled from 'styled-components';
+
+
+const GrommetWrapper = styled(Grommet)`
+	height: auto;
+`
+
+
+const RegisterPage = loadable(() => import("./Views/RegisterPage/RegisterPage"));
+
+const routes = [
+	{ path: "/", exact: true, component: LandingPage },
+	{ path: "/register", component: RegisterPage }
+];
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<GrommetWrapper theme={theme} full={true}>
+			<Switch>
+				{routes.map((route, key) => route.exact ? (
+					<Route key={key} exact={true} path={route.path} component={route.component} />
+				) : (
+						<Route key={key} path={route.path} component={route.component} />
+					)
+				)}
+			</Switch>
+		</GrommetWrapper >
+	);
 }
 
 export default App;

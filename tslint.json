@@ -1,0 +1,10 @@
+{
+	"extends": [
+		"tslint-react-hooks",
+		"tslint-react"
+	],
+	"rules": {
+		"jsx-no-multiline-js": false,
+		"jsx-no-lambda": false
+	}
+}

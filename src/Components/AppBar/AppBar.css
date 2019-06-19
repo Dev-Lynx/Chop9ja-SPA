@@ -1,0 +1,22 @@
+.AppBar-enter {
+	transform: translateY(-100%);
+}
+
+.AppBar-enter-active {
+	transform: translateY(0%);
+	transition: all 1500ms !important;
+}
+
+.AppBar-exit {
+	transform: translateY(0%)
+}
+
+.AppBar-exit-active {
+	transform: translateY(-100%);
+	transition: all 1500ms !important;
+}
+
+.AppBar-exit-done {
+	transform: translateY(-100%);
+	display: none;
+}
