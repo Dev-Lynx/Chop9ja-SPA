@@ -7,7 +7,7 @@ const theme = {
 			brand: "#009746",
 			error: "#FF4040",
 			warning: "#FFAA15",
-			successful: "#00C781",
+			success: "#00C781",
 		},
 		control: {
 			border: {

@@ -1,0 +1,28 @@
+.SnackBar-enter {
+	display: flex;
+	transform: translateY(-200%);
+}
+
+.SnackBar-enter-active {
+	transform: translateY(0%);
+	transition: all 500ms 500ms !important;
+}
+
+.SnackBar-enter-done {
+	display: flex;
+}
+
+.SnackBar-exit {
+	display: flex;
+	transform:  translateY(0%);
+}
+
+.SnackBar-exit-active {
+	transform: translateY(-100%);
+	transition: all 500ms 500ms !important;
+}
+
+.SnackBar-exit-done {
+	transform: translateY(-100%);
+	display: none;
+}

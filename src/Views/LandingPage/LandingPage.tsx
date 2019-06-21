@@ -5,12 +5,15 @@ import { FormClose } from 'grommet-icons';
 import background from "../../assets/images/landing-page.jpg";
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { validate } from '@babel/types';
 
 const HeaderHeight = styled.div`
 	min-height: 100vh;
 `
 
 const LandingPageComponent = () => {
+
+
 	return (
 		<AppBody>
 			<HeaderHeight>
