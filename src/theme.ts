@@ -31,11 +31,32 @@ const theme = {
 		},
 
 	},
-	text: {
-		extend: {
-			textDecoration: "none !important"
+	table: {
+		body: {
+			align: "center",
+			pad: { vertical: "large" },
+			border: undefined
 		},
-	},
-};
+		extend: () => `font-family: Arial`,
+		footer: {
+			align: "start",
+			border: undefined,
+			pad: { horizontal: "large", vertical: "small" },
+			verticalAlign: "bottom"
+		},
+		header: {
+			align: "center",
+			border: undefined,
+			fill: "horizontal",
+			pad: { horizontal: "large", vertical: "xsmall" },
+			verticalAlign: "bottom",
+		},
+		text: {
+			extend: {
+				textDecoration: "none !important"
+			},
+		},
+	}
+}
 
 export default theme;

@@ -11,6 +11,7 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 const Main = styled(Box)`
 	margin: 5rem 1rem 0;
 	@media (min-width: 768px){
+		margin-top: 9rem;
 		margin-left: 5rem;
 	}
 `
