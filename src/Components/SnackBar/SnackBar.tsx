@@ -41,7 +41,7 @@ const SnackBarComponent = ({ show, message, variant, onClose}: props)  => {
 			// Wait for 6 seconds after displaying message then call the close function
 			setTimeout(() => {
 				onClose(null);
-			}, 6000)
+			}, 4000)
 		}
 	}, [show])
 

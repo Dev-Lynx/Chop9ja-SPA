@@ -15,7 +15,7 @@ const theme = {
 			}
 		},
 		font: {
-			family: "HelveticaNeue"
+			family: "HelveticaNeue",
 		},
 	},
 	select: {

@@ -5,10 +5,16 @@ import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import loadable from '@loadable/component';
 import styled from 'styled-components';
 import { Location } from 'history';
-
 import LandingPage from './Views/LandingPage/LandingPage';
 import LoginPage from "./Views/LoginPage/LoginPage";
-const RegisterPage = loadable(() => import("./Views/RegisterPage/RegisterPage"));
+import ProgressBar from './Components/ProgressBar/ProgressBar';
+
+const Dashboard = loadable(() => import('./Layouts/Dashboard/Dashboard'), {
+	fallback: <ProgressBar show={true} />
+});
+const RegisterPage = loadable(() => import("./Views/RegisterPage/RegisterPage"), {
+	fallback: <ProgressBar show={true} />
+});
 
 type props = {} & RouteComponentProps;
 
@@ -21,7 +27,8 @@ const GrommetWrapper = styled(Grommet)`
 const routes = [
 	{ path: "/", exact: true, component: LandingPage },
 	{ path: "/register", component: RegisterPage },
-	{ path: "/login", component: LoginPage }
+	{ path: "/login", component: LoginPage },
+	{ path: "/dashboard", component: Dashboard }
 ];
 
 const App = (props: props) => {

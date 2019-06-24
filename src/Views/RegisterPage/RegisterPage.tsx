@@ -3,6 +3,7 @@ import { Text, Form, Heading, Select, FormField, TextInput, Box, Image, Responsi
 import backgroundImage from "../../assets/images/login-page.jpg";
 import moment from "moment";
 import styled from 'styled-components';
+import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 
@@ -14,7 +15,7 @@ const MainContent = styled(Box)`
 	z-index: 3;
 `;
 
-const ImageBackround = styled(Image)`
+const ImageBackground = styled(Image)`
 	position: fixed;
 	filter: blur(8px);
 	width: 100vw;
@@ -44,6 +45,10 @@ const states = [
 const RegisterPageComponent = () => {
 
 	const size = useContext(ResponsiveContext);
+
+	// Snackbar
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
+
 	const [email, setEmail] = useState("");
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -82,9 +87,9 @@ const RegisterPageComponent = () => {
 	}, []);
 
 	// To optimize performance so that this code will only run once.
-	const monthList = useMemo(() => moment.months().map((month, index) =>
-		<option key={index} value={index + 1}>{month}</option>
-	), [])
+	const monthList = useMemo(() => (
+		moment.months().map((month, index) => <option key={index} value={index + 1}>{month}</option>
+		)), [])
 
 	const dayList = useMemo(() => {
 		const options = [];
@@ -96,13 +101,14 @@ const RegisterPageComponent = () => {
 		return options;
 	}, [month])
 
-	const changeInput = useCallback((inputName: string) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		// Get the state setters
-		let func = inputName.charAt(0).toUpperCase();
-		func = `set${func}${inputName.substring(1)}`
-		// @ts-ignore
-		stateSetters[func](event.target.value);
-	}, [])
+	const changeInput = useCallback((inputName: string) => (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			// Get the state setters
+			let func = inputName.charAt(0).toUpperCase();
+			func = `set${func}${inputName.substring(1)}`
+			// @ts-ignore
+			stateSetters[func](event.target.value);
+		}, [])
 
 	const validate = async (): Promise<boolean> => {
 		let pass = true;
@@ -199,7 +205,13 @@ const RegisterPageComponent = () => {
 	return (
 		<>
 			<ProgressBar show={loading} />
-			<ImageBackround fit="cover" src={backgroundImage} />
+			<SnackBar
+				show={snackbar.show}
+				message={snackbar.message}
+				variant={snackbar.variant as any}
+				onClose={() => setSnackbar(snackbar => ({ ...snackbar, show: false }))}
+			/>
+			<ImageBackground fit="cover" src={backgroundImage} />
 			<Box fill={true} justify="center" flex={true} direction="row">
 				<MainContent border={true} background="red" direction="row" justify="center">
 					<Form errors={errors} style={{ flexGrow: 1 }}>
@@ -212,7 +224,7 @@ const RegisterPageComponent = () => {
 								</Text>
 							</Box>
 							<FormFields
-								label="E-mail"
+								label={<Text size="small">E-mail</Text>}
 								name="email"
 								id="email"
 								type="email"
@@ -222,7 +234,7 @@ const RegisterPageComponent = () => {
 								placeholder="e.g xxxxxx@gmail.com"
 							/>
 							<FormFields
-								label="First Name"
+								label={<Text size="small">First name</Text>}
 								name="firstName"
 								id="firstName"
 								type="text"
@@ -232,7 +244,7 @@ const RegisterPageComponent = () => {
 								placeholder="Your First Name"
 							/>
 							<FormFields
-								label="Last Name"
+								label={<Text size="small">Last name</Text>}
 								name="lastName"
 								id="lastName"
 								type="text"
@@ -241,7 +253,7 @@ const RegisterPageComponent = () => {
 								placeholder="Your Last Name"
 							/>
 							<FormFields
-								label="Username"
+								label={<Text size="small">Username</Text>}
 								name="username"
 								id="username"
 								type="text"
@@ -250,7 +262,7 @@ const RegisterPageComponent = () => {
 								placeholder="e.g jonhson12"
 							/>
 							<FormFields
-								label="Phone Number"
+								label={<Text size="small">Phone number</Text>}
 								name="phoneNumber"
 								id="phoneNumber"
 								type="text"
@@ -259,7 +271,7 @@ const RegisterPageComponent = () => {
 								placeholder="e.g 08143xxxx90"
 							/>
 							<div style={{ width: "100%", marginTop: "1rem", marginBottom: "1rem" }}>
-								<Text>Select State Of Origin</Text>
+								<Text size="small">Select State Of Origin</Text>
 								<SelectComponent
 									value={stateOfOrigin}
 									style={{ [errors.stateOfOrigin && "border"]: "solid .5px red" }}
@@ -272,7 +284,7 @@ const RegisterPageComponent = () => {
 							</div>
 
 							<Box style={{ width: "100%", marginTop: "1rem", marginBottom: "1rem" }}>
-								<Text>Select Date Of Birth</Text>
+								<Text size="small">Select Date Of Birth</Text>
 								<Box wrap={false} justify="between" direction="row" style={{ width: "100%", marginTop: "1rem", marginBottom: "1rem" }}>
 									<Box style={{ flexBasis: "30%" }}>
 										<SelectComponent
@@ -301,7 +313,7 @@ const RegisterPageComponent = () => {
 									<Box style={{ flexBasis: "30%" }}>
 										<SelectComponent
 											value={day}
-											style={{ [errors.day && "border"]: "solid .5px red" }}
+											style={{ [errors.day && "border"]: "solid .5px red", fontSize: 14 }}
 											onChange={changeInput("day")}
 										>
 											<option>Day</option>
@@ -319,7 +331,7 @@ const RegisterPageComponent = () => {
 								value={password}
 								onChange={event => setPassword(event.target.value)}
 								placeholder="Six characters"
-								label="Password"
+								label={<Text size="small">Password</Text>}
 							/>
 							<Box
 								margin="medium"

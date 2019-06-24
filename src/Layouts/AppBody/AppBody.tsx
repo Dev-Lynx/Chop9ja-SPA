@@ -35,7 +35,7 @@ const AppBodyComponent: React.FC = ({ children }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({}) as any;
-	const [snackBar, setSnackBar] = useState({ show: false, message: "Mumu", variant: "success" });
+	const [snackBar, setSnackBar] = useState({ show: false, message: "", variant: "success" });
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [loading, setLoading] = useState(false);
 	const size = useContext(ResponsiveContext)
