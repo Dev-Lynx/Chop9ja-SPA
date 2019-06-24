@@ -4,8 +4,20 @@ html {
 	padding: 0;
 }
 
+* {
+	box-sizing: border-box !important;
+}
+
+.sidebar-link-active {
+	background-color: #B2CD25;
+}
+
 a {
 	text-decoration: none;
+}
+
+i {
+	font-size: 24px;
 }
 
 input:focus {
