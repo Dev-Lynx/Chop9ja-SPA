@@ -1,15 +1,13 @@
-import React, { useState, useContext } from 'react'
+import React from 'react'
 import { Box, Heading, Text } from 'grommet';
 import AppBody from "../../Layouts/AppBody/AppBody";
-import { FormClose } from 'grommet-icons';
 import background from "../../assets/images/landing-page.jpg";
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { validate } from '@babel/types';
 
 const HeaderHeight = styled.div`
 	min-height: 100vh;
-`
+`;
 
 const LandingPageComponent = () => {
 

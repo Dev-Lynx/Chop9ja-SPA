@@ -5,13 +5,7 @@ import styled from 'styled-components';
 const Wrapper = styled(Box)`
 	max-width: 720px;
 	margin: 3rem auto 0;
-`
-
-const CustomizeTable = styled(GroTable)`
-	width: 776px;
-	box-sizing: border-box;
-`
-
+`;
 
 const Table = ({ transactions }: { transactions: { id: number, date: string, type: string, amount: number }[] }) => {
 

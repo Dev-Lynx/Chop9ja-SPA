@@ -1,11 +1,12 @@
 import React, { useContext, useState, useMemo, useCallback } from 'react'
-import { Text, Form, Heading, Select, FormField, TextInput, Box, Image, ResponsiveContext, Button, RadioButtonGroup } from 'grommet';
+import { Text, Form, Heading, FormField, Box, Image, Button, RadioButtonGroup } from 'grommet';
 import backgroundImage from "../../assets/images/login-page.jpg";
 import moment from "moment";
 import styled from 'styled-components';
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
+import { Context } from '../../Context/Context';
 
 const MainContent = styled(Box)`
 	background: rgba(255, 255, 255, 0.8);
@@ -44,7 +45,7 @@ const states = [
 
 const RegisterPageComponent = () => {
 
-	const size = useContext(ResponsiveContext);
+	const { state, dispatch } = useContext(Context)
 
 	// Snackbar
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
@@ -103,12 +104,12 @@ const RegisterPageComponent = () => {
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			// Get the state setters
-			let func = inputName.charAt(0).toUpperCase();
-			func = `set${func}${inputName.substring(1)}`
-			// @ts-ignore
-			stateSetters[func](event.target.value);
-		}, [])
+		// Get the state setters
+		let func = inputName.charAt(0).toUpperCase();
+		func = `set${func}${inputName.substring(1)}`
+		// @ts-ignore
+		stateSetters[func](event.target.value);
+	}, [])
 
 	const validate = async (): Promise<boolean> => {
 		let pass = true;
@@ -191,15 +192,29 @@ const RegisterPageComponent = () => {
 		}
 		try {
 			const response = await Axios.post("/api/Auth/register", data);
-			console.log(response)
+			if (response.status === 200) {
+			}
 		} catch (error) {
 			const err = error as AxiosError
+			if (err.response) {
+				if (err.response.status === 400) {
+					if (err.response.data) {
+						setSnackbar(snackbar => ({
+							...snackbar, show: true,
+							variant: "error",
+							message: err.response ? err.response.data[0].code : "Something went wrong"
+						}))
+					}
+				}
+			}
 		}
 
 
 		setLoading(false);
 
 	}
+
+	console.log(state, dispatch)
 
 
 	return (

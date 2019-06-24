@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components';
 import { Box, Paragraph, Button } from 'grommet';
 import { Validate, Close, Alert, Icon } from 'grommet-icons';
