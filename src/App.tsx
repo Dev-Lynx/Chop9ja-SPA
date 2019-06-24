@@ -5,14 +5,14 @@ import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import loadable from '@loadable/component';
 import styled from 'styled-components';
 import { Location } from 'history';
-import LandingPage from './Views/LandingPage/LandingPage';
-import LoginPage from "./Views/LoginPage/LoginPage";
+import LandingPage from './Views/Landing/Landing';
+import LoginPage from "./Views/Login/Login";
 import ProgressBar from './Components/ProgressBar/ProgressBar';
 
 const Dashboard = loadable(() => import('./Layouts/Dashboard/Dashboard'), {
 	fallback: <ProgressBar show={true} />
 });
-const RegisterPage = loadable(() => import("./Views/RegisterPage/RegisterPage"), {
+const RegisterPage = loadable(() => import("./Views/Register/Register"), {
 	fallback: <ProgressBar show={true} />
 });
 
