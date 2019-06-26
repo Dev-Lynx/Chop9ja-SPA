@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 Axios.defaults.baseURL = "http://chop9ja.appspot.com/";
-Axios.defaults.headers.common["Content-Type"] = "application/json";
+Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 Axios.interceptors.request.use((value) => {
 	return value;
 }, (error) => {

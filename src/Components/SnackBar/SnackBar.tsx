@@ -11,8 +11,7 @@ const Wrapper = styled(Box)`
 	padding: 10px;
 	z-index: 999;
 	position: fixed;
-	transform: translateY(-200%);
-	display: flex;
+	display: none;
 	top: 0;
 	@media (min-width: 900px) {
 		width: 500px

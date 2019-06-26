@@ -7,6 +7,7 @@ import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import { Context } from '../../Context/Context';
+import { RouteComponentProps } from 'react-router';
 
 const MainContent = styled(Box)`
 	background: rgba(255, 255, 255, 0.8);
@@ -37,13 +38,15 @@ const SelectComponent = styled.select`
 	width: 100%;
 `
 
+type props = RouteComponentProps & {};
+
 const states = [
 	"Abuja",
 	"Lagos",
 	'Port Hacourt'
 ];
 
-const RegisterPageComponent = () => {
+const RegisterPageComponent = ({ history }: props) => {
 
 	const { state, dispatch } = useContext(Context)
 
@@ -193,6 +196,13 @@ const RegisterPageComponent = () => {
 		try {
 			const response = await Axios.post("/api/Auth/register", data);
 			if (response.status === 200) {
+				setSnackbar({
+					show: true,
+					variant: "success",
+					message: "Registration Successful"
+				})
+				dispatch({ type: "LOGIN" });
+				history.push("/dashboard");
 			}
 		} catch (error) {
 			const err = error as AxiosError
@@ -200,7 +210,7 @@ const RegisterPageComponent = () => {
 				if (err.response.status === 400) {
 					if (err.response.data) {
 						setSnackbar(snackbar => ({
-							...snackbar, show: true,
+							show: true,
 							variant: "error",
 							message: err.response ? err.response.data[0].code : "Something went wrong"
 						}))

@@ -55,8 +55,8 @@ const Transactions = styled(Box)`
 `
 
 const transactions = [
-	{ id: 1, date: "August 7, 2019", type: "Credit", amount: 5000 },
-	{ id: 2, date: "August 7, 2019", type: "Withdrawal", amount: 4000 }
+	{ id: 1, date: "Aug 7, 2019", type: "Credit", amount: 5000 },
+	{ id: 2, date: "Aug 7, 2019", type: "Withdrawal", amount: 4000 }
 ];
 
 const Overview = () => {
@@ -82,7 +82,7 @@ const Overview = () => {
 					primary={true}
 				/>
 			</Box>
-			<Box width="100vw" margin="medium" elevation="medium" pad="medium">
+			<Box width="100vw">
 				<Text
 					textAlign="center"
 					color="#24501F"

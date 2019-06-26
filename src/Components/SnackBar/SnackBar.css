@@ -1,28 +1,28 @@
 .SnackBar-enter {
-	display: flex;
-	transform: translateY(-200%);
+	display: flex !important;
+	transform: translateY(-200%) !important;
 }
 
 .SnackBar-enter-active {
-	transform: translateY(0%);
+	transform: translateY(0%) !important;
 	transition: all 500ms 500ms !important;
 }
 
 .SnackBar-enter-done {
-	display: flex;
+	display: flex !important;
 }
 
 .SnackBar-exit {
-	display: flex;
-	transform:  translateY(0%);
+	display: flex !important;
+	transform:  translateY(0%) !important;
 }
 
 .SnackBar-exit-active {
-	transform: translateY(-100%);
+	transform: translateY(-100%) !important;
 	transition: all 500ms 500ms !important;
 }
 
 .SnackBar-exit-done {
-	transform: translateY(-100%);
-	display: none;
+	transform: translateY(-100%) !important;
+	display: none !important;
 }

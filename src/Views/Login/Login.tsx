@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components';
 import { Box, Form, FormField, Heading, Button } from 'grommet';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
+import { Context } from '../../Context/Context';
+import { RouteComponentProps } from 'react-router';
 
 
 const Wrapper = styled(Box)`
@@ -20,8 +22,12 @@ const Wrapper = styled(Box)`
 	box-sizing: border-box
 `
 
+type props = RouteComponentProps & {}
 
-const LoginPageComponent = () => {
+const LoginPageComponent = ({ history }: props) => {
+
+	// Global context
+	const { state, dispatch } = useContext(Context);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -29,6 +35,25 @@ const LoginPageComponent = () => {
 	const [snackBar, setSnackBar] = useState({ show: false, message: "Mumu", variant: "success" });
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [loading, setLoading] = useState(false);
+
+	/**
+	 * Fires immediately we render
+	 * Sends a get request to get the user from the back
+	 * To check if the token is still valid
+	 */
+	useEffect(() => {
+		(async () => {
+			try {
+				const response = await Axios.get("/api/Account/user");
+				if (response.status === 200) {
+					await dispatch({ type: "LOGIN" });
+					history.push("/dashboard")
+				}
+			} catch (error) {
+				const err = error as AxiosError;
+			}
+		})()
+	}, [])
 
 	const validate = (): boolean => {
 		let pass = true;
@@ -56,6 +81,16 @@ const LoginPageComponent = () => {
 
 		try {
 			const response = await Axios.post("/api/Auth/login", { email, password })
+			if (response.status === 200) {
+				if (response.data.accessToken) {
+					localStorage.setItem("__sheghuntk__", response.data.accessToken);
+					// Set the default header to use the token
+					Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+				}
+
+				await dispatch({ type: "LOGIN" });
+				history.push("/dashboard");
+			}
 		} catch (error) {
 			const err = error as AxiosError
 			if (err.response) {

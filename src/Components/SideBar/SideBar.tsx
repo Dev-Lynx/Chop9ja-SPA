@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
 import { NavLink } from 'react-router-dom';
+import { RouteChildrenProps, withRouter } from 'react-router';
 
 const Links = styled(NavLink)`
 	padding: 20px;
@@ -23,7 +24,7 @@ const Contents = styled(Box)`
 	width: 300px;
 `
 
-const SideBar = ({ show }: { show: boolean }) => {
+const SideBar = ({ show, location }: { show: boolean } & RouteChildrenProps) => {
 	return (
 		<Box
 			elevation="medium"
@@ -37,23 +38,23 @@ const SideBar = ({ show }: { show: boolean }) => {
 			}}
 		>
 			<Contents background="white" align="start" justify="center">
-				<Links to="/dashboard" activeStyle={{ backgroundColor: "#B2CD25" }}>
+				<Links to="/dashboard" isActive={() => location.pathname === "/dashboard"} activeStyle={{ backgroundColor: "#B2CD25" }}>
 					<i className="zwicon-home" />
 					<Text>Dashboard</Text>
 				</Links>
-				<Links to="#">
+				<Links to="/dashboard/deposit" activeStyle={{ backgroundColor: "#B2CD25" }}>
 					<i className="zwicon-piggy-bank" />
 					<Text>Deposits</Text>
 				</Links>
-				<Links to="#">
+				<Links to="#" activeStyle={{ backgroundColor: "#B2CD25" }}>
 					<i className="zwicon-wallet" />
 					<Text>Wallet</Text>
 				</Links>
-				<Links to="#">
+				<Links to="/dashboard/withdraw" activeStyle={{ backgroundColor: "#B2CD25" }}>
 					<i className="zwicon-money-bill" />
 					<Text>Withdraw</Text>
 				</Links>
-				<Links to="#">
+				<Links to="/dashboard/settings" activeStyle={{ backgroundColor: "#B2CD25" }}>
 					<i className="zwicon-cog" />
 					<Text>Settings</Text>
 				</Links>
@@ -62,4 +63,5 @@ const SideBar = ({ show }: { show: boolean }) => {
 	)
 }
 
-export default SideBar
+// @ts-ignore
+export default withRouter(SideBar)

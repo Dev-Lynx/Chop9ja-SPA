@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components';
 import { Box } from 'grommet';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
 
 
 
 const Wrapper = styled(Box)`
 	position: fixed;
+	background-color: white;
 	font-size: 28px;
 	bottom: 0;
 `
@@ -21,26 +22,26 @@ const Links = styled(NavLink)`
 	transition all 1s;
 `
 
-const Footer = () => {
+const Footer = ({ location }: RouteComponentProps) => {
 	return (
 		<Wrapper elevation="medium" direction="row" width="100%" justify="between">
-			<Links to="/dashboard" activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links to="/dashboard" isActive={() => location.pathname === "/dashboard"} activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-home" />
 			</Links>
-			<Links to="#">
+			<Links to="/dashboard/deposit" activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-piggy-bank" />
 			</Links>
-			<Links to="#">
+			<Links to="#" activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-wallet" />
 			</Links>
-			<Links to="#">
+			<Links to="/dashboard/withdraw" activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-money-bill" />
 			</Links>
-			<Links to="#">
+			<Links to="/dashboard/settings" activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-cog" />
 			</Links>
 		</Wrapper>
 	)
 }
 
-export default Footer
+export default withRouter(Footer)

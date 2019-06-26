@@ -1,12 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Box, Layer, ResponsiveContext, Text } from 'grommet';
 import styled from 'styled-components';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
 import SideBar from '../../Components/SideBar/SideBar';
 import NavBar from "../../Components/NavBar/NavBar";
 import NavFooter from '../../Components/NavFooter/NavFooter';
 import loadable from '@loadable/component';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
+import { Context } from '../../Context/Context';
+import Axios, { AxiosError } from 'axios';
 
 const Main = styled(Box)`
 	margin: 5rem 1rem 0;
@@ -30,6 +32,8 @@ const Settings = loadable(() => import("../../Views/Settings/Settings"), {
 	fallback: <ProgressBar show={true} />
 })
 
+type props = RouteComponentProps & {};
+
 
 const routes = [
 	{ path: "/dashboard", component: Overview },
@@ -39,15 +43,33 @@ const routes = [
 ];
 
 
-const Dashboard = () => {
+const Dashboard = ({ history }: props) => {
 
 	// size context
 	const size = useContext(ResponsiveContext);
 
+	// Global context
+	const { state, dispatch } = useContext(Context);
+
 	const [showSideBar, setShowSideBar] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const response = await Axios.get("/api/Account/user");
+			} catch (error) {
+				const err = error as AxiosError;
+			}
+		})()
+	}, [])
+
 
 	const toggleSideBar = () => {
 		setShowSideBar(!showSideBar);
+	}
+
+	if (!state.loggedIn) {
+		return <Redirect to="/login" />
 	}
 
 	return (
