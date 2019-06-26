@@ -49,12 +49,23 @@ const Dashboard = ({ history }: props) => {
 	// size context
 	const size = useContext(ResponsiveContext);
 
+	/**
+	 * To decide if to show the sidebar or not
+	 * we will check the user agent in the useEffect function
+	 * And see if it matches any of the
+	 */
+	const [isPc, setIsPc] = useState(false);
+
 	// Global context
 	const { state, dispatch } = useContext(Context);
 
 	const [showSideBar, setShowSideBar] = useState(false);
 
 	useEffect(() => {
+		// Run the check function
+		if (window.screen.width > 768) {
+			setIsPc(true);
+		}
 		(async () => {
 			try {
 				const response = await Axios.get("/api/Account/user");
@@ -62,7 +73,14 @@ const Dashboard = ({ history }: props) => {
 				const err = error as AxiosError;
 			}
 		})()
+		return () => {
+			window.removeEventListener("resize", checkIfDeviceIsPc)
+		}
 	}, [])
+
+	const checkIfDeviceIsPc = (event: UIEvent) => {
+		console.log(event)
+	}
 
 
 	const toggleSideBar = () => {
@@ -80,7 +98,7 @@ const Dashboard = ({ history }: props) => {
 			/>
 
 			<Box direction="row">
-				{size !== "small" && (<SideBar show={showSideBar} />)}
+				{isPc && (<SideBar show={showSideBar} />)}
 				<Main>
 					<Switch>
 						{routes.map((route => <Route exact={true} path={route.path} component={route.component} />))}
@@ -88,7 +106,7 @@ const Dashboard = ({ history }: props) => {
 				</Main>
 			</Box>
 
-			{size === "small" && (
+			{!isPc && (
 				<NavFooter />
 			)}
 		</>
