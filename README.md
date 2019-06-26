@@ -1,3 +1,3 @@
-The chop9ja front end repo
+# Chop9ja Front End
 
-# Chop9ja
+This is the front end repository for Chop9ja

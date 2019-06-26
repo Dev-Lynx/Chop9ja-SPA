@@ -2,6 +2,9 @@ import React from 'react'
 import { Box, Image, Text, Heading, Button } from 'grommet';
 import styled from 'styled-components';
 import Table from '../../Components/Table/Table';
+import { Link } from 'react-router-dom';
+import AccountBalance from '../../Components/AccountBalance/AccountBalance';
+import { DepositButton, WithdrawalButton } from '../../Components/Buttons/Buttons';
 
 
 
@@ -21,35 +24,6 @@ const Card = styled(Box)`
 	}
 `
 
-const ButtonGreen = styled(Button)`
-	border-radius: 5px;
-	background-color: #24501F;
-	color: #BCDBCA;
-	text-align: center;
-	outline: none;
-	margin-right: 1rem;
-	border: none;
-	box-shadow: 0px 2px 4px #24501F;
-	&: hover {
-		background-color: white;
-		color: #24501F;
-	}
-`
-const ButtonWhite = styled(Button)`
-	border-radius: 5px;
-	background-color: white;
-	transition: all 1s;
-	color: #24501F;
-	outline: none;
-	border: none;
-	box-shadow: 0px 2px 4px #24501F;
-	margin-left: 1rem;
-	&:hover {
-		background-color: #24501F;
-		color: #BCDBCA
-	}
-`
-
 const Transactions = styled(Box)`
 
 `
@@ -62,25 +36,11 @@ const transactions = [
 const Overview = () => {
 	return (
 		<Wrapper direction="column" align="center">
-			<Box height="215px" width="612px">
-				<Card fill={true} align="start" direction="column">
-					<Heading level="1">N36,000</Heading>
-					<Text style={{ fontSize: "25px" }}>Total Withdrawals</Text>
-					<Text style={{ fontSize: "25px" }}>N11,234</Text>
-				</Card>
-			</Box>
+			<AccountBalance />
 
 			<Box direction="row" margin="medium">
-				<ButtonGreen
-					label="Deposit"
-					color="brand"
-					primary={true}
-				/>
-				<ButtonWhite
-					label="Withdrawal"
-					color="brand"
-					primary={true}
-				/>
+				<DepositButton />
+				<WithdrawalButton />
 			</Box>
 			<Box width="100vw">
 				<Text

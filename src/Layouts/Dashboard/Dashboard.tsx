@@ -11,10 +11,11 @@ import { Context } from '../../Context/Context';
 import Axios, { AxiosError } from 'axios';
 
 const Main = styled(Box)`
-	margin: 5rem 1rem 0;
+	padding: 5rem 1rem 5rem;
+	background-color: #EDEDED;
 	@media (min-width: 768px){
-		margin-top: 9rem;
-		margin-left: 5rem;
+		padding-top: 9rem;
+		padding-left: 5rem;
 	}
 `
 

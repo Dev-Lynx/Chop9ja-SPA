@@ -32,7 +32,7 @@ const routes = [
 ];
 
 // Initial IState
-const initialState = { loggedIn: false };
+const initialState = { loggedIn: true };
 
 /**
  * @params IState, IAction
