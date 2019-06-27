@@ -35,6 +35,20 @@ const Settings = loadable(() => import("../../Views/Settings/Settings"), {
 
 type props = RouteComponentProps & {};
 
+type responseData = {} & {
+	dateOfBirth: string,
+	email: string,
+	emailConfirmed: boolean,
+	firstName: string,
+	gender: string,
+	wallet: string,
+	lastName: string,
+	phoneNumber: string,
+	phoneNumberConfirmed: boolean,
+	stateOfOrigin: string,
+	username: string,
+}
+
 
 const routes = [
 	{ path: "/dashboard", component: Overview },
@@ -60,6 +74,19 @@ const Dashboard = ({ history }: props) => {
 	const { state, dispatch } = useContext(Context);
 
 	const [showSideBar, setShowSideBar] = useState(false);
+	const [data, setData] = useState({
+		dateOfBirth: "",
+		email: "",
+		emailConfirmed: false,
+		firstName: "",
+		gender: "",
+		lastName: "",
+		wallet: "",
+		phoneNumber: "",
+		phoneNumberConfirmed: false,
+		stateOfOrigin: "",
+		username: "",
+	});
 
 	useEffect(() => {
 		// Run the check function
@@ -69,13 +96,28 @@ const Dashboard = ({ history }: props) => {
 		(async () => {
 			try {
 				const response = await Axios.get("/api/Account/user");
+				const data = response.data as responseData
+				setData({ ...data });
+			} catch (error) {
+				const err = error as AxiosError;
+				if (err.response) {
+					if (err.response.status === 401) {
+						// Token failed
+						history.push("/login")
+
+					}
+				}
+			}
+		})();
+		(async () => {
+			try {
+				const response = await Axios.get("/api/wallet")
+				const data = response.data;
+				console.log(data)
 			} catch (error) {
 				const err = error as AxiosError;
 			}
-		})()
-		return () => {
-			window.removeEventListener("resize", checkIfDeviceIsPc)
-		}
+		})();
 	}, [])
 
 	const checkIfDeviceIsPc = (event: UIEvent) => {
@@ -87,14 +129,13 @@ const Dashboard = ({ history }: props) => {
 		setShowSideBar(!showSideBar);
 	}
 
-	if (!state.loggedIn) {
-		return <Redirect to="/login" />
-	}
+	console.log(data)
 
 	return (
 		<>
 			<NavBar
 				toggleSideBar={toggleSideBar}
+				firstName={data.firstName}
 			/>
 
 			<Box direction="row">

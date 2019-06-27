@@ -20,7 +20,7 @@ border-top: .5rem solid #D9251B;
 `
 
 
-const NavBar = ({ toggleSideBar }: { toggleSideBar: any }) => {
+const NavBar = ({ toggleSideBar, firstName }: { toggleSideBar: any, firstName: string }) => {
 	// size context
 	const size = useContext(ResponsiveContext);
 
@@ -49,7 +49,7 @@ const NavBar = ({ toggleSideBar }: { toggleSideBar: any }) => {
 				Logo
 		</Box>
 			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
-				<Text size="small">Hello, John</Text>
+				<Text size="small">Hello, {firstName}</Text>
 				<ArrowDown />
 			</Box>
 		</Wrapper>
