@@ -4,7 +4,7 @@ import { ButtonProps, Button as GrommetButton } from 'grommet';
 import styled from 'styled-components';
 
 type props = ButtonProps & {
-	style: object;
+	style?: object;
 	alternate: boolean
 }
 
@@ -18,10 +18,25 @@ const Customized = styled(GrommetButton)`
 
 const Button = ({ alternate, style, ...props }: props) => {
 	return (
-		<Customized
-			style={style}
-			{...props}
-		/>
+		(!alternate ? (
+			<Customized
+				style={{
+					...style,
+				}}
+				{...props}
+			/>
+		) : (
+				<Customized
+					style={{
+						...style,
+						background: "#7E1E12",
+						border: "none",
+						outline: "none",
+						color: "#D1E185"
+					}}
+					{...props}
+				/>
+			))
 	)
 }
 

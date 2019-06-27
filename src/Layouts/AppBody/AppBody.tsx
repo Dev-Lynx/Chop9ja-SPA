@@ -116,7 +116,7 @@ const AppBodyComponent: React.FC = ({ children }) => {
 								Login
 							</Text>
 						</Link>
-						<Link to="/register">
+						<Link to="/login">
 							<Text
 								margin="small"
 								tag="small"
