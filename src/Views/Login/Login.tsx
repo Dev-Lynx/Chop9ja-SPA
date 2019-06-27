@@ -1,16 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components';
-import { Box, Form, FormField, Heading, Button } from 'grommet';
+import { Box, Form, FormField, Heading, Text, TextInput } from 'grommet';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import { Context } from '../../Context/Context';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Link } from 'react-router-dom';
+import { History } from 'history';
+import Button from "../../Components/Button/Button";
 
 
 const Wrapper = styled(Box)`
 	z-index: 9999;
-	background-color: rgba(0, 151, 70, 0.4);
 	position: fixed;
 	display: flex;
 	flex-direction: column;
@@ -22,12 +23,73 @@ const Wrapper = styled(Box)`
 	box-sizing: border-box
 `
 
+const Headings = styled(Heading)`
+	padding: 2rem;
+	background-color: #B0CC20;
+	font-weight: 100;
+	cursor: pointer;
+	transition: all 1s;
+	&:first-child {
+		background-color: rgba(176, 204, 42, .7);
+	}
+	&:hover {
+		background-color: #B0CC20;
+	}
+`;
+
+
+
 type props = RouteComponentProps & {}
 
 const LoginPageComponent = ({ history }: props) => {
 
+
+
+
+	return (
+		<Wrapper background="#D3E4DB">
+
+			<Box
+				background="white"
+				direction="row"
+				width="960px"
+				height="90vh"
+				elevation="small"
+				round={true}
+			>
+				<Box
+					style={{ flexBasis: "60%" }}
+					pad="medium"
+				>
+
+					<Box
+						direction="row"
+						justify="center"
+					>
+						<Headings level="2">Register</Headings>
+						<Headings level="2">Login</Headings>
+					</Box>
+					<Login history={history} />
+				</Box>
+				<Box
+					style={{ flexGrow: 1 }}
+					round={true}
+					background="green"
+				>
+
+					fuck you
+				</Box>
+			</Box>
+		</Wrapper>
+	)
+}
+
+
+const Login = ({ history }: { history: History }) => {
 	// Global context
 	const { state, dispatch } = useContext(Context);
+
+	const [componentToShow, setComponentToShow] = useState("login");
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -35,6 +97,8 @@ const LoginPageComponent = ({ history }: props) => {
 	const [snackBar, setSnackBar] = useState({ show: false, message: "Mumu", variant: "success" });
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [loading, setLoading] = useState(false);
+
+
 
 	/**
 	 * Fires immediately we render
@@ -47,7 +111,7 @@ const LoginPageComponent = ({ history }: props) => {
 				const response = await Axios.get("/api/Account/user");
 				if (response.status === 200) {
 					await dispatch({ type: "LOGIN" });
-					history.push("/dashboard")
+					// history.push("/dashboard")
 				}
 			} catch (error) {
 				const err = error as AxiosError;
@@ -105,9 +169,8 @@ const LoginPageComponent = ({ history }: props) => {
 		setSnackBar(snack => ({ ...snack, show: false }));
 	}
 
-
 	return (
-		<Wrapper background="dark-3">
+		<>
 			<SnackBar
 				variant={snackBar.variant as any}
 				show={snackBar.show}
@@ -115,34 +178,43 @@ const LoginPageComponent = ({ history }: props) => {
 				onClose={closeSnackBar}
 			/>
 			<ProgressBar show={loading} />
-			<Box background="white" direction="column" margin="medium" justify="center" elevation="small" pad="medium" round={true}>
-				<Heading textAlign="center">Log in</Heading>
-				<Form errors={errors}>
-					<FormField
-						label="E-mail"
-						value={email}
-						name="email"
-						id="email"
-						onChange={(event) => setEmail(event.target.value)}
-					/>
-					<FormField
-						label="Password"
-						name="password"
-						type="password"
-						id="password"
-						value={password}
-						onChange={(event) => setPassword(event.target.value)}
-					/>
+			<Form errors={errors}>
+				<FormField
+					value={email}
+					placeholder="E-mail"
+					name="email"
+					id="email"
+					onChange={(event) => setEmail(event.target.value)}
+				/>
+				<FormField
+					name="password"
+					placeholder="Password"
+					type="password"
+					id="password"
+					value={password}
+					onChange={(event) => setPassword(event.target.value)}
+				/>
+				<Box width="100%" margin={{ vertical: "large" }}>
+					<Text textAlign="center" color="#D9251B">
+						<Link to="/forgot-password">
+							Forgot password?
+						</Link>
+					</Text>
+				</Box>
+				<Box>
 					<Button
 						primary={true}
+						alternate={false}
 						onClick={submit}
 						label="Login"
+						style={{ margin: "0 auto 0" }}
 						alignSelf="center"
 					/>
-				</Form>
-			</Box>
-		</Wrapper>
-	)
+				</Box>
+			</Form>
+		</>
+	);
 }
+
 
 export default LoginPageComponent

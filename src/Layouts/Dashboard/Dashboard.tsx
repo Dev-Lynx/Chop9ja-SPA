@@ -12,7 +12,7 @@ import Axios, { AxiosError } from 'axios';
 
 const Main = styled(Box)`
 	padding: 5rem 1rem 5rem;
-	background-color: #EDEDED;
+	background-color: #D3E4DB;
 	@media (min-width: 768px){
 		padding-top: 9rem;
 		padding-left: 5rem;

@@ -12,9 +12,20 @@ html {
 	background-color: #B2CD25;
 }
 
+/**
+	For input errors
+*/
+.fBnqFF {
+	font-size: 12px !important;
+}
+
 a {
 	text-decoration: none;
 	color: inherit;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 i {
