@@ -51,11 +51,7 @@ const Components = styled(Box)`
 
 `
 
-
-
-type props = RouteComponentProps & {}
-
-const LoginPageComponent = ({ history }: props) => {
+const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 
 	const [componentToDisplay, setComponentToDisplay] = useState("REGISTER" as "LOGIN" | "REGISTER")
 
@@ -81,11 +77,27 @@ const LoginPageComponent = ({ history }: props) => {
 						direction="row"
 						justify="center"
 					>
-						<Headings level="2" onClick={() => setComponentToDisplay("REGISTER")}>Register</Headings>
-						<Headings level="2" onClick={() => setComponentToDisplay("LOGIN")}>Login</Headings>
+						<Headings
+							level="2"
+							style={{
+								backgroundColor: location.pathname !== "/login" ? "#B0CC20" : "#b0cc2ab3"
+							}}
+							onClick={() => history.push("/register")}
+						>
+							Register
+						</Headings>
+						<Headings
+							level="2"
+							style={{
+								backgroundColor: location.pathname === "/login" ? "#B0CC20" : "#b0cc2ab3"
+							}}
+							onClick={() => history.push("/login")}
+						>
+							Login
+						</Headings>
 					</Box>
 
-					{componentToDisplay === "LOGIN" ?
+					{location.pathname === "/login" ?
 						<Login history={history} />
 						:
 						<Register history={history} />
@@ -97,7 +109,7 @@ const LoginPageComponent = ({ history }: props) => {
 					background="green"
 				>
 
-				<></>
+					<></>
 				</BackgroundImage>
 			</Box>
 		</Wrapper>
@@ -252,15 +264,31 @@ const FormFields = styled(FormField)`
 const SelectComponent = styled.select`
 	color: black;
 	border: none;
-	padding: 2rem;
+	flex-basis: 33%;
 	outline: none;
 	cursor: pointer;
-	height: 30px;
 	font-size: 16px;
 	font-family: HelveticaNeue;
 	background-color: rgba(255,255,255,0);
 	width: 100%;
-`
+	@media (min-width: 768px) {
+		height: 30px;
+	}
+`;
+
+const SelectWrapper = styled(Box)`
+	@media (max-width: 768px) {
+		display: block !important;
+		margin-top: 1rem;
+	}
+`;
+
+const BirthDateInputs = styled(Box)`
+	height: 4rem;
+	@media (max-width: 768px) {
+		margin-top: 1rem;
+	}
+`;
 
 const states = [
 	"Abuja",
@@ -524,7 +552,7 @@ const Register = ({ history }: { history: History }) => {
 							}
 						/>
 					</Box>
-					<Box
+					<SelectWrapper
 						direction="row"
 						justify="between"
 						margin={{ top: "small", bottom: "small" }}
@@ -533,6 +561,9 @@ const Register = ({ history }: { history: History }) => {
 							border={{
 								side: "bottom",
 								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+							}}
+							style={{
+								height: "3rem"
 							}}
 						>
 							<SelectComponent
@@ -557,7 +588,10 @@ const Register = ({ history }: { history: History }) => {
 
 						</Box>
 
-						<Box direction="row" justify="center">
+						<BirthDateInputs
+							direction="row"
+							justify="between"
+						>
 							<Box
 								border={{
 									side: "bottom",
@@ -587,6 +621,9 @@ const Register = ({ history }: { history: History }) => {
 									side: "bottom",
 									color: errors.month ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
 								}}
+								style={{
+									flexBasis: "33%",
+								}}
 							>
 								<SelectComponent
 									value={month}
@@ -609,6 +646,9 @@ const Register = ({ history }: { history: History }) => {
 									side: "bottom",
 									color: errors.day ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
 								}}
+								style={{
+									flexBasis: "33%",
+								}}
 							>
 								<SelectComponent
 									value={day}
@@ -625,8 +665,8 @@ const Register = ({ history }: { history: History }) => {
 									{errors.day}
 								</Text>
 							</Box>
-						</Box>
-					</Box>
+						</BirthDateInputs>
+					</SelectWrapper>
 
 					<Box
 						direction="row"
@@ -672,7 +712,7 @@ const Register = ({ history }: { history: History }) => {
 						<Text
 							margin="small"
 							color="red"
-							style={{fontSize: "14px"}}
+							style={{ fontSize: "14px" }}
 						>
 							{errors.gender}
 						</Text>
@@ -682,7 +722,7 @@ const Register = ({ history }: { history: History }) => {
 							primary={true}
 							alternate={true}
 							onClick={submit}
-							label="Login"
+							label="Register"
 							style={{ margin: "0 auto 0" }}
 							alignSelf="center"
 						/>

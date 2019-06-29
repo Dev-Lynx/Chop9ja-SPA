@@ -26,7 +26,7 @@ const GrommetWrapper = styled(Grommet)`
 
 const routes = [
 	{ path: "/", exact: true, component: LandingPage },
-	{ path: "/register", component: RegisterPage },
+	{ path: "/register", component: LoginPage },
 	{ path: "/login", component: LoginPage },
 	{ path: "/dashboard", component: Dashboard }
 ];
