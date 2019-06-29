@@ -97,7 +97,7 @@ const LoginPageComponent = ({ history }: props) => {
 					background="green"
 				>
 
-					fuck you
+				<></>
 				</BackgroundImage>
 			</Box>
 		</Wrapper>
