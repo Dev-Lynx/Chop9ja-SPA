@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components';
 import { Box, Heading, Text } from 'grommet';
+import { UserContext } from '../../Context/Context';
 
 const Card = styled(Box)`
 	background-color: rgba(178, 205, 37, 0.36);
@@ -14,10 +15,13 @@ const Card = styled(Box)`
 `
 
 const AccountBalance = () => {
+
+	const { userState } = useContext(UserContext);
+
 	return (
 		<Box height="215px" width="612px">
 			<Card fill={true} align="start" direction="column">
-				<Heading level="1">N36,000</Heading>
+				<Heading level="1">{"₦" + userState.balance}</Heading>
 				<Text style={{ fontSize: "25px" }}>Total Withdrawals</Text>
 				<Text style={{ fontSize: "25px" }}>N11,234</Text>
 			</Card>

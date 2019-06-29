@@ -4,7 +4,7 @@ import { Box, Form, FormField, Heading, Text, Select, TextInput, RadioButtonGrou
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
-import { Context } from '../../Context/Context';
+import { LoginContext } from '../../Context/Context';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import { History } from 'history';
 import Button from "../../Components/Button/Button";
@@ -118,8 +118,8 @@ const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 
 
 const Login = ({ history }: { history: History }) => {
-	// Global context
-	const { state, dispatch } = useContext(Context);
+	// Login context
+	const { loginState, loginDispatch } = useContext(LoginContext);
 
 	const [componentToShow, setComponentToShow] = useState("login");
 
@@ -142,7 +142,7 @@ const Login = ({ history }: { history: History }) => {
 			try {
 				const response = await Axios.get("/api/Account/user");
 				if (response.status === 200) {
-					await dispatch({ type: "LOGIN" });
+					await loginDispatch({ type: "LOGIN" });
 					history.push("/dashboard")
 				}
 			} catch (error) {
@@ -184,7 +184,7 @@ const Login = ({ history }: { history: History }) => {
 					Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 				}
 
-				await dispatch({ type: "LOGIN" });
+				await loginDispatch({ type: "LOGIN" });
 				history.push("/dashboard");
 			}
 		} catch (error) {
@@ -290,14 +290,14 @@ const BirthDateInputs = styled(Box)`
 	}
 `;
 
-const states = [
+const loginStates = [
 	"Abuja",
 	"Lagos",
 	'Port Hacourt'
 ];
 
 const Register = ({ history }: { history: History }) => {
-	const { state, dispatch } = useContext(Context)
+	const { loginState, loginDispatch } = useContext(LoginContext)
 
 	// Snackbar
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
@@ -308,7 +308,7 @@ const Register = ({ history }: { history: History }) => {
 	const [username, setUsername] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [address, setAddress] = useState("");
-	const [stateOfOrigin, setStateOfOrigin] = useState("");
+	const [loginStateOfOrigin, setStateOfOrigin] = useState("");
 	const [password, setPassword] = useState("");
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [day, setDay] = useState("");
@@ -318,7 +318,7 @@ const Register = ({ history }: { history: History }) => {
 	const [errors, setErrors] = useState({}) as [any, React.Dispatch<any>];
 	const [loading, setLoading] = useState(false);
 
-	const stateSetters = useMemo(() => ({
+	const loginStateSetters = useMemo(() => ({
 		setEmail,
 		setFirstName,
 		setLastName,
@@ -358,11 +358,11 @@ const Register = ({ history }: { history: History }) => {
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		// Get the state setters
+		// Get the loginState setters
 		let func = inputName.charAt(0).toUpperCase();
 		func = `set${func}${inputName.substring(1)}`
 		// @ts-ignore
-		stateSetters[func](event.target.value);
+		loginStateSetters[func](event.target.value);
 	}, [])
 
 	const validate = async (): Promise<boolean> => {
@@ -390,9 +390,9 @@ const Register = ({ history }: { history: History }) => {
 			pass = false;
 			setErrors((errors: any) => ({ ...errors, phoneNumber: "Phone number is required and should contain 11 digits" }))
 		}
-		if (stateOfOrigin.length < 2) {
+		if (loginStateOfOrigin.length < 2) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, stateOfOrigin: "State Of origin is required" }))
+			setErrors((errors: any) => ({ ...errors, loginStateOfOrigin: "State Of origin is required" }))
 		}
 		if (year === "") {
 			pass = false;
@@ -440,7 +440,7 @@ const Register = ({ history }: { history: History }) => {
 			email,
 			username,
 			gender,
-			stateOfOrigin,
+			loginStateOfOrigin,
 			password,
 			dateOfBirth: new Date(`${year}-${month}-${day}`),
 		}
@@ -457,7 +457,7 @@ const Register = ({ history }: { history: History }) => {
 						localStorage.setItem("__sheghuntk__", response.data.accessToken);
 						// Set the default header to use the token
 						Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
-						dispatch({ type: "LOGIN" });
+						loginDispatch({ type: "LOGIN" });
 						history.push("/dashboard");
 					}
 				}, 3000);
@@ -560,21 +560,21 @@ const Register = ({ history }: { history: History }) => {
 						<Box
 							border={{
 								side: "bottom",
-								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+								color: errors.loginStateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
 							}}
 							style={{
 								height: "3rem"
 							}}
 						>
 							<SelectComponent
-								value={stateOfOrigin}
-								style={{ [errors.stateOfOrigin && "borderBottom"]: "solid .5px red" }}
+								value={loginStateOfOrigin}
+								style={{ [errors.loginStateOfOrigin && "borderBottom"]: "solid .5px red" }}
 								onChange={(event) => setStateOfOrigin(event.target.value)}
 							>
 
 								<option>Select State Of Origin</option>
-								{states.map((state, key) =>
-									<option key={key} value={state}>{state}</option>
+								{loginStates.map((loginState, key) =>
+									<option key={key} value={loginState}>{loginState}</option>
 								)}
 
 							</SelectComponent>
@@ -583,7 +583,7 @@ const Register = ({ history }: { history: History }) => {
 								color="red"
 								style={{ fontSize: "12px" }}
 							>
-								{errors.stateOfOrigin}
+								{errors.loginStateOfOrigin}
 							</Text>
 
 						</Box>

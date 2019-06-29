@@ -1,8 +1,30 @@
 import React from "react";
-import { IContextAction, IContextState } from "../Types";
+import { LoginContextAction, LoginContextState, UserContextState, UserContextAction } from "../Types";
 
-const state: IContextState = { loggedIn: false };
-const dispatch = (action: IContextAction) => {/* Login implemented in App.tsx */};
+const loginState: LoginContextState = { loggedIn: false };
+const loginDispatch = (action: LoginContextAction) => {/* Login implemented in App.tsx */ };
 
 // For checking if the user is logged in
-export const Context = React.createContext({state, dispatch});
+export const LoginContext = React.createContext({ loginState, loginDispatch });
+
+const userState: UserContextState = {
+	dateOfBirth: "",
+	email: "",
+	availableBalance: 0,
+	balance: 0,
+	transactions: [],
+	emailConfirmed: false,
+	firstName: "",
+	gender: "",
+	initials: "",
+	lastName: "",
+	phoneNumber: "",
+	phoneNumberConfirmed: false,
+	stateOfOrigin: "",
+	username: ""
+};
+
+const userDispatch = (action: UserContextAction) => { };
+
+// For saving the users information
+export const UserContext = React.createContext({ userState, userDispatch });

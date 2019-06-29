@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
-import { Context } from '../../Context/Context';
+import { LoginContext } from '../../Context/Context';
 import { RouteComponentProps } from 'react-router';
 
 const MainContent = styled(Box)`
@@ -48,7 +48,7 @@ const states = [
 
 const RegisterPageComponent = ({ history }: props) => {
 
-	const { state, dispatch } = useContext(Context)
+	const { loginState, loginDispatch } = useContext(LoginContext)
 
 	// Snackbar
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
@@ -201,7 +201,7 @@ const RegisterPageComponent = ({ history }: props) => {
 					variant: "success",
 					message: "Registration Successful"
 				})
-				dispatch({ type: "LOGIN" });
+				loginDispatch({ type: "LOGIN" });
 				history.push("/dashboard");
 			}
 		} catch (error) {
@@ -223,8 +223,6 @@ const RegisterPageComponent = ({ history }: props) => {
 		setLoading(false);
 
 	}
-
-	console.log(state, dispatch)
 
 
 	return (

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Box, ResponsiveContext, Text } from 'grommet';
 import styled from 'styled-components';
+import { UserContext } from '../../Context/Context';
 
 const Wrapper = styled(Box)`
 position: fixed;
@@ -20,9 +21,12 @@ border-top: .5rem solid #D9251B;
 `
 
 
-const NavBar = ({ toggleSideBar, firstName }: { toggleSideBar: any, firstName: string }) => {
+const NavBar = ({ toggleSideBar, }: { toggleSideBar: any }) => {
 	// size context
 	const size = useContext(ResponsiveContext);
+
+	// Get the user context
+	const { userState } = useContext(UserContext)
 
 	return (
 		<Wrapper
@@ -49,7 +53,7 @@ const NavBar = ({ toggleSideBar, firstName }: { toggleSideBar: any, firstName: s
 				Logo
 		</Box>
 			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
-				<Text size="small">Hello, {firstName}</Text>
+				<Text size="small">Hello, {userState.firstName}</Text>
 				<ArrowDown />
 			</Box>
 		</Wrapper>

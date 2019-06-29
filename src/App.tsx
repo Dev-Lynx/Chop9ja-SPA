@@ -8,8 +8,8 @@ import { Location } from 'history';
 import LandingPage from './Views/Landing/Landing';
 import LoginPage from "./Views/Login/Login";
 import ProgressBar from './Components/ProgressBar/ProgressBar';
-import { IContextState, IContextAction } from './Types';
-import { Context } from './Context/Context';
+import { LoginContextState, LoginContextAction } from './Types';
+import { LoginContext } from './Context/Context';
 
 const Dashboard = loadable(() => import('./Layouts/Dashboard/Dashboard'), {
 	fallback: <ProgressBar show={true} />
@@ -37,7 +37,7 @@ const initialState = { loggedIn: false };
 /**
  * @params IState, IAction
  */
-const reducer = (state: IContextState, action: IContextAction): IContextState => {
+const reducer = (state: LoginContextState, action: LoginContextAction): LoginContextState => {
 	switch (action.type) {
 		case "LOGIN":
 			return { ...state, loggedIn: true };
@@ -51,7 +51,7 @@ const reducer = (state: IContextState, action: IContextAction): IContextState =>
 const App = (props: props) => {
 
 	// Set the reducer
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [loginState, loginDispatch] = useReducer(reducer, initialState);
 
 	// To store the previous location
 	const prevLocation = useRef<Location<{ login: boolean }>>();
@@ -64,7 +64,7 @@ const App = (props: props) => {
 
 	return (
 		<GrommetWrapper theme={theme} full={true}>
-			<Context.Provider value={{ state, dispatch }}>
+			<LoginContext.Provider value={{ loginState, loginDispatch }}>
 				<Switch location={isModal ? prevLocation.current : location}>
 					{routes.map((route, key) => route.exact ? (
 						<Route key={key} exact={true} path={route.path} component={route.component} />
@@ -74,7 +74,7 @@ const App = (props: props) => {
 					)}
 				</Switch>
 				{isModal && <Route path="/login" component={LoginPage} />}
-			</Context.Provider>
+			</LoginContext.Provider>
 		</GrommetWrapper >
 	);
 }

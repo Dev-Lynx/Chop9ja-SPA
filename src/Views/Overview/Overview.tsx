@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box, Image, Text, Heading, Button } from 'grommet';
 import styled from 'styled-components';
 import Table from '../../Components/Table/Table';
 import { Link } from 'react-router-dom';
 import AccountBalance from '../../Components/AccountBalance/AccountBalance';
 import { DepositButton, WithdrawalButton } from '../../Components/Buttons/Buttons';
+import { UserContext } from '../../Context/Context';
 
 
 
@@ -34,6 +35,9 @@ const transactions = [
 ];
 
 const Overview = () => {
+
+	const { userState } = useContext(UserContext);
+
 	return (
 		<Wrapper direction="column" align="center">
 			<AccountBalance />
@@ -50,7 +54,7 @@ const Overview = () => {
 				>
 					Transactions
 				</Text>
-				<Table transactions={transactions} />
+				<Table transactions={userState.transactions} />
 			</Box>
 		</Wrapper>
 	)
