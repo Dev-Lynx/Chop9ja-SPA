@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo, useCallback } from 'react'
 import styled from 'styled-components';
-import { Box, Form, FormField, Heading, Text, Select, TextInput, RadioButtonGroup } from 'grommet';
+import { Box, Form, FormField, Heading, Text, Select, TextInput, RadioButtonGroup, Image } from 'grommet';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
@@ -9,7 +9,7 @@ import { RouteComponentProps, Link } from 'react-router-dom';
 import { History } from 'history';
 import Button from "../../Components/Button/Button";
 import moment from "moment";
-import { ImageBackground } from 'react-native';
+import LoginBackGroundImage from "../../assets/images/chop9ja-registration.jpeg";
 
 
 const Wrapper = styled(Box)`
@@ -106,10 +106,11 @@ const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 				<BackgroundImage
 					style={{ flexBasis: "40%" }}
 					round={true}
-					background="green"
 				>
-
-					<></>
+					<Image
+						fit="cover"
+						src={LoginBackGroundImage}
+					/>
 				</BackgroundImage>
 			</Box>
 		</Wrapper>
@@ -308,7 +309,7 @@ const Register = ({ history }: { history: History }) => {
 	const [username, setUsername] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [address, setAddress] = useState("");
-	const [loginStateOfOrigin, setStateOfOrigin] = useState("");
+	const [stateOfOrigin, setStateOfOrigin] = useState("");
 	const [password, setPassword] = useState("");
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [day, setDay] = useState("");
@@ -390,9 +391,9 @@ const Register = ({ history }: { history: History }) => {
 			pass = false;
 			setErrors((errors: any) => ({ ...errors, phoneNumber: "Phone number is required and should contain 11 digits" }))
 		}
-		if (loginStateOfOrigin.length < 2) {
+		if (stateOfOrigin.length < 2) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, loginStateOfOrigin: "State Of origin is required" }))
+			setErrors((errors: any) => ({ ...errors, stateOfOrigin: "State Of origin is required" }))
 		}
 		if (year === "") {
 			pass = false;
@@ -440,7 +441,7 @@ const Register = ({ history }: { history: History }) => {
 			email,
 			username,
 			gender,
-			loginStateOfOrigin,
+			stateOfOrigin,
 			password,
 			dateOfBirth: new Date(`${year}-${month}-${day}`),
 		}
@@ -560,15 +561,15 @@ const Register = ({ history }: { history: History }) => {
 						<Box
 							border={{
 								side: "bottom",
-								color: errors.loginStateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
 							}}
 							style={{
 								height: "3rem"
 							}}
 						>
 							<SelectComponent
-								value={loginStateOfOrigin}
-								style={{ [errors.loginStateOfOrigin && "borderBottom"]: "solid .5px red" }}
+								value={stateOfOrigin}
+								style={{ [errors.stateOfOrigin && "borderBottom"]: "solid .5px red" }}
 								onChange={(event) => setStateOfOrigin(event.target.value)}
 							>
 
@@ -583,7 +584,7 @@ const Register = ({ history }: { history: History }) => {
 								color="red"
 								style={{ fontSize: "12px" }}
 							>
-								{errors.loginStateOfOrigin}
+								{errors.stateOfOrigin}
 							</Text>
 
 						</Box>

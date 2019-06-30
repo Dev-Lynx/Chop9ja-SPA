@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Box, Image, Text, Button } from 'grommet';
 import styled from 'styled-components';
 import AccountBalance from '../../Components/AccountBalance/AccountBalance';
-import InterSwitch from "../../assets/images/interswitch.png";
-import paystack from "../../assets/images/paystack.png";
-import masterCard from "../../assets/images/master-card.png";
 import { WithdrawalButton } from '../../Components/Buttons/Buttons';
 import Axios from 'axios';
+import Spinner from '../../Components/Spinner/Spinner';
 
 
 const Wrapper = styled(Box)`
@@ -38,29 +36,29 @@ const Gateways = styled(Box)`
 	}
 
 `;
-
-const bank = [
-	{
-		description: "",
-		feePercentage: 1.5,
-		fixedFee: 100,
-		logo: "",
-		name: "",
-		paymentRange: "",
-		type: "",
-		usesFeePercentage: true,
-		usesFixedFee: true,
-	}
-]
+interface Bank {
+	description: string;
+	feePercentage: number;
+	fixedFee: number;
+	logo: string;
+	name: string;
+	paymentRange: string;
+	type: string;
+	usesFeePercentage: boolean;
+	usesFixedFee: boolean;
+}
 
 const Deposit = () => {
 
-	const [banks, setBanks] = useState(bank)
+	const [banks, setBanks] = useState([] as Bank[])
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		(async () => {
+			setLoading(true)
 			const response = await Axios.get("/api/account/Wallet/deposit/paymentChannels")
 			setBanks(response.data)
+			setLoading(false);
 		})();
 	}, [])
 
@@ -69,20 +67,29 @@ const Deposit = () => {
 			<AccountBalance />
 			<Box margin="medium">
 				<WithdrawalButton />
-
 			</Box>
 			<Header>Make a Deposit</Header>
 			<Box direction="column" align="center">
+				<Spinner show={loading as any as Element | null} />
 				{banks.map((bank, index) => (
 					<Gateways
 						direction="row"
+						round={true}
 						justify="between"
 						key={index}
 						background="white"
 						pad={{ horizontal: "medium" }}
 						elevation="small"
 					>
-						<Box style={{ flexBasis: "20rem" }} height="150px" margin={{ right: "small" }} border="right">
+						<Box
+							style={{
+								flexBasis: "20%"
+							}}
+							height="150px"
+							round={true}
+							pad={{ right: "medium" }}
+							border="right"
+						>
 							<Image
 								fit="contain"
 								src={bank.logo}
