@@ -13,10 +13,12 @@ import { UserContextState, UserContextAction } from '../../Types';
 
 const Main = styled(Box)`
 	padding: 5rem 1rem 5rem;
+	margin-top: 3rem;
 	background-color: #D3E4DB;
 	@media (min-width: 768px){
 		padding-top: 9rem;
 		padding-left: 5rem;
+		margin-top: 0;
 	}
 `
 

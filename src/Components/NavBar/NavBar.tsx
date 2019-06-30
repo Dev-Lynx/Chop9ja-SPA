@@ -74,7 +74,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 			</Box>
 			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
 				<Menu
-					label={`Hello, ${userState.firstName}`}
+					label={<Text size="small">Hello, {userState.firstName}</Text>}
 					items={[
 						{
 							label: (
@@ -97,10 +97,12 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 			{confirmSignOut && (
 				<Layer
 					position="center"
+					responsive={false}
 				>
 					<Box
 						background="white"
 						height="200px"
+						width={isPc ? "200px" : "70vw"}
 						pad="medium"
 						direction="column"
 						justify="between"
@@ -114,11 +116,11 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 						>
 							<Button
 								color="red"
-								label="Sign Out"
+								label={<Text size="small">Sign Out</Text>}
 								onClick={signOut}
 							/>
 							<Button
-								label="Cancel"
+								label={<Text size="small">Cancel</Text>}
 								onClick={() => setConfirmSignOut(false)}
 							/>
 						</Box>

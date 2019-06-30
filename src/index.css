@@ -39,7 +39,9 @@ input:focus {
 
 input:disabled {
 	border: dashed 1px rgba(0, 0, 0, 0.33) !important;
-	color: rgba(0, 0, 0, 1);
+	color: rgba(0, 0, 0, 0.6);
+	font-weight: 500;
+	opacity: 1;
 	cursor: not-allowed;
 }
 
