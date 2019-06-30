@@ -3,7 +3,7 @@ import { Box, Image, Text, Heading, Button } from 'grommet';
 import styled from 'styled-components';
 import Table from '../../Components/Table/Table';
 import { Link } from 'react-router-dom';
-import AccountBalance from '../../Components/AccountBalance/AccountBalance';
+import Wallet from '../../Components/Wallet/Wallet';
 import { DepositButton, WithdrawalButton } from '../../Components/Buttons/Buttons';
 import { UserContext } from '../../Context/Context';
 
@@ -40,7 +40,7 @@ const Overview = () => {
 
 	return (
 		<Wrapper direction="column" align="center">
-			<AccountBalance />
+			<Wallet />
 
 			<Box direction="row" margin="medium">
 				<DepositButton />

@@ -20,11 +20,20 @@ const Links = styled(NavLink)`
 	font-size: 24px;
 	color: #444444;
 	transition all 1s;
+
+	& i {
+		width: 100%
+	}
 `
 
 const Footer = ({ location }: RouteComponentProps) => {
 	return (
-		<Wrapper elevation="medium" direction="row" width="100%" justify="between">
+		<Wrapper
+			elevation="medium"
+			direction="row"
+			width="100%"
+			justify="between"
+		>
 			<Links to="/dashboard" isActive={() => location.pathname === "/dashboard"} activeStyle={{ backgroundColor: "#B2CD25" }}>
 				<i className="zwicon-home" />
 			</Links>

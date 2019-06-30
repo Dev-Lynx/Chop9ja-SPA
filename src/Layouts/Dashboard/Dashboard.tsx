@@ -150,6 +150,7 @@ const Dashboard = ({ history }: props) => {
 			>
 
 				<NavBar
+					isPc={isPc}
 					toggleSideBar={toggleSideBar}
 				/>
 

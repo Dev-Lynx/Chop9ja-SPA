@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Image, Text, Button } from 'grommet';
 import styled from 'styled-components';
-import AccountBalance from '../../Components/AccountBalance/AccountBalance';
+import Wallet from '../../Components/Wallet/Wallet';
 import { WithdrawalButton } from '../../Components/Buttons/Buttons';
 import Axios from 'axios';
 import Spinner from '../../Components/Spinner/Spinner';
@@ -64,7 +64,7 @@ const Deposit = () => {
 
 	return (
 		<Wrapper direction="column">
-			<AccountBalance />
+			<Wallet />
 			<Box margin="medium">
 				<WithdrawalButton />
 			</Box>

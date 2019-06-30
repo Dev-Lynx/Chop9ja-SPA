@@ -51,11 +51,15 @@ const theme = {
 			pad: { horizontal: "large", vertical: "xsmall" },
 			verticalAlign: "bottom",
 		},
-		text: {
-			extend: {
-				textDecoration: "none !important"
-			},
+	},
+	text: {
+		extend: {
+			textDecoration: "none !important"
 		},
+	},
+	textInput: {
+		extend: () => `
+		`
 	}
 }
 

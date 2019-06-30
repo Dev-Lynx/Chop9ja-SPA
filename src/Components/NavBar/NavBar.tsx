@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
-import { Box, ResponsiveContext, Text } from 'grommet';
+import React, { useContext, useState } from 'react'
+import { Box, ResponsiveContext, Text, Image, Menu, Layer, Button } from 'grommet';
 import styled from 'styled-components';
-import { UserContext } from '../../Context/Context';
+import Logo from "../../assets/images/chop9ja.png";
+import { UserContext, LoginContext } from '../../Context/Context';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const Wrapper = styled(Box)`
-position: fixed;
-top: 0;
-z-index: 999;
-color: #24501F !important;
+	position: fixed;
+	top: 0;
+	z-index: 999;
+	color: #24501F !important;
 `
 
 const ArrowDown = styled.span`
@@ -21,16 +23,25 @@ border-top: .5rem solid #D9251B;
 `
 
 
-const NavBar = ({ toggleSideBar, }: { toggleSideBar: any }) => {
-	// size context
-	const size = useContext(ResponsiveContext);
+const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: boolean } & RouteComponentProps) => {
 
 	// Get the user context
 	const { userState } = useContext(UserContext)
 
+	// Get the login context
+	const { loginDispatch } = useContext(LoginContext);
+
+	const [confirmSignOut, setConfirmSignOut] = useState(false);
+
+
+	const signOut = () => {
+		loginDispatch({ type: "LOGOUT" });
+		history.push("/")
+	}
+
 	return (
 		<Wrapper
-			pad="medium"
+			pad={{ vertical: "small", left: isPc ? "large" : "-4rem", right: isPc ? "large" : "large", }}
 			direction="row"
 			elevation="small"
 			align="center"
@@ -38,26 +49,84 @@ const NavBar = ({ toggleSideBar, }: { toggleSideBar: any }) => {
 			width="100%"
 			background="white"
 		>
-			{size !== "small" && (
+			{isPc && (
 				<Box
 					direction="row"
 					style={{ cursor: "pointer" }}
 					onClick={toggleSideBar}
-					justify="center"
+					justify="between"
+					width="5rem"
 				>
-					<i className="zwicon-hamburger-menu" />
+					<i
+						className="zwicon-hamburger-menu"
+					/>
 					MENU
 				</Box>
 			)}
-			<Box>
-				Logo
-		</Box>
-			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
-				<Text size="small">Hello, {userState.firstName}</Text>
-				<ArrowDown />
+			<Box
+				height="64px"
+				pad={{ vertical: "-2rem" }}
+			>
+				<Image
+					fit="contain"
+					src={Logo}
+				/>
 			</Box>
+			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
+				<Menu
+					label={`Hello, ${userState.firstName}`}
+					items={[
+						{
+							label: (
+								<Text
+									style={{
+										color: "red",
+										fontSize: "14px",
+										fontWeight: 100,
+									}}
+								>
+									LOG OUT
+								</Text>
+							),
+							onClick: () => setConfirmSignOut(true)
+						},
+					]}
+				/>
+				{/* <i className="zwicon-more-h" /> */}
+			</Box>
+			{confirmSignOut && (
+				<Layer
+					position="center"
+				>
+					<Box
+						background="white"
+						height="200px"
+						pad="medium"
+						direction="column"
+						justify="between"
+						elevation="medium"
+					>
+						<Text>Are you sure?</Text>
+						<Box
+							direction="row"
+							justify="between"
+
+						>
+							<Button
+								color="red"
+								label="Sign Out"
+								onClick={signOut}
+							/>
+							<Button
+								label="Cancel"
+								onClick={() => setConfirmSignOut(false)}
+							/>
+						</Box>
+					</Box>
+				</Layer>
+			)}
 		</Wrapper>
 	)
 }
 
-export default NavBar
+export default withRouter(NavBar)

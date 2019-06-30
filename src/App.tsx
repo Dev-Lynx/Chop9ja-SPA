@@ -10,6 +10,7 @@ import LoginPage from "./Views/Login/Login";
 import ProgressBar from './Components/ProgressBar/ProgressBar';
 import { LoginContextState, LoginContextAction } from './Types';
 import { LoginContext } from './Context/Context';
+import Axios from 'axios';
 
 const Dashboard = loadable(() => import('./Layouts/Dashboard/Dashboard'), {
 	fallback: <ProgressBar show={true} />
@@ -42,6 +43,9 @@ const reducer = (state: LoginContextState, action: LoginContextAction): LoginCon
 		case "LOGIN":
 			return { ...state, loggedIn: true };
 		case "LOGOUT":
+			// Delete the token and log the use out
+			localStorage.removeItem("__sheghuntk__");
+			Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 			return { ...state, loggedIn: false };
 		default:
 			return state;
