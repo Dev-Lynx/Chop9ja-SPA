@@ -21,7 +21,7 @@ const ButtonGreen = styled(Button)`
 export const DepositButton = () => {
 	return (
 		<ButtonGreen
-			label={<Link to="dashboard/deposit">Deposit</Link>}
+			label={<Link to="/dashboard/wallet/deposit">Deposit</Link>}
 			color="brand"
 			primary={true}
 		/>
@@ -47,7 +47,7 @@ export const WithdrawalButton = () => {
 
 	return (
 		<ButtonWhite
-			label={<Link to="dashboard/withdraw">Withdrawal</Link>}
+			label={<Link to="/dashboard/wallet/withdraw">Withdrawal</Link>}
 			color="brand"
 			primary={true}
 		/>

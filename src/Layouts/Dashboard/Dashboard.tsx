@@ -23,13 +23,7 @@ const Main = styled(Box)`
 `
 
 // Lazy load the components
-const Overview = loadable(() => import("../../Views/Overview/Overview"), {
-	fallback: <ProgressBar show={true} />
-})
-const Deposit = loadable(() => import("../../Views/Deposit/Deposit"), {
-	fallback: <ProgressBar show={true} />
-})
-const Withdraw = loadable(() => import("../../Views/Withdraw/Withdraw"), {
+const Wallet = loadable(() => import("../../Views/Wallet/Wallet"), {
 	fallback: <ProgressBar show={true} />
 })
 const Settings = loadable(() => import("../../Views/Settings/Settings"), {
@@ -39,9 +33,8 @@ const Settings = loadable(() => import("../../Views/Settings/Settings"), {
 type props = RouteComponentProps & {};
 
 const routes = [
-	{ path: "/dashboard", component: Overview },
-	{ path: "/dashboard/deposit", component: Deposit },
-	{ path: "/dashboard/withdraw", component: Withdraw },
+	{ path: "/dashboard", exact: true, component: Wallet },
+	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/settings", component: Settings }
 ];
 
@@ -136,14 +129,12 @@ const Dashboard = ({ history }: props) => {
 		})();
 	}, [])
 
-	console.log(userState)
 
 
 	const toggleSideBar = () => {
 		setShowSideBar(!showSideBar);
 	}
 
-	console.log(data)
 
 	return (
 		<>
@@ -157,10 +148,15 @@ const Dashboard = ({ history }: props) => {
 				/>
 
 				<Box direction="row">
-					{isPc && (<SideBar show={showSideBar} />)}
+					{isPc && (<SideBar show={showSideBar} isPc={isPc} />)}
 					<Main>
 						<Switch>
-							{routes.map((route => <Route exact={true} path={route.path} component={route.component} />))}
+							{routes.map((route => (
+								route.exact ?
+									<Route exact={true} path={route.path} component={route.component} />
+									:
+									<Route path={route.path} component={route.component} />
+							)))}
 						</Switch>
 					</Main>
 				</Box>

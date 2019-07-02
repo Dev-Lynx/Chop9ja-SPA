@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components';
-import { Box } from 'grommet';
-import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Box, Text, Heading } from 'grommet';
+import { NavLink, withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { UserContext } from '../../Context/Context';
 
 
 
@@ -24,9 +25,23 @@ const Links = styled(NavLink)`
 	& i {
 		width: 100%
 	}
-`
+`;
+
+
+const SettingsLinks = styled(Box)`
+	cursor: pointer;
+	&:hover {
+		text-decoration: underline;
+		background-color: rgba(0, 0, 0, 0.05);
+	}
+`;
 
 const Footer = ({ location }: RouteComponentProps) => {
+
+	const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+
+	const { userState } = useContext(UserContext);
+
 	return (
 		<Wrapper
 			elevation="medium"
@@ -34,20 +49,96 @@ const Footer = ({ location }: RouteComponentProps) => {
 			width="100%"
 			justify="between"
 		>
-			<Links to="/dashboard" isActive={() => location.pathname === "/dashboard"} activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links
+				to="/dashboard"
+				isActive={() => location.pathname === "/dashboard"}
+				activeStyle={{ backgroundColor: "#B2CD25" }}
+			>
 				<i className="zwicon-home" />
 			</Links>
-			<Links to="/dashboard/deposit" activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links
+				to="/dashboard/deposit"
+				activeStyle={{ backgroundColor: "#B2CD25" }}
+			>
 				<i className="zwicon-piggy-bank" />
 			</Links>
-			<Links to="#" activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links
+				to="/dashboard/wallet"
+				activeStyle={{ backgroundColor: "#B2CD25" }}
+			>
 				<i className="zwicon-wallet" />
 			</Links>
-			<Links to="/dashboard/withdraw" activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links
+				to="/dashboard/withdraw"
+				activeStyle={{ backgroundColor: "#B2CD25" }}
+			>
 				<i className="zwicon-money-bill" />
 			</Links>
-			<Links to="/dashboard/settings" activeStyle={{ backgroundColor: "#B2CD25" }}>
+			<Links
+				to="#"
+				onClick={_ => setShowSettingsMenu(!showSettingsMenu)}
+				activeStyle={{ backgroundColor: "#B2CD25" }}
+			>
 				<i className="zwicon-cog" />
+				<Box
+					style={{
+						transition: "all 1s",
+						bottom: "10vh",
+						position: "fixed",
+						width: "300px",
+						display: showSettingsMenu ? "block" : "none",
+					}}
+					background="white"
+					elevation="small"
+				>
+
+					<SettingsLinks
+						pad="medium"
+						border={{ side: "bottom" }}
+					>
+						<Box
+							height="50px"
+							width="50px"
+							background="#24501F"
+							direction="column"
+							align="center"
+							justify="center"
+						>
+							<Heading level="3">
+								{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
+							</Heading>
+						</Box>
+						<Text>
+							{userState.firstName} {userState.lastName}
+						</Text>
+					</SettingsLinks>
+					<SettingsLinks
+						pad="medium"
+						border={{ side: "bottom" }}
+					>
+						<Link
+							to="/dashboard/settings/bank"
+						>
+							<Text
+							>
+								Bank accounts
+									</Text>
+						</Link>
+					</SettingsLinks>
+					<SettingsLinks
+						pad="medium"
+						border={{ side: "bottom" }}
+					>
+						<Link
+							to="/dashboard/settings/bank"
+						>
+							<Text
+							>
+								Passwords
+									</Text>
+						</Link>
+					</SettingsLinks>
+				</Box>
 			</Links>
 		</Wrapper>
 	)

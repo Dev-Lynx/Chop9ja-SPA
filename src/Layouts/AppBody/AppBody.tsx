@@ -1,16 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Box, Heading, Button, ResponsiveContext, TextInput, Text, Form, FormField } from 'grommet';
-// @ts-ignore
-import { defaultProps } from "grommet";
 import AppBar from '../../Components/AppBar/AppBar';
-import { Menu } from 'grommet-icons';
-import theme from "../../theme";
 import styled from 'styled-components';
 import Services from '../../Services';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
+import { LoginContext } from '../../Context/Context';
 
 
 const AppBarSpace = styled.div`
@@ -29,7 +26,11 @@ const Inputs = styled.div`
 	border-radius: 5px;
 `
 
-const AppBodyComponent: React.FC = ({ children }) => {
+const AppBodyComponent = ({ children, history }: RouteComponentProps & { children: any }) => {
+
+	// Use context
+	const { loginDispatch } = useContext(LoginContext);
+
 	const [showSidebar, setSidebar] = useState(false);
 	const [background, setBackground] = useState("");
 	const [email, setEmail] = useState("");
@@ -73,7 +74,8 @@ const AppBodyComponent: React.FC = ({ children }) => {
 
 		try {
 			const response = await Axios.post("/api/Auth/login", { email, password })
-			console.log(response);
+			loginDispatch({ type: "LOGIN" });
+			history.push("/dashboard");
 		} catch (error) {
 			const err = error as AxiosError
 			if (err.response) {
@@ -215,4 +217,4 @@ const AppBodyComponent: React.FC = ({ children }) => {
 	)
 }
 
-export default AppBodyComponent;
+export default withRouter(AppBodyComponent);

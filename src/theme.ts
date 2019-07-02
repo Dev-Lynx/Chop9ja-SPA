@@ -56,6 +56,9 @@ const theme = {
 		extend: {
 			textDecoration: "none !important"
 		},
+		medium: {
+			size: "16px",
+		}
 	},
 	textInput: {
 		extend: () => `
