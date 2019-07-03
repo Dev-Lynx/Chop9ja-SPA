@@ -35,7 +35,7 @@ type props = RouteComponentProps & {};
 const routes = [
 	{ path: "/dashboard", exact: true, component: Wallet },
 	{ path: "/dashboard/wallet", component: Wallet },
-	{ path: "/dashboard/settings", component: Settings }
+	{ path: "/dashboard/settings/profile", component: Settings }
 ];
 
 // Initial IState
@@ -53,7 +53,8 @@ const initialState: UserContextState = {
 	phoneNumber: "",
 	phoneNumberConfirmed: false,
 	stateOfOrigin: "",
-	username: ""
+	username: "",
+	paymentChannels: []
 };
 
 /**
@@ -137,35 +138,33 @@ const Dashboard = ({ history }: props) => {
 
 
 	return (
-		<>
-			<UserContext.Provider
-				value={{ userState, userDispatch }}
-			>
+		<UserContext.Provider
+			value={{ userState, userDispatch }}
+		>
 
-				<NavBar
-					isPc={isPc}
-					toggleSideBar={toggleSideBar}
-				/>
+			<NavBar
+				isPc={isPc}
+				toggleSideBar={toggleSideBar}
+			/>
 
-				<Box direction="row">
-					{isPc && (<SideBar show={showSideBar} isPc={isPc} />)}
-					<Main>
-						<Switch>
-							{routes.map((route => (
-								route.exact ?
-									<Route exact={true} path={route.path} component={route.component} />
-									:
-									<Route path={route.path} component={route.component} />
-							)))}
-						</Switch>
-					</Main>
-				</Box>
+			<Box direction="row">
+				{isPc && (<SideBar show={showSideBar} isPc={isPc} />)}
+				<Main>
+					<Switch>
+						{routes.map((route => (
+							route.exact ?
+								<Route exact={true} path={route.path} component={route.component} />
+								:
+								<Route path={route.path} component={route.component} />
+						)))}
+					</Switch>
+				</Main>
+			</Box>
 
-				{!isPc && (
-					<NavFooter />
-				)}
-			</UserContext.Provider>
-		</>
+			{!isPc && (
+				<NavFooter />
+			)}
+		</UserContext.Provider>
 	)
 }
 

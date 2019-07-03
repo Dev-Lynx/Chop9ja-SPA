@@ -21,7 +21,9 @@ const userState: UserContextState = {
 	phoneNumber: "",
 	phoneNumberConfirmed: false,
 	stateOfOrigin: "",
-	username: ""
+	username: "",
+	paymentChannels: [],
+
 };
 
 const userDispatch = (action: UserContextAction) => { };

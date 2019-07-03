@@ -104,9 +104,13 @@ const Footer = ({ location }: RouteComponentProps) => {
 							align="center"
 							justify="center"
 						>
-							<Heading level="3">
-								{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
-							</Heading>
+							<Link
+								to="/dashboard/settings/profile"
+							>
+								<Heading level="3">
+									{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
+								</Heading>
+							</Link>
 						</Box>
 						<Text>
 							{userState.firstName} {userState.lastName}

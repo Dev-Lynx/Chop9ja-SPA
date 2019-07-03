@@ -38,6 +38,8 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 	const [showSettingsMenu, setShowSettingsMenu] = useState(false);
 	const { userState } = useContext(UserContext);
 
+	console.log(userState);
+
 	return (
 		<>
 			<Box
@@ -83,7 +85,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 						<Text>Withdraw</Text>
 					</Links>
 					<Links
-						to="/dashboard/settings"
+						to="#"
 						activeStyle={{ backgroundColor: "#B2CD25" }}
 						onClick={() => setShowSettingsMenu(!showSettingsMenu)}
 					>
@@ -103,6 +105,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 						>
 
 							<SettingsLinks
+
 								pad="medium"
 								border={{ side: "bottom" }}
 							>
@@ -114,9 +117,13 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 									align="center"
 									justify="center"
 								>
-									<Heading level="3">
-										{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
-									</Heading>
+									<Link
+										to="/dashboard/settings/profile"
+									>
+										<Heading level="3">
+											{/* {`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`} */}
+										</Heading>
+									</Link>
 								</Box>
 								<Text>
 									{userState.firstName} {userState.lastName}
@@ -140,7 +147,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 								border={{ side: "bottom" }}
 							>
 								<Link
-									to="/dashboard/settings/bank"
+									to="/dashboard/settings/password"
 								>
 									<Text
 									>
