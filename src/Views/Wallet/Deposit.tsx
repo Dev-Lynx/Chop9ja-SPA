@@ -17,7 +17,7 @@ const Wrapper = styled(Box)`
 	@media (min-width: 768px) {
 		// align-items: start;
 	}
-`
+`;
 
 const Header = styled(Text)`
 	font-size: 32px;
@@ -29,7 +29,7 @@ const Header = styled(Text)`
 		margin-top: 5rem;
 		font-size: 55px;
 	}
-`
+`;
 
 const Gateways = styled(Box)`
 	width: 100%;

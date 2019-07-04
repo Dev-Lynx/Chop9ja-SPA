@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 type props = ButtonProps & {
 	style?: object;
-	alternate: boolean
+	alternate?: boolean
 }
 
 const Customized = styled(GrommetButton)`

@@ -57,7 +57,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 				<i className="zwicon-home" />
 			</Links>
 			<Links
-				to="/dashboard/deposit"
+				to="/dashboard/bet-insurance"
 				activeStyle={{ backgroundColor: "#B2CD25" }}
 			>
 				<i className="zwicon-piggy-bank" />

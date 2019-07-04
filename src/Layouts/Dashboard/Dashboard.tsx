@@ -10,7 +10,7 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { LoginContext, UserContext } from '../../Context/Context';
 import Axios, { AxiosError } from 'axios';
 import { UserContextState, UserContextAction } from '../../Types';
-import BetInsurance from '../../Views/BetInsurace/BetInsurance';
+import BetInsurance from '../../Views/BetInsurance/BetInsurance';
 
 const Main = styled(Box)`
 	padding: 5rem 1rem 5rem;

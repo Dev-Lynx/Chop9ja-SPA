@@ -37,7 +37,9 @@ const theme = {
 			pad: { vertical: "large" },
 			border: undefined
 		},
-		extend: () => `font-family: Arial`,
+		extend: () => `
+			font-size: 14px !important;
+		`,
 		footer: {
 			align: "start",
 			border: undefined,
