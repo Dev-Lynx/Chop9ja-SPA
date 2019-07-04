@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Box, Image, Text, Button, TextInput, Heading, ResponsiveContext } from 'grommet';
 import styled from 'styled-components';
 import Wallet from '../../Components/Wallet/Wallet';
-import { WithdrawalButton, DepositButton } from '../../Components/Buttons/Buttons';
 import Axios, { AxiosError } from 'axios';
 import Spinner from '../../Components/Spinner/Spinner';
 import { Link, Route, RouteComponentProps } from 'react-router-dom';
@@ -50,7 +49,7 @@ interface Bank {
 	usesFixedFee: boolean;
 }
 
-const Withdraw = () => {
+const BetInsurance = () => {
 
 	const size = useContext(ResponsiveContext);
 
@@ -85,11 +84,7 @@ const Withdraw = () => {
 
 	return (
 		<Wrapper direction="column">
-			<Wallet />
-			<Box margin="medium">
-				<DepositButton />
-			</Box>
-			<Header>Withdraw</Header>
+			<Header>BetInsurance</Header>
 			<Box direction="column" align="center">
 				<Spinner show={loading as any as Element | null} />
 				<Box
@@ -144,4 +139,4 @@ const Withdraw = () => {
 	)
 }
 
-export default Withdraw
+export default BetInsurance

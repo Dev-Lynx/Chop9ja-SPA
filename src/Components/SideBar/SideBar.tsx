@@ -33,7 +33,7 @@ const SettingsLinks = styled(Box)`
 	}
 `;
 
-const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & RouteChildrenProps) => {
+const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boolean } & RouteChildrenProps) => {
 
 	const [showSettingsMenu, setShowSettingsMenu] = useState(false);
 	const { userState } = useContext(UserContext);
@@ -64,7 +64,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 						<Text>Dashboard</Text>
 					</Links>
 					<Links
-						to="/dashboard/deposit"
+						to="/dashboard/bet-insurance"
 						activeStyle={{ backgroundColor: "#B2CD25" }}
 					>
 						<i className="zwicon-piggy-bank" />
@@ -107,6 +107,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 							<SettingsLinks
 
 								pad="medium"
+								onClick={_ => history.push("/dashboard/settings/profile")}
 								border={{ side: "bottom" }}
 							>
 								<Box
@@ -121,7 +122,7 @@ const SideBar = ({ show, location, isPc }: { show: boolean; isPc: boolean } & Ro
 										to="/dashboard/settings/profile"
 									>
 										<Heading level="3">
-											{/* {`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`} */}
+											{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
 										</Heading>
 									</Link>
 								</Box>

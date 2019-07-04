@@ -171,23 +171,25 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 		}
 		// Get the percentage
 		let percentage = 0;
+		let fee = 0;
+		let fixedFee = 0;
 		const amount = Number(event.target.value);
 		if (paymentChannel) {
 			if (paymentChannel.usesFeePercentage) {
 				percentage = amount * (paymentChannel.feePercentage / 100)
 			}
-			let fee = 0;
-			if (paymentChannel.name === "Paystack" && amount > 2000) {
-				fee = percentage + paymentChannel.fixedFee;
-
+			if (paymentChannel.usesFixedFee) {
+				fixedFee = paymentChannel.fixedFee
 			}
+			fee += percentage + fixedFee;
+
 			const total = fee + amount;
 			setAmount(amount);
 			setFee(fee);
 			setTotal(total);
 		}
 	}
-	const submitAmount = () => {
+	const submitAmount = async () => {
 		setLoading(true);
 		setError(false);
 		if (amount < 500) {
@@ -196,11 +198,16 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 			return;
 		}
 
-		// try {
-		// 	const reponse = Axios.post("/api/account/Wallet/deposit", {data})
-		// } catch (error) {
-		// 	const err = error as AxiosError;
-		// }
+		try {
+			const data = {
+				amount: total,
+				paymentChannel: paymentChannel && paymentChannel.name
+			};
+			const response = await Axios.post("/api/account/Wallet/deposit", data)
+			console.log(response)
+		} catch (error) {
+			const err = error as AxiosError;
+		}
 		setLoading(false);
 	}
 

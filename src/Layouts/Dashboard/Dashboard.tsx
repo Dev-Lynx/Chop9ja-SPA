@@ -10,6 +10,7 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { LoginContext, UserContext } from '../../Context/Context';
 import Axios, { AxiosError } from 'axios';
 import { UserContextState, UserContextAction } from '../../Types';
+import BetInsurance from '../../Views/BetInsurace/BetInsurance';
 
 const Main = styled(Box)`
 	padding: 5rem 1rem 5rem;
@@ -35,6 +36,7 @@ type props = RouteComponentProps & {};
 const routes = [
 	{ path: "/dashboard", exact: true, component: Wallet },
 	{ path: "/dashboard/wallet", component: Wallet },
+	{ path: "/dashboard/bet-insurance", component: BetInsurance },
 	{ path: "/dashboard/settings/profile", component: Settings }
 ];
 

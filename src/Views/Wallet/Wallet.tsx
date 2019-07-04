@@ -76,6 +76,10 @@ const Wallet = () => {
 				path="/dashboard/wallet/deposit"
 				component={Deposit}
 			/>
+			<Route
+				path="/dashboard/wallet/withdraw"
+				component={Withdraw}
+			/>
 		</>
 	)
 }
