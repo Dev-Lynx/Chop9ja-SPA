@@ -6,7 +6,6 @@ import { UserContext, LoginContext } from '../../Context/Context';
 import { withRouter, RouteComponentProps } from 'react-router';
 
 const Wrapper = styled(Box)`
-	position: fixed;
 	top: 0;
 	z-index: 999;
 	color: #24501F !important;
@@ -41,8 +40,15 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 
 	return (
 		<Wrapper
-			pad={{ vertical: "small", left: isPc ? "large" : "-4rem", right: isPc ? "large" : "large", }}
+			pad={{
+				vertical: "small",
+				left: isPc ? "large" : "-4rem",
+				right: isPc ? "large" : "large",
+			}}
 			direction="row"
+			style={{
+				position: isPc ? "fixed" : "absolute"
+			}}
 			elevation="small"
 			align="center"
 			justify="between"
@@ -64,7 +70,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 				</Box>
 			)}
 			<Box
-				height="64px"
+				height="40px"
 				pad={{ vertical: "-2rem" }}
 			>
 				<Image
@@ -72,28 +78,33 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 					src={Logo}
 				/>
 			</Box>
-			<Box direction="row" style={{ textTransform: "uppercase" }} align="center">
-				<Menu
-					label={<Text size="small">Hello, {userState.firstName}</Text>}
-					items={[
-						{
-							label: (
-								<Text
-									style={{
-										color: "red",
-										fontSize: "14px",
-										fontWeight: 100,
-									}}
-								>
-									LOG OUT
-								</Text>
-							),
-							onClick: () => setConfirmSignOut(true)
-						},
-					]}
-				/>
-				{/* <i className="zwicon-more-h" /> */}
-			</Box>
+
+				<Box
+					direction="row"
+					style={{ textTransform: "uppercase" }}
+					align="center"
+				>
+					<Menu
+						label={<Text size="small">Hello, {userState.firstName}</Text>}
+						items={[
+							{
+								label: (
+									<Text
+										style={{
+											color: "red",
+											fontSize: "14px",
+											fontWeight: 100,
+										}}
+									>
+										LOG OUT
+									</Text>
+								),
+								onClick: () => setConfirmSignOut(true)
+							},
+						]}
+					/>
+				</Box>
+
 			{confirmSignOut && (
 				<Layer
 					position="center"

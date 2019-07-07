@@ -30,7 +30,7 @@ a:hover {
 
 i {
 	font-size: 24px;
-	width: 0;
+	width: auto;
 }
 
 input {

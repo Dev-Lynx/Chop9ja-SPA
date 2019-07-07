@@ -3,8 +3,9 @@ const theme = {
 		colors: {
 			transparent: "rgba(255, 255, 189, 0)",
 			nav: "rgba(255, 255, 255, 0.7)",
-			secondary: "white",
+			secondary: "#9060EB",
 			brand: "#009746",
+
 			error: "#FF4040",
 			warning: "#FFAA15",
 			success: "#00C781",

@@ -10,23 +10,29 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { LoginContext, UserContext } from '../../Context/Context';
 import Axios, { AxiosError } from 'axios';
 import { UserContextState, UserContextAction } from '../../Types';
-import BetInsurance from '../../Views/BetInsurance/BetInsurance';
 
 const Main = styled(Box)`
-	padding: 5rem 1rem 5rem;
-	margin-top: 3rem;
-	background-color: #D3E4DB;
-	@media (min-width: 768px){
-		padding-top: 9rem;
-		padding-left: 5rem;
-		margin-top: 0;
-	}
+padding: 1rem 1rem 5rem;
+margin-top: 3rem;
+background-color: #EDEDED;
+@media (min-width: 768px){
+	padding-top: 9rem;
+	padding-left: 5rem;
+	margin-top: 0;
+}
 `
 
 // Lazy load the components
+
+const Overview = loadable(() => import('../../Views/Overview/Overview'), {
+	fallback: <ProgressBar show={true} />
+});
 const Wallet = loadable(() => import("../../Views/Wallet/Wallet"), {
 	fallback: <ProgressBar show={true} />
 })
+const BetInsurance = loadable(() => import('../../Views/BetInsurance/BetInsurance'), {
+	fallback: <ProgressBar show={true} />
+});
 const Settings = loadable(() => import("../../Views/Settings/Settings"), {
 	fallback: <ProgressBar show={true} />
 })
@@ -34,7 +40,7 @@ const Settings = loadable(() => import("../../Views/Settings/Settings"), {
 type props = RouteComponentProps & {};
 
 const routes = [
-	{ path: "/dashboard", exact: true, component: Wallet },
+	{ path: "/dashboard", exact: true, component: Overview },
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
 	{ path: "/dashboard/settings/profile", component: Settings }
@@ -151,14 +157,24 @@ const Dashboard = ({ history }: props) => {
 
 			<Box direction="row">
 				{isPc && (<SideBar show={showSideBar} isPc={isPc} />)}
-				<Main>
+				<Main
+				>
 					<Switch>
-						{routes.map((route => (
+						{routes.map((route, i) => (
 							route.exact ?
-								<Route exact={true} path={route.path} component={route.component} />
+								<Route
+									key={i}
+									exact={true}
+									path={route.path}
+									component={route.component}
+								/>
 								:
-								<Route path={route.path} component={route.component} />
-						)))}
+								<Route
+									key={i}
+									path={route.path}
+									component={route.component}
+								/>
+						))}
 					</Switch>
 				</Main>
 			</Box>

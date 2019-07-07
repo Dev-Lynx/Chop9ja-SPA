@@ -74,8 +74,14 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 
 		try {
 			const response = await Axios.post("/api/Auth/login", { email, password })
-			loginDispatch({ type: "LOGIN" });
-			history.push("/dashboard");
+			if (response.data.accessToken) {
+
+				localStorage.setItem("__sheghuntk__", response.data.accessToken);
+				// Set the default header to use the token
+				Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+				loginDispatch({ type: "LOGIN" });
+				history.push("/dashboard");
+			}
 		} catch (error) {
 			const err = error as AxiosError
 			if (err.response) {
