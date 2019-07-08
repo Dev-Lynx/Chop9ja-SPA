@@ -1,13 +1,29 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Box, Image, Text, TextInput, Heading, ResponsiveContext, Select, Table, TableBody, TableRow, TableCell, TableHeader } from 'grommet';
-import styled from 'styled-components';
-import Wallet from '../../Components/Wallet/Wallet';
-import Axios, { AxiosError } from 'axios';
-import Spinner from '../../Components/Spinner/Spinner';
-import { Link, Route, RouteComponentProps } from 'react-router-dom';
-import { UserContext } from '../../Context/Context';
-import Button from '../../Components/Button/Button';
-
+import Axios, { AxiosError } from "axios";
+import {
+	Box,
+	Button,
+	Form,
+	FormField,
+	Heading,
+	Image,
+	ResponsiveContext,
+	Select,
+	SelectProps,
+	Table,
+	TableBody,
+	TableCell,
+	TableHeader,
+	TableRow,
+	Text,
+	TextInput,
+} from "grommet";
+import moment from "moment";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Route, RouteComponentProps } from "react-router-dom";
+import styled, { CSSObject } from "styled-components";
+import Spinner from "../../Components/Spinner/Spinner";
+import Wallet from "../../Components/Wallet/Wallet";
+import { UserContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -16,7 +32,7 @@ const Wrapper = styled(Box)`
 	@media (min-width: 768px) {
 		// align-items: start;
 	}
-`
+`;
 
 const Header = styled(Text)`
 	font-size: 32px;
@@ -28,32 +44,23 @@ const Header = styled(Text)`
 		margin-top: 5rem;
 		font-size: 55px;
 	}
-`
-
-const Gateways = styled(Box)`
-	width: 100%;
-	margin-top: 2rem;
-	@media (min-width: 768px) {
-		width: 70%;
-	}
-
 `;
-interface Bank {
-	description: string;
-	feePercentage: number;
-	fixedFee: number;
-	logo: string;
-	name: string;
-	paymentRange: string;
-	type: string;
-	usesFeePercentage: boolean;
-	usesFixedFee: boolean;
-}
+
+type CustomSelectWithProps = SelectProps & {
+	attributeAppliedForCssToBeStyledInTheIndexDotCss?: any,
+	style?: CSSObject,
+};
+
+const CustomSelect = Select as React.ComponentClass<CustomSelectWithProps>;
+
+const DateSelector = styled(CustomSelect)`
+	font-weight: 700;
+`;
 
 const Bets = [
-	{ number: "B911SCWAWZSTTQ-3664462", amount: 5000, date: "20/04/2019 20:14:11" },
-	{ number: "B911SCWAWZSTTQ-3664462", amount: 5000, date: "20/04/2019 20:14:11" },
-	{ number: "B911SCWAWZSTTQ-3664462", amount: 5000, date: "20/04/2019 20:14:11" },
+	{ number: "B911SCWAWZSTTQ-3664462", odds: "4.5", platform: "Bet9ja", stake: 5000, date: moment().format("lll") },
+	{ number: "B911SCWAWZSTTQ-3664462", odds: "10.4", platform: "YangaBet", stake: 5000, date: "20/04/2019 20:14:11" },
+	{ number: "B911SCWAWZSTTQ-3664462", odds: "5.4", platform: "NairaBet", stake: 5000, date: "20/04/2019 20:14:11" },
 ];
 
 const BetInsurance = () => {
@@ -61,22 +68,21 @@ const BetInsurance = () => {
 	const size = useContext(ResponsiveContext);
 
 	// Get the user state
-	const { userState } = useContext(UserContext)
+	const { userState } = useContext(UserContext);
 
 	const [loading, setLoading] = useState(false);
 
 	const [amount, setAmount] = useState(0);
 	const [error, setError] = useState(false);
 
-
 	const amountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
-		const amount = Number(event.target.value)
-		if (isNaN(amount)) {
+		const a = Number(event.target.value);
+		if (isNaN(a)) {
 			return;
 		}
-		setAmount(amount);
-	}
+		setAmount(a);
+	};
 
 	const submit = () => {
 		setLoading(true);
@@ -87,7 +93,7 @@ const BetInsurance = () => {
 			return;
 		}
 		setLoading(false);
-	}
+	};
 
 	return (
 		<Wrapper direction="column">
@@ -98,66 +104,143 @@ const BetInsurance = () => {
 				<Box
 					pad="large"
 					width={size !== "small" ? "60vw" : "80vw"}
+					overflow={{ horizontal: "hidden" }}
 					background="white"
 					margin={{ top: "xlarge" }}
-					elevation="small"
+					round="small"
+					elevation="large"
 				>
+
 					<Box
-						direction={size !== "small" ? "row" : "column"}
-						justify="between"
-						align="center"
+						width="100%"
+						direction="column"
+						align="start"
 					>
+						<Text weight="bold" size="small">Date</Text>
 						<Box
-							border={{ side: "bottom" }}
-							pad="small"
+							direction="row"
+							justify="between"
+							width={size !== "small" ? "50%" : "100%"}
 						>
-							<Select
-								placeholder="BET NUMBER"
-								size="small"
-								options={['small', 'medium', 'large']}
-							/>
-						</Box>
-						<Box
-							border={{ side: "bottom" }}
-							pad="small"
-						>
-							<Select
-								size="small"
-								placeholder="BET TYPE"
-								options={['small', 'medium', 'large']}
-							/>
+							<Box
+								width="33%"
+							>
+								<DateSelector
+									style={{ width: "auto" }}
+									margin={{ right: "small" }}
+									size="small"
+									placeholder="DD"
+									icon={<i className="zwicon-chevron-down" />}
+									options={["small", "medium", "large"]}
+								/>
+							</Box>
+							<Box
+								width="33%"
+							>
+								<DateSelector
+									style={{ width: "auto" }}
+									margin={{ right: "small" }}
+									icon={
+										<i
+											style={{ color: "#9060EB" }}
+											className="zwicon-chevron-down"
+										/>
+									}
+									placeholder="MM"
+									options={["small", "medium", "large"]}
+								/>
+							</Box>
+							<Box
+								width="33%"
+							>
+								<DateSelector
+									style={{ width: "auto" }}
+									margin={{ right: "small" }}
+									icon={<i className="zwicon-chevron-down" />}
+									placeholder="YY"
+									options={["small", "medium", "large"]}
+								/>
+							</Box>
 						</Box>
 					</Box>
+
 					<Box
-						direction={size !== "small" ? "row" : "column"}
-						justify="between"
-						align="center"
+						width="100%"
+						margin={{ top: "medium" }}
+						direction="column"
+						align="start"
 					>
 						<Box
-							border={{ side: "bottom" }}
-							pad="small"
+							width="100%"
+							direction={size !== "small" ? "row" : "column"}
+							align="baseline"
+							justify="between"
 						>
-							<Select
-								placeholder="BET SITE"
-								size="small"
-								options={['small', 'medium', 'large']}
-							/>
+							<Box
+								direction="column"
+								justify="between"
+							>
+								<Text weight="bold" size="small">Platform</Text>
+								<DateSelector
+									margin={{ right: "small" }}
+									icon={<i className="zwicon-chevron-down" />}
+									placeholder="YY"
+									options={["small", "medium", "large"]}
+								/>
+							</Box>
+							<Box
+								flex="grow"
+							>
+								<Form>
+									<FormField
+										label="Bet Slip"
+										style={{
+											border: "none",
+										}}
+										placeholder="Help"
+									/>
+								</Form>
+							</Box>
 						</Box>
+						{size !== "Small" && (<Box margin={{ top: "medium" }} />)}
 						<Box
-							border={{ side: "bottom" }}
-							pad="small"
+							width="100%"
+							direction={size !== "small" ? "row" : "column"}
+							justify="between"
+							gap="small"
 						>
-							<TextInput
-								size="small"
-								placeholder="AMOUNT"
-							/>
+							<Box
+								flex="grow"
+							>
+								<Form>
+									<FormField
+										label="Stake"
+										style={{
+											border: "none",
+										}}
+										placeholder="Help"
+									/>
+								</Form>
+							</Box>
+							<Box>
+								<Form>
+									<FormField
+										label="Odds"
+										style={{
+											border: "none",
+										}}
+										placeholder="Help"
+									/>
+								</Form>
+							</Box>
 						</Box>
 					</Box>
-					<Box width="100%" round={true} direction="row" justify="center">
+
+					<Box width="100%" round={true} direction="row" justify="end">
 						<Button
 							style={{ marginTop: "1rem" }}
 							label={"Proceed"}
-							color="#009746"
+							color="secondary"
 							onClick={submit}
 							primary={true}
 						/>
@@ -166,9 +249,8 @@ const BetInsurance = () => {
 			</Box>
 			<Box
 				pad="large"
-				width={size !== "small" ? "720px" : "80vw"}
+				width={size !== "small" ? "960px" : "80vw"}
 				background="white"
-				round={true}
 				overflow={{ horizontal: "scroll" }}
 				direction="row"
 				align="center"
@@ -176,29 +258,31 @@ const BetInsurance = () => {
 				elevation="small"
 			>
 				<Table
-					style={{ width: size !== "small" ? "680px" : "80vw" }}
+					style={{ width: size !== "small" ? "920px" : "80vw" }}
 				>
 					<TableHeader>
 						<TableRow
 							style={{
-								borderBottom: "solid 1px rgba(0, 0, 0, 0.3)",
+								borderBottom: "solid 1px #ccc",
+								fontSize: "14px !important",
 								width: size !== "small" ? "720px" : "80vw",
-								fontSize: "14px !important"
 							}}
 						>
 							<TableCell>
-								<strong>
-									BET NUMBER
-								</strong>
+								Date
+							</TableCell>
+							<TableCell>
+								Platform
+							</TableCell>
+							<TableCell>
+								Slip Number
+							</TableCell>
+							<TableCell>
+								Odds
 							</TableCell>
 							<TableCell>
 								<strong>
-									AMOUNT
-								</strong>
-							</TableCell>
-							<TableCell>
-								<strong>
-									DATE
+									Stake
 								</strong>
 							</TableCell>
 						</TableRow>
@@ -208,23 +292,28 @@ const BetInsurance = () => {
 							<TableRow
 								key={index}
 								style={{
-									borderBottom: "solid 1px rgba(0, 0, 0, 0.3)",
-									padding: ".1rem"
+									padding: ".1rem",
 								}}
 							>
 								<TableCell
 									scope="row"
 								>
-									<strong>
-										{bet.number}
-									</strong>
+									{bet.date}
 								</TableCell>
 								<TableCell
 								>
-									{bet.amount}
+									{bet.platform}
 								</TableCell>
 								<TableCell>
-									{bet.date}
+									{bet.number}
+								</TableCell>
+								<TableCell>
+									{bet.odds}
+								</TableCell>
+								<TableCell>
+									<strong>
+										{bet.stake.toLocaleString()}
+									</strong>
 								</TableCell>
 							</TableRow>
 
@@ -233,7 +322,7 @@ const BetInsurance = () => {
 				</Table>
 			</Box>
 		</Wrapper >
-	)
-}
+	);
+};
 
-export default BetInsurance
+export default BetInsurance;

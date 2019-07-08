@@ -1,19 +1,29 @@
 const theme = {
+	formField: {
+		extend: () => `
+			font-size: 14px;
+		`,
+		label: {
+			margin: {
+				vertical: "small",
+			},
+		},
+	},
 	global: {
 		colors: {
-			transparent: "rgba(255, 255, 189, 0)",
+			brand: "#009746",
+			error: "#FF4040",
 			nav: "rgba(255, 255, 255, 0.7)",
 			secondary: "#9060EB",
-			brand: "#009746",
-
-			error: "#FF4040",
-			warning: "#FFAA15",
 			success: "#00C781",
+			text: { secondary: "white" },
+			transparent: "rgba(255, 255, 189, 0)",
+			warning: "#FFAA15",
 		},
-		control: {
+		focus: {
 			border: {
-				color: "rgba(255, 255, 255, 0)",
-			}
+				color: "#9060EB",
+			},
 		},
 		font: {
 			family: "HelveticaNeue",
@@ -22,12 +32,7 @@ const theme = {
 	select: {
 		options: {
 			text: {
-				color: "black"
-			},
-			control: {
-				extend: {
-					border: "solid 10px black !important",
-				},
+				color: "black",
 			},
 		},
 
@@ -35,8 +40,8 @@ const theme = {
 	table: {
 		body: {
 			align: "center",
+			border: undefined,
 			pad: { vertical: "large" },
-			border: undefined
 		},
 		extend: () => `
 			font-size: 14px !important;
@@ -45,7 +50,7 @@ const theme = {
 			align: "start",
 			border: undefined,
 			pad: { horizontal: "large", vertical: "small" },
-			verticalAlign: "bottom"
+			verticalAlign: "bottom",
 		},
 		header: {
 			align: "center",
@@ -57,16 +62,15 @@ const theme = {
 	},
 	text: {
 		extend: {
-			textDecoration: "none !important"
+			textDecoration: "none !important",
 		},
 		medium: {
-			size: "16px",
-		}
+			size: "14px",
+		},
 	},
 	textInput: {
-		extend: () => `
-		`
-	}
-}
+
+	},
+};
 
 export default theme;
