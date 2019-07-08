@@ -126,7 +126,10 @@ const BetInsurance = () => {
 								width="33%"
 							>
 								<DateSelector
-									style={{ width: "auto" }}
+									style={{
+										borderBottom: "none",
+										width: "auto",
+									}}
 									margin={{ right: "small" }}
 									size="small"
 									placeholder="DD"
@@ -138,7 +141,10 @@ const BetInsurance = () => {
 								width="33%"
 							>
 								<DateSelector
-									style={{ width: "auto" }}
+									style={{
+										borderBottom: "none",
+										width: "auto",
+									}}
 									margin={{ right: "small" }}
 									icon={
 										<i
@@ -154,7 +160,10 @@ const BetInsurance = () => {
 								width="33%"
 							>
 								<DateSelector
-									style={{ width: "auto" }}
+									style={{
+										borderBottom: "none",
+										width: "auto",
+									}}
 									margin={{ right: "small" }}
 									icon={<i className="zwicon-chevron-down" />}
 									placeholder="YY"
@@ -182,6 +191,10 @@ const BetInsurance = () => {
 							>
 								<Text weight="bold" size="small">Platform</Text>
 								<DateSelector
+									style={{
+										width: "auto",
+										borderBottom: "none"
+									}}
 									margin={{ right: "small" }}
 									icon={<i className="zwicon-chevron-down" />}
 									placeholder="YY"

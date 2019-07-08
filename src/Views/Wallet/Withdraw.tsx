@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Box, Image, Text, Button, TextInput, Heading, ResponsiveContext } from 'grommet';
 import styled from 'styled-components';
 import Wallet from '../../Components/Wallet/Wallet';
-import { WithdrawalButton, DepositButton } from '../../Components/Buttons/Buttons';
+import { WithdrawButton, DepositButton } from '../../Components/Buttons/Buttons';
 import Axios, { AxiosError } from 'axios';
 import Spinner from '../../Components/Spinner/Spinner';
 import { Link, Route, RouteComponentProps } from 'react-router-dom';

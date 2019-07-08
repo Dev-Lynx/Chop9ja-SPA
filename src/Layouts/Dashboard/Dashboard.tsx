@@ -1,41 +1,42 @@
-import React, { useContext, useState, useEffect, useReducer } from 'react'
-import { Box, Layer, ResponsiveContext, Text } from 'grommet';
-import styled from 'styled-components';
-import { Route, Switch, Redirect, RouteComponentProps } from 'react-router-dom';
-import SideBar from '../../Components/SideBar/SideBar';
+import loadable from "@loadable/component";
+import Axios, { AxiosError } from "axios";
+import { Box, Layer, ResponsiveContext, Text } from "grommet";
+import React, { useContext, useEffect, useReducer, useState } from "react"
+import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
+import styled from "styled-components";
 import NavBar from "../../Components/NavBar/NavBar";
-import NavFooter from '../../Components/NavFooter/NavFooter';
-import loadable from '@loadable/component';
-import ProgressBar from '../../Components/ProgressBar/ProgressBar';
-import { LoginContext, UserContext } from '../../Context/Context';
-import Axios, { AxiosError } from 'axios';
-import { UserContextState, UserContextAction } from '../../Types';
+import NavFooter from "../../Components/NavFooter/NavFooter";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import SideBar from "../../Components/SideBar/SideBar";
+import { LoginContext, UserContext } from "../../Context/Context";
+import { UserContextAction, UserContextState } from "../../Types";
 
 const Main = styled(Box)`
-padding: 1rem 1rem 5rem;
+padding: 1rem 0rem 5rem;
 margin-top: 3rem;
 background-color: #EDEDED;
 @media (min-width: 768px){
 	padding-top: 9rem;
-	padding-left: 5rem;
+	padding-left: 4rem;
+	padding-right: 0rem;
 	margin-top: 0;
 }
-`
+`;
 
 // Lazy load the components
 
-const Overview = loadable(() => import('../../Views/Overview/Overview'), {
-	fallback: <ProgressBar show={true} />
+const Overview = loadable(() => import("../../Views/Overview/Overview"), {
+	fallback: <ProgressBar show={true} />,
 });
 const Wallet = loadable(() => import("../../Views/Wallet/Wallet"), {
-	fallback: <ProgressBar show={true} />
-})
-const BetInsurance = loadable(() => import('../../Views/BetInsurance/BetInsurance'), {
-	fallback: <ProgressBar show={true} />
+	fallback: <ProgressBar show={true} />,
+});
+const BetInsurance = loadable(() => import("../../Views/BetInsurance/BetInsurance"), {
+	fallback: <ProgressBar show={true} />,
 });
 const Settings = loadable(() => import("../../Views/Settings/Settings"), {
-	fallback: <ProgressBar show={true} />
-})
+	fallback: <ProgressBar show={true} />,
+});
 
 type props = RouteComponentProps & {};
 
@@ -43,7 +44,7 @@ const routes = [
 	{ path: "/dashboard", exact: true, component: Overview },
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
-	{ path: "/dashboard/settings/profile", component: Settings }
+	{ path: "/dashboard/settings/profile", component: Settings },
 ];
 
 // Initial IState
@@ -62,7 +63,7 @@ const initialState: UserContextState = {
 	phoneNumberConfirmed: false,
 	stateOfOrigin: "",
 	username: "",
-	paymentChannels: []
+	paymentChannels: [],
 };
 
 /**
@@ -117,33 +118,30 @@ const Dashboard = ({ history }: props) => {
 		(async () => {
 			try {
 				const response = await Axios.get("/api/Account/user");
-				const data = response.data
-				userDispatch({ type: "UPDATE", payload: data })
+				const data = response.data;
+				userDispatch({ type: "UPDATE", payload: data });
 			} catch (error) {
 				const err = error as AxiosError;
 				if (err.response) {
 					// Token failed
-					history.push("/login")
+					history.push("/login");
 				}
 			}
 		})();
 		(async () => {
 			try {
-				const response = await Axios.get("/api/account/wallet")
+				const response = await Axios.get("/api/account/wallet");
 				const data = response.data;
-				userDispatch({ type: "UPDATE", payload: data })
+				userDispatch({ type: "UPDATE", payload: data });
 			} catch (error) {
 				const err = error as AxiosError;
 			}
 		})();
-	}, [])
-
-
+	}, []);
 
 	const toggleSideBar = () => {
 		setShowSideBar(!showSideBar);
-	}
-
+	};
 
 	return (
 		<UserContext.Provider
@@ -183,7 +181,7 @@ const Dashboard = ({ history }: props) => {
 				<NavFooter />
 			)}
 		</UserContext.Provider>
-	)
-}
+	);
+};
 
-export default Dashboard
+export default Dashboard;

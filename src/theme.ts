@@ -25,6 +25,11 @@ const theme = {
 				color: "#9060EB",
 			},
 		},
+		control: {
+			border: {
+				radius: 0
+			}
+		},
 		font: {
 			family: "HelveticaNeue",
 		},
@@ -69,7 +74,10 @@ const theme = {
 		},
 	},
 	textInput: {
-
+		extend: () => `
+			border: none;
+			border-bottom: 1px solid rgba(0,0,0,0.33);
+		`
 	},
 };
 

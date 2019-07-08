@@ -37,10 +37,6 @@ input {
 	box-shadow: none !important;
 }
 
-input:focus {
-	border: none;
-}
-
 input:disabled {
 	border: dashed 1px rgba(0, 0, 0, 0.33) !important;
 	color: rgba(0, 0, 0, 0.6);

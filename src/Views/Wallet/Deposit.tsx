@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Box, Image, Text, Button, TextInput, Heading, ResponsiveContext } from 'grommet';
-import styled from 'styled-components';
-import Wallet from '../../Components/Wallet/Wallet';
-import { WithdrawalButton } from '../../Components/Buttons/Buttons';
-import Axios, { AxiosError } from 'axios';
-import Spinner from '../../Components/Spinner/Spinner';
-import { Link, Route, RouteComponentProps } from 'react-router-dom';
-import { UserContext } from '../../Context/Context';
-import ProgressBar from '../../Components/ProgressBar/ProgressBar';
-
+import Axios, { AxiosError } from "axios";
+import { Box, Button, Form, FormField, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Route, RouteComponentProps } from "react-router-dom";
+import styled from "styled-components";
+import { WithdrawButton } from "../../Components/Buttons/Buttons";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import Spinner from "../../Components/Spinner/Spinner";
+import Wallet from "../../Components/Wallet/Wallet";
+import { UserContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -24,7 +23,7 @@ const Header = styled(Text)`
 	font-family: Roboto;
 	font-weight: 100;
 	margin-top: 2rem;
-	color: #24501F;
+	color: #444;
 	@media (min-width:768px) {
 		margin-top: 5rem;
 		font-size: 55px;
@@ -56,7 +55,7 @@ const Deposit = () => {
 	const size = useContext(ResponsiveContext);
 
 	// Get the user state
-	const { userState, userDispatch } = useContext(UserContext)
+	const { userState, userDispatch } = useContext(UserContext);
 
 	const [banks, setBanks] = useState([] as Bank[]);
 	const [loading, setLoading] = useState(false);
@@ -65,13 +64,13 @@ const Deposit = () => {
 		// Try getting the list of banks from the local storage
 		if (userState.paymentChannels.length === 0) {
 			(async () => {
-				setLoading(true)
-				const response = await Axios.get("/api/account/Wallet/deposit/paymentChannels")
+				setLoading(true);
+				const response = await Axios.get("/api/account/Wallet/deposit/paymentChannels");
 				userDispatch({ type: "UPDATE", payload: { paymentChannels: response.data } });
 				setLoading(false);
 			})();
 		}
-	}, [])
+	}, []);
 
 	console.log(userState);
 
@@ -79,10 +78,14 @@ const Deposit = () => {
 		<Wrapper direction="column">
 			<Wallet />
 			<Box margin="medium">
-				<WithdrawalButton />
+				<WithdrawButton />
 			</Box>
-			<Header>Make a Deposit</Header>
-			<Box direction="column" align="center">
+			<Header >Make a Deposit</Header>
+			<Box
+				direction="column"
+				align="center"
+				pad="medium"
+			>
 				<Spinner show={loading as any as Element | null} />
 				<Route
 					path="/dashboard/wallet/deposit/:paymentChannel"
@@ -96,18 +99,18 @@ const Deposit = () => {
 							<Gateways
 								direction="row"
 								round={true}
-								justify="between"
+								justify="start"
 								key={index}
 								background="white"
 								pad={{ horizontal: "medium" }}
-								elevation="small"
+								elevation="large"
 							>
 								<Box
 									style={{
-										flexBasis: "20%"
+										flexBasis: "20%",
 									}}
 									height="150px"
-									round={true}
+									round="small"
 									pad={{ right: "medium" }}
 									border="right"
 								>
@@ -116,16 +119,36 @@ const Deposit = () => {
 										src={bank.logo}
 									/>
 								</Box>
-								<Box pad="medium" direction="column" justify="center">
+								<Box
+									pad="medium"
+									flex={size !== "small" ? "grow" : true}
+									direction="column"
+									justify="between"
+								>
+
+									<Text size="16px">
+										<strong>
+											{bank.name}
+										</strong>
+									</Text>
 									<Text size="xsmall">
 										{bank.description}
 									</Text>
-									<Text size="xsmall">
-										<strong>Payment Range:</strong> {bank.paymentRange}
-									</Text>
-									<Box width="100%" round={true} direction="row" justify="end">
+									<Box
+										width="100%"
+										round={true}
+										direction="row"
+										justify="between"
+										align="center"
+									>
+										<Text size="xsmall">
+											<strong>Payment Range:</strong> {bank.paymentRange}
+										</Text>
 										<Button
-											style={{ marginTop: "1rem" }}
+											style={{
+												color: "white",
+												marginTop: "1rem",
+											}}
 											label={
 												<Link
 													to={`/dashboard/wallet/deposit/${bank.name}`}
@@ -133,7 +156,7 @@ const Deposit = () => {
 													Continue
 												</Link>
 											}
-											color="#009746"
+											color="secondary"
 											primary={true}
 										/>
 									</Box>
@@ -144,10 +167,10 @@ const Deposit = () => {
 				/>
 			</Box>
 		</Wrapper>
-	)
-}
+	);
+};
 
-export default Deposit
+export default Deposit;
 
 const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 
@@ -157,38 +180,39 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 
 	const [loading, setLoading] = useState(false);
 
-	const [amount, setAmount] = useState(0);
-	const [fee, setFee] = useState(0.00);
-	const [total, setTotal] = useState(0);
+	const [amount, setAmount] = useState("" as any as number);
+	const [fee, setFee] = useState("" as any as number);
+	const [total, setTotal] = useState("" as any as number);
 	const [error, setError] = useState(false);
 
-	const paymentChannel = paymentChannels.find(channel => channel.name === match.params.paymentChannel);
+	const paymentChannel = paymentChannels.find((channel) => channel.name === match.params.paymentChannel);
 
 	const setPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
-		if (isNaN(Number(event.target.value))) {
+		const a = Number(event.target.value);
+
+		if (isNaN(a)) {
 			return;
 		}
 		// Get the percentage
 		let percentage = 0;
-		let fee = 0;
+		let f = 0;
 		let fixedFee = 0;
-		const amount = Number(event.target.value);
 		if (paymentChannel) {
 			if (paymentChannel.usesFeePercentage) {
-				percentage = amount * (paymentChannel.feePercentage / 100)
+				percentage = a * (paymentChannel.feePercentage / 100);
 			}
 			if (paymentChannel.usesFixedFee) {
-				fixedFee = paymentChannel.fixedFee
+				fixedFee = paymentChannel.fixedFee;
 			}
-			fee += percentage + fixedFee;
+			f += percentage + fixedFee;
 
-			const total = fee + amount;
-			setAmount(amount);
-			setFee(fee);
-			setTotal(total);
+			const t = f + a;
+			setAmount(a);
+			setFee(f);
+			setTotal(t);
 		}
-	}
+	};
 	const submitAmount = async () => {
 		setLoading(true);
 		setError(false);
@@ -201,27 +225,23 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 		try {
 			const data = {
 				amount: total,
-				paymentChannel: paymentChannel && paymentChannel.name
+				paymentChannel: paymentChannel && paymentChannel.name,
 			};
-			const response = await Axios.post("/api/account/Wallet/deposit", data)
-			console.log(response)
+			const response = await Axios.post("/api/account/Wallet/deposit", data);
 		} catch (error) {
 			const err = error as AxiosError;
 		}
 		setLoading(false);
-	}
+	};
 
-	console.log(useContext(UserContext).userState);
 
 	return (
 		<>
 			<Box
 				pad="large"
 				width={size !== "small" ? "50vw" : "80vw"}
-				background="white"
-				margin={{ top: "xlarge" }}
+				margin={{ top: "small" }}
 				round={true}
-				elevation="small"
 			>
 				<ProgressBar show={loading as any} />
 				{paymentChannel && (
@@ -231,98 +251,111 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 							align="center"
 							direction="row"
 						>
-
-							<Heading level="3">{paymentChannel.name}</Heading>
 							<Box
 								style={{
-									flexBasis: "20%"
+									flexBasis: "100px",
 								}}
-								height="50px"
-								round={true}
-								pad={{ right: "medium" }}
+								height="100px"
+								direction="row"
+								justify="center"
+								round="small"
+								background="white"
+								margin={{ right: "medium" }}
+								pad="medium"
+								elevation="medium"
 							>
 								<Image
 									fit="contain"
 									src={paymentChannel.logo}
 								/>
 							</Box>
+							<Text
+								size={size !== "small" ? "48px" : "16px"}
+							>
+								{paymentChannel.name}
+							</Text>
 						</Box>
 					</>
 
 				)}
 				<Box
-					direction="row"
-					align="baseline"
-					justify="start"
-					margin={{ bottom: "large", }}
+					pad="medium"
+					margin={{ vertical: "large" }}
+					background="white"
+					round="small"
+					elevation="medium"
 				>
-					<Text
-						style={{
-							fontWeight: 100,
-							lineHeight: 0,
-							fontSize: "24px"
-						}}
-						margin={{ right: "medium" }}
-						color="rgba(68, 68, 68, 0.5)"
+					<Box
+						direction="column"
+						align="start"
+						margin={{ bottom: "small" }}
+						width="100%"
 					>
-						Amount
-					</Text>
-
-					<TextInput
-						focusIndicator={false}
-						width="60%"
-						value={amount}
-						onChange={setPrice as any}
-						style={{
-							outline: "none !important",
-							borderBottom: error ? "solid .5px red" : "solid .5px rgba(0,0,0,0.33)"
-						}}
-					/>
-				</Box>
-				<Box
-					direction="row"
-					align="baseline"
-					justify="start"
-				>
-					<Text
-						style={{
-							fontWeight: 100,
-							lineHeight: 0,
-							fontSize: "24px"
-						}}
-						margin={{ right: "medium" }}
-						color="rgba(68, 68, 68, 0.5)"
-					>
-						Fee
-					</Text>
+						<Form
+							style={{
+								width: "100%",
+							}}
+						>
+							<Text
+								size="16px"
+								weight={100}
+							>
+								Amount
+							</Text>
+							<TextInput
+								focusIndicator={true}
+								value={amount}
+								onChange={setPrice}
+							/>
+						</Form>
+					</Box>
 
 					<Box
-						width="20%"
-						direction="row"
-						justify="center"
-						color="#ddd"
-						border={{ side: "bottom" }}
+						direction="column"
+						align="start"
+						width={size !== "small" ? "100px" : "40%"}
 					>
-						{fee}
+						<Form
+							style={{
+								width: size !== "small" ? "100px" : "40%",
+							}}
+						>
+							<Text
+								size="16px"
+								weight={100}
+							>
+								Fee
+							</Text>
+							<TextInput
+								value={fee}
+								onFocus={(event) => {
+									event.target.blur();
+								}}
+							/>
+						</Form>
 					</Box>
-				</Box>
-				<Box
-					direction="row"
-					justify="end"
-				>
-					<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
+
+					<Box
+						direction="row"
+						justify="end"
+					>
+						<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
+					</Box>
+					<Box width="100%" round={true} direction="row" justify="end">
+						<Button
+							style={{
+								color: "white",
+								marginTop: "1rem",
+							 }}
+							label={"Proceed"}
+							color="secondary"
+							onClick={submitAmount}
+							primary={true}
+						/>
+					</Box>
 				</Box>
 			</Box>
 
-			<Box width="100%" round={true} direction="row" justify="end">
-				<Button
-					style={{ marginTop: "1rem" }}
-					label={"Proceed"}
-					color="#009746"
-					onClick={submitAmount}
-					primary={true}
-				/>
-			</Box>
 		</>
-	)
-}
+	);
+};

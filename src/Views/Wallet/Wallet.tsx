@@ -1,25 +1,25 @@
-import React, { useContext } from 'react'
-import { Box, Image, Text, Heading, Button } from 'grommet';
-import styled from 'styled-components';
-import Table from '../../Components/Table/Table';
-import { Link, Route } from 'react-router-dom';
-import WalletComponent from '../../Components/Wallet/Wallet';
-import { DepositButton, WithdrawalButton } from '../../Components/Buttons/Buttons';
-import { UserContext } from '../../Context/Context';
-import loadable from '@loadable/component';
-import ProgressBar from '../../Components/ProgressBar/ProgressBar';
+import loadable from "@loadable/component";
+import { Box, Button, Heading, Image, ResponsiveContext, Text } from "grommet";
+import React, { useContext } from "react";
+import { Link, Route } from "react-router-dom";
+import styled from "styled-components";
+import { DepositButton, WithdrawButton } from "../../Components/Buttons/Buttons";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import Table from "../../Components/Table/Table";
+import WalletComponent from "../../Components/Wallet/Wallet";
+import { UserContext } from "../../Context/Context";
 
 const Deposit = loadable(() => import("../../Views/Wallet/Deposit"), {
-	fallback: <ProgressBar show={true} />
-})
+	fallback: <ProgressBar show={true} />,
+});
 const Withdraw = loadable(() => import("../../Views/Wallet/Withdraw"), {
-	fallback: <ProgressBar show={true} />
-})
+	fallback: <ProgressBar show={true} />,
+});
 
 const Wrapper = styled(Box)`
 	width: 100vw;
 	padding-bottom: 2rem;
-`
+`;
 
 const Card = styled(Box)`
 	background-color: rgba(178, 205, 37, 0.36);
@@ -30,19 +30,19 @@ const Card = styled(Box)`
 	@media (max-width: 768px) {
 		height: 150px;
 	}
-`
+`;
 
 const Transactions = styled(Box)`
 
-`
+`;
 
 const transactions = [
 	{ id: 1, date: "Aug 7, 2019", type: "Credit", amount: 5000 },
-	{ id: 2, date: "Aug 7, 2019", type: "Withdrawal", amount: 4000 }
+	{ id: 2, date: "Aug 7, 2019", type: "Withdrawal", amount: 4000 },
 ];
 
 const Wallet = () => {
-
+	const size = useContext(ResponsiveContext);
 	const { userState } = useContext(UserContext);
 
 	return (
@@ -55,9 +55,16 @@ const Wallet = () => {
 					<Wrapper direction="column" align="center">
 						<WalletComponent />
 
-						<Box direction="row" margin="medium">
+						<Box
+							direction="row"
+							margin="medium"
+							width="100%"
+							justify={size !== "small" ? "end" : "between"}
+							pad={{ horizontal: "xlarge" }}
+							gap="medium"
+						>
 							<DepositButton />
-							<WithdrawalButton />
+							<WithdrawButton />
 						</Box>
 						<Box width="100vw">
 							<Text
@@ -81,7 +88,7 @@ const Wallet = () => {
 				component={Withdraw}
 			/>
 		</>
-	)
-}
+	);
+};
 
-export default Wallet
+export default Wallet;

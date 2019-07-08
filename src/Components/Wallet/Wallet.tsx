@@ -1,42 +1,62 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components';
-import { Box, Heading, Text, Image } from 'grommet';
-import { UserContext } from '../../Context/Context';
+import { Box, Heading, Image, ResponsiveContext, Text } from "grommet";
+import React, { useContext } from "react"
+import styled from "styled-components";
 import WalletImage from "../../assets/images/wallet.jpg";
+import { UserContext } from "../../Context/Context";
 
 const Card = styled(Box)`
 	color: white;
-	background-image: url("${WalletImage}");
-	height: 215px;
-	max-width: 612px;
 	@media (max-width: 768px) {
 		height: 150px;
 	}
-`
-
+`;
 const Wallet = () => {
 
+	const size = useContext(ResponsiveContext);
 	const { userState } = useContext(UserContext);
 
 	return (
-		<Box height="215px" width="612px">
-			<Card fill={true} align="start" direction="column">
-				<Box
-					fill={true}
-					width="100%"
+		<Box
+			width="100%"
+			height={size !== "small" ? "400px" : "250px"}
+			margin={{ top: size !== "small" ? "-4.5rem" : "-1rem" }}
+			background={{
+				color: "brand",
+				image: `url(${WalletImage})`,
+				opacity: "strong",
+				position: "center",
+				size: "cover",
+			}}
+		>
+			<Box
+				height="100%"
+				style={{
+					color: "white"
+					,
+				}}
+				background="rgba(51, 51, 51, 0.5)"
+				pad="large"
+				responsive={true}
+				direction="column"
+				justify="end"
+			>
+				<Heading
 					style={{
-						color: "white"
+						fontWeight: 100,
+						marginBottom: "-1.5rem",
 					}}
-					pad={{ left: "3rem" }}
-					background="rgba(178, 205, 37, 0.36)"
 				>
-					<Heading level="1">{"₦" + userState.balance}</Heading>
-					<Text style={{ fontSize: "25px" }}>Total Withdrawals</Text>
-					<Text style={{ fontSize: "25px" }}>N11,234</Text>
-				</Box>
-			</Card>
+					WALLET
+				</Heading>
+				<Heading
+					level="1"
+				>
+					{"₦" + userState.balance}
+				</Heading>
+			</Box>
 		</Box>
 	)
+		;
 }
-
+	;
 export default Wallet;
