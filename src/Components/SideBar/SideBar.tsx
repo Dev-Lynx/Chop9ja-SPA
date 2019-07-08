@@ -78,7 +78,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						<Text>Wallet</Text>
 					</Links>
 					<Links
-						to="/dashboard/withdraw"
+						to="/dashboard/cash-out"
 						activeStyle={{ backgroundColor: "#B2CD25" }}
 					>
 						<i className="zwicon-money-bill" />

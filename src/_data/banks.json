@@ -1,0 +1,184 @@
+[
+	{
+	  "id": "1",
+	  "name": "Access Bank",
+	  "knownAs": "Access Bank",
+	  "code": "044",
+		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535417/Banks/AccessBank.png",
+		"isAvailable": true
+	},
+	{
+	  "id": "2",
+	  "name": "Citibank",
+	  "knownAs": "Citi Bank",
+	  "code": "023",
+		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535451/Banks/CitiBank.png",
+		"isAvailable": true
+	},
+	{
+	  "id": "3",
+	  "name": "Diamond Bank",
+	  "knownAs": "Diamond Bank",
+	  "code": "063",
+		"isAvailable": false
+	},
+	{
+	  "id": "4",
+	  "name": "Dynamic Standard Bank",
+	  "knownAs": "Dynamic Standard Bank",
+	  "code": "",
+	  "isAvailable": false
+	},
+	{
+	  "id": "5",
+	  "name": "Ecobank Nigeria",
+	  "knownAs": "EcoBank",
+	  "code": "050",
+		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535461/Banks/EcoBank.png",
+		"isAvailable": true
+	},
+	{
+	  "id": "6",
+	  "name": "Fidelity Bank Nigeria",
+	  "knownAs": "Fidelity Bank",
+	  "code": "070",
+		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535465/Banks/FidelityBank.png",
+		"isAvailable": true
+	},
+	{
+	  "id": "7",
+	  "name": "First Bank of Nigeria",
+	  "knownAs": "First Bank",
+	  "code": "011",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535521/Banks/FirstBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "8",
+	  "name": "First City Monument Bank",
+	  "knownAs": "FCMB",
+	  "code": "214",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535483/Banks/FCMB.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "9",
+	  "name": "Guaranty Trust Bank",
+	  "knownAs": "GT Bank",
+	  "code": "058",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535515/Banks/GTBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "10",
+	  "name": "Heritage Bank Plc",
+	  "knownAs": "Heritage Bank",
+	  "code": "030",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535516/Banks/HeritageBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "11",
+	  "name": "Jaiz Bank",
+	  "knownAs": "Jaiz Bank",
+	  "code": "301",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535518/Banks/JaizBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "12",
+	  "name": "Keystone Bank Limited",
+	  "knownAs": "Keystone Bank",
+	  "code": "082",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535520/Banks/KeystoneBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "13",
+	  "name": "Providus Bank Plc",
+	  "knownAs": "Providus Bank",
+	  "code": "101",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535526/Banks/ProvidusBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "14",
+	  "name": "Polaris Bank",
+	  "knownAs": "Polaris Bank",
+	  "code": "076",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535521/Banks/PolarisBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "15",
+	  "name": "Stanbic IBTC Bank Nigeria Limited",
+	  "knownAs": "Stanbic IBTC Bank",
+	  "code": "221",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535521/Banks/StanbicBank.png",
+	  "isAvailable": true
+	},
+	{
+	  "id": "16",
+	  "name": "Standard Chartered Bank",
+	  "knownAs": "Standard Chartered Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535526/Banks/StandardCharteredBank.png",
+	  "code": "068",
+	  "isAvailable": true
+	},
+	{
+	  "id": "17",
+	  "name": "Sterling Bank",
+	  "knownAs": "Sterling Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535523/Banks/Sterling-Bank.png",
+	  "code": "232",
+	  "isAvailable": true
+	},
+	{
+	  "id": "18",
+	  "name": "Suntrust Bank Nigeria Limited",
+	  "knownAs": "Suntrust Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535524/Banks/SunTrustBank.png",
+	  "code": "100",
+	  "isAvailable": true
+	},
+	{
+	  "id": "19",
+	  "name": "Union Bank of Nigeria",
+	  "knownAs": "Union Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535531/Banks/UnionBank.png",
+	  "code": "032",
+	  "isAvailable": true
+	},
+	{
+	  "id": "20",
+	  "name": "United Bank for Africa",
+	  "knownAs": "UBA",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535526/Banks/UBA.png",
+	  "code": "033",
+	  "isAvailable": true
+	},
+	{
+	  "id": "21",
+	  "name": "Unity Bank Plc",
+	  "knownAs": "Unity Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535526/Banks/UBA.png",
+	  "code": "215",
+	  "isAvailable": true
+	},
+	{
+	  "id": "22",
+	  "name": "Wema Bank",
+	  "knownAs": "Wema Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535532/Banks/WemaBank.png",
+	  "code": "035",
+	  "isAvailable": true
+	},
+	{
+	  "id": "23",
+	  "name": "Zenith Bank",
+	  "knownAs": "Zenith Bank",
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535533/Banks/ZenithBank.png",
+	  "code": "057",
+	  "isAvailable": true
+	}
+  ]

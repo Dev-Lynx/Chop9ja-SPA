@@ -239,7 +239,7 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 		<>
 			<Box
 				pad="large"
-				width={size !== "small" ? "50vw" : "80vw"}
+				width={size !== "small" ? "50vw" : "100vw"}
 				margin={{ top: "small" }}
 				round={true}
 			>
@@ -279,10 +279,11 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 
 				)}
 				<Box
-					pad="medium"
+					pad="large"
 					margin={{ vertical: "large" }}
 					background="white"
 					round="small"
+					width="80vw"
 					elevation="medium"
 				>
 					<Box
@@ -346,7 +347,7 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 							style={{
 								color: "white",
 								marginTop: "1rem",
-							 }}
+							}}
 							label={"Proceed"}
 							color="secondary"
 							onClick={submitAmount}

@@ -10,6 +10,7 @@ import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SideBar from "../../Components/SideBar/SideBar";
 import { LoginContext, UserContext } from "../../Context/Context";
 import { UserContextAction, UserContextState } from "../../Types";
+import CashOut from "../../Views/CashOut/CashOut";
 
 const Main = styled(Box)`
 padding: 1rem 0rem 5rem;
@@ -44,11 +45,14 @@ const routes = [
 	{ path: "/dashboard", exact: true, component: Overview },
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
+	{ path: "/dashboard/cash-out", component: CashOut },
 	{ path: "/dashboard/settings/profile", component: Settings },
 ];
 
 // Initial IState
 const initialState: UserContextState = {
+	availableBalance: 0,
+	balance: 0,
 	dateOfBirth: "",
 	email: "",
 	emailConfirmed: false,
@@ -56,14 +60,12 @@ const initialState: UserContextState = {
 	gender: "",
 	initials: "",
 	lastName: "",
-	availableBalance: 0,
-	balance: 0,
-	transactions: [],
+	paymentChannels: [],
 	phoneNumber: "",
 	phoneNumberConfirmed: false,
 	stateOfOrigin: "",
+	transactions: [],
 	username: "",
-	paymentChannels: [],
 };
 
 /**

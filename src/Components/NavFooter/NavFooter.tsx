@@ -69,7 +69,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 				<i className="zwicon-wallet" />
 			</Links>
 			<Links
-				to="/dashboard/withdraw"
+				to="/dashboard/cash-out"
 				activeStyle={{ backgroundColor: "#B2CD25" }}
 			>
 				<i className="zwicon-money-bill" />
