@@ -1,9 +1,9 @@
-import React, { useEffect, useState, CSSProperties, useContext } from 'react'
-import styled from 'styled-components';
-import { Box, Text, Menu, Heading } from 'grommet';
-import { NavLink, Link } from 'react-router-dom';
-import { RouteChildrenProps, withRouter } from 'react-router';
-import { UserContext } from '../../Context/Context';
+import { Box, Heading, Menu, Text } from "grommet";
+import React, { CSSProperties, useContext, useEffect, useState } from "react";
+import { RouteChildrenProps, withRouter } from "react-router";
+import { Link, NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { UserContext } from "../../Context/Context";
 
 const Links = styled(NavLink)`
 	padding: 20px;
@@ -14,16 +14,16 @@ const Links = styled(NavLink)`
 	color: #444444;
 	transition all 1s;
 	&:hover {
-		background-color: #B2CD25;
+		background-color: #9060EB;
 	}
-`
+`;
 
 const Contents = styled(Box)`
 	width: 2rem;
 	margin-top: 5rem;
 	height: 100%;
 	width: 300px;
-`
+`;
 
 const SettingsLinks = styled(Box)`
 	cursor: pointer;
@@ -47,46 +47,62 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 				id="sidebar"
 				style={{
 					height: "100vh",
-					transition: "all 1s",
-					position: "fixed",
-					zIndex: 998,
-					width: show ? "300px" : "4rem",
 					overflowX: "hidden",
+					position: "fixed",
+					transition: "all 1s",
+					width: show ? "300px" : "4rem",
+					zIndex: 998,
 				}}
 			>
 				<Contents background="white" align="start" justify="center">
 					<Links
 						to="/dashboard"
 						isActive={() => location.pathname === "/dashboard"}
-						activeStyle={{ backgroundColor: "#B2CD25" }}
+						activeStyle={{
+							backgroundColor: "#9060EB",
+							color: "white",
+						}}
 					>
 						<i className="zwicon-home" />
 						<Text>Dashboard</Text>
 					</Links>
 					<Links
 						to="/dashboard/bet-insurance"
-						activeStyle={{ backgroundColor: "#B2CD25" }}
+						activeStyle={{
+							backgroundColor: "#9060EB",
+							color: "white",
+						}}
 					>
 						<i className="zwicon-piggy-bank" />
 						<Text>Deposits</Text>
 					</Links>
 					<Links
 						to="/dashboard/wallet"
-						activeStyle={{ backgroundColor: "#B2CD25" }}
+						activeStyle={{
+							backgroundColor: "#9060EB",
+							color: "white",
+						}}
 					>
 						<i className="zwicon-wallet" />
 						<Text>Wallet</Text>
 					</Links>
 					<Links
 						to="/dashboard/cash-out"
-						activeStyle={{ backgroundColor: "#B2CD25" }}
+						activeStyle={{
+							backgroundColor: "#9060EB",
+							color: "white",
+						}}
 					>
 						<i className="zwicon-money-bill" />
 						<Text>Withdraw</Text>
 					</Links>
 					<Links
 						to="#"
-						activeStyle={{ backgroundColor: "#B2CD25" }}
+						isActive={() => location.pathname.includes("/settings")}
+						activeStyle={{
+							backgroundColor: "#9060EB",
+							color: "white",
+						}}
 						onClick={() => setShowSettingsMenu(!showSettingsMenu)}
 					>
 						<i className="zwicon-cog" />
@@ -98,7 +114,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 								position: "fixed",
 								width: "300px",
 								display: showSettingsMenu ? "block" : "none",
-								left: show ? "310px" : "5rem"
+								left: show ? "310px" : "5rem",
 							}}
 							background="white"
 							elevation="small"
@@ -107,7 +123,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 							<SettingsLinks
 
 								pad="medium"
-								onClick={_ => history.push("/dashboard/settings/profile")}
+								onClick={(_) => history.push("/dashboard/settings/profile")}
 								border={{ side: "bottom" }}
 							>
 								<Box
@@ -161,8 +177,8 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 				</Contents>
 			</Box>
 		</>
-	)
-}
+	);
+};
 
 // @ts-ignore
-export default withRouter(SideBar)
+export default withRouter(SideBar);

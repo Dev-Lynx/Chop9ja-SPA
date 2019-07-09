@@ -1,17 +1,11 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components';
-import { Box, Image, Text, Heading, BoxProps, Button, ResponsiveContext } from 'grommet';
-import WalletImage from "../../assets/images/wallet.jpg";
-import DiceControlImage from "../../assets/images/dice-control.jpg";
-import HandCreditCard from "../../assets/images/hand-credit-card.jpg";
-import MacHandsKeyBoard from "../../assets/images/mac-hands-keyboard.jpg";
-
+import { Box, BoxProps, Button, Heading, Image, ResponsiveContext, Text } from "grommet";
+import React, { useContext } from "react";
 
 type props = {
 	heading: string | JSX.Element;
 	body: string | JSX.Element;
 	image: string;
-} & BoxProps
+} & BoxProps;
 
 const CardImage = ({ heading, body, image, ...props }: props) => {
 	const size = useContext(ResponsiveContext);
@@ -24,6 +18,7 @@ const CardImage = ({ heading, body, image, ...props }: props) => {
 		>
 			<Box
 				height="200px"
+				round={true}
 			>
 				<Image
 					fit="cover"
@@ -39,7 +34,7 @@ const CardImage = ({ heading, body, image, ...props }: props) => {
 			</Box>
 			<Box
 				pad={{
-					horizontal: "large"
+					horizontal: "large",
 				}}
 			>
 				<Text
@@ -56,9 +51,9 @@ const CardImage = ({ heading, body, image, ...props }: props) => {
 			>
 				<Button
 					style={{
-						width: "150px",
 						color: "white",
-						textAlign: "center"
+						width: "150px",
+						textAlign: "center",
 					}}
 					color="secondary"
 					primary={true}
@@ -73,7 +68,7 @@ const CardImage = ({ heading, body, image, ...props }: props) => {
 			</Box>
 
 		</Box>
-	)
-}
+	);
+};
 
-export default CardImage
+export default CardImage;

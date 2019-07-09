@@ -1,20 +1,18 @@
-import React, { useContext, useState } from 'react'
-import styled from 'styled-components';
-import { Box, Text, Heading } from 'grommet';
-import { NavLink, withRouter, RouteComponentProps, Link } from 'react-router-dom';
-import { UserContext } from '../../Context/Context';
-
-
+import { Box, Heading, Text } from "grommet";
+import React, { useContext, useState } from "react";
+import { Link, NavLink, RouteComponentProps, withRouter } from "react-router-dom";
+import styled from "styled-components";
+import { UserContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	position: fixed;
 	background-color: white;
 	font-size: 28px;
 	bottom: 0;
-`
+`;
 
 const Links = styled(NavLink)`
-	padding: 20px;
+	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -26,7 +24,6 @@ const Links = styled(NavLink)`
 		width: 100%
 	}
 `;
-
 
 const SettingsLinks = styled(Box)`
 	cursor: pointer;
@@ -52,41 +49,56 @@ const Footer = ({ location }: RouteComponentProps) => {
 			<Links
 				to="/dashboard"
 				isActive={() => location.pathname === "/dashboard"}
-				activeStyle={{ backgroundColor: "#B2CD25" }}
+				activeStyle={{
+					backgroundColor: "#9060EB",
+					color: "white",
+				}}
 			>
 				<i className="zwicon-home" />
 			</Links>
 			<Links
 				to="/dashboard/bet-insurance"
-				activeStyle={{ backgroundColor: "#B2CD25" }}
+				activeStyle={{
+					backgroundColor: "#9060EB",
+					color: "white",
+				}}
 			>
 				<i className="zwicon-piggy-bank" />
 			</Links>
 			<Links
 				to="/dashboard/wallet"
-				activeStyle={{ backgroundColor: "#B2CD25" }}
+				activeStyle={{
+					backgroundColor: "#9060EB",
+					color: "white",
+				}}
 			>
 				<i className="zwicon-wallet" />
 			</Links>
 			<Links
 				to="/dashboard/cash-out"
-				activeStyle={{ backgroundColor: "#B2CD25" }}
+				activeStyle={{
+					backgroundColor: "#9060EB",
+					color: "white",
+				}}
 			>
 				<i className="zwicon-money-bill" />
 			</Links>
 			<Links
 				to="#"
-				onClick={_ => setShowSettingsMenu(!showSettingsMenu)}
-				activeStyle={{ backgroundColor: "#B2CD25" }}
+				onClick={(_) => setShowSettingsMenu(!showSettingsMenu)}
+				activeStyle={{
+					backgroundColor: "#9060EB",
+					color: "white",
+				}}
 			>
 				<i className="zwicon-cog" />
 				<Box
 					style={{
-						transition: "all 1s",
 						bottom: "10vh",
-						position: "fixed",
-						width: "300px",
 						display: showSettingsMenu ? "block" : "none",
+						position: "fixed",
+						transition: "all 1s",
+						width: "300px",
 					}}
 					background="white"
 					elevation="small"
@@ -145,7 +157,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 				</Box>
 			</Links>
 		</Wrapper>
-	)
-}
+	);
+};
 
-export default withRouter(Footer)
+export default withRouter(Footer);

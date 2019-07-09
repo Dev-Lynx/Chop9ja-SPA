@@ -192,8 +192,8 @@ const BetInsurance = () => {
 								<Text weight="bold" size="small">Platform</Text>
 								<DateSelector
 									style={{
+										borderBottom: "none",
 										width: "auto",
-										borderBottom: "none"
 									}}
 									margin={{ right: "small" }}
 									icon={<i className="zwicon-chevron-down" />}

@@ -1,15 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { Box, ResponsiveContext, Text, Image, Menu, Layer, Button } from 'grommet';
-import styled from 'styled-components';
+import { Box, Button, Image, Layer, Menu, ResponsiveContext, Text } from "grommet";
+import React, { useContext, useState } from "react";
+import { RouteComponentProps, withRouter } from "react-router";
+import styled from "styled-components";
 import Logo from "../../assets/images/chop9ja.png";
-import { UserContext, LoginContext } from '../../Context/Context';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { LoginContext, UserContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	top: 0;
 	z-index: 999;
 	color: #24501F !important;
-`
+`;
 
 const ArrowDown = styled.span`
 color: #B0CC20;
@@ -19,35 +19,33 @@ height: 0;
 border-left: .5rem solid transparent;
 border-right: .5rem solid transparent;
 border-top: .5rem solid #D9251B;
-`
-
+`;
 
 const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: boolean } & RouteComponentProps) => {
 
 	// Get the user context
-	const { userState } = useContext(UserContext)
+	const { userState } = useContext(UserContext);
 
 	// Get the login context
 	const { loginDispatch } = useContext(LoginContext);
 
 	const [confirmSignOut, setConfirmSignOut] = useState(false);
 
-
 	const signOut = () => {
 		loginDispatch({ type: "LOGOUT" });
-		history.push("/")
-	}
+		history.push("/");
+	};
 
 	return (
 		<Wrapper
 			pad={{
-				vertical: "small",
 				left: isPc ? "large" : "-4rem",
 				right: isPc ? "large" : "large",
+				vertical: "small",
 			}}
 			direction="row"
 			style={{
-				position: isPc ? "fixed" : "absolute"
+				position: isPc ? "fixed" : "absolute",
 			}}
 			elevation="small"
 			align="center"
@@ -99,7 +97,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 										LOG OUT
 									</Text>
 								),
-								onClick: () => setConfirmSignOut(true)
+								onClick: () => setConfirmSignOut(true),
 							},
 						]}
 					/>
@@ -139,7 +137,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 				</Layer>
 			)}
 		</Wrapper>
-	)
-}
+	);
+};
 
-export default withRouter(NavBar)
+export default withRouter(NavBar);

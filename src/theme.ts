@@ -1,4 +1,9 @@
 const theme = {
+	button: {
+		primary: {
+			color: "#fff",
+		},
+	},
 	formField: {
 		extend: () => `
 			font-size: 14px;
@@ -20,15 +25,15 @@ const theme = {
 			transparent: "rgba(255, 255, 189, 0)",
 			warning: "#FFAA15",
 		},
+		control: {
+			border: {
+				radius: 0,
+			},
+		},
 		focus: {
 			border: {
 				color: "#9060EB",
 			},
-		},
-		control: {
-			border: {
-				radius: 0
-			}
 		},
 		font: {
 			family: "HelveticaNeue",
@@ -46,7 +51,7 @@ const theme = {
 		body: {
 			align: "center",
 			border: undefined,
-			pad: { vertical: "large" },
+			pad: { vertical: "medium" },
 		},
 		extend: () => `
 			font-size: 14px !important;
@@ -77,7 +82,7 @@ const theme = {
 		extend: () => `
 			border: none;
 			border-bottom: 1px solid rgba(0,0,0,0.33);
-		`
+		`,
 	},
 };
 

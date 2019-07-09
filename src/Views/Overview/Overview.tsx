@@ -1,20 +1,20 @@
-import React, { useContext } from 'react'
-import CardImage from '../../Components/CardImage/CardImage';
-import { Box, ResponsiveContext, Heading } from 'grommet';
+import { Box, Heading, ResponsiveContext } from "grommet";
+import React, { useContext } from "react"
 import DiceControlImage from "../../assets/images/dice-control.jpg";
 import HandCreditCard from "../../assets/images/hand-credit-card.jpg";
 import MacHandsKeyBoard from "../../assets/images/mac-hands-keyboard.jpg";
 import PocketCreditCards from "../../assets/images/pocket-credit-cards.jpg";
+import CardImage from "../../Components/CardImage/CardImage";
 
 const Overview = () => {
 
-	const size = useContext(ResponsiveContext)
+	const size = useContext(ResponsiveContext);
 
 	return (
 		<Box
 			width="100vw"
 			align="center"
-			pad={{ bottom: "small" }}
+			pad={{ horizontal: "large" }}
 			gap="small"
 		>
 
@@ -26,10 +26,10 @@ const Overview = () => {
 				direction="row"
 				align="center"
 				style={{
-					verticalAlign: 'middle'
+					verticalAlign: "middle",
 				}}
 				justify="center"
-				round="full"
+				round="small"
 			>
 				<i style={{ fontSize: "92px" }} className="zwicon-user" />
 			</Box>
@@ -41,7 +41,6 @@ const Overview = () => {
 				</Heading>
 			</Box>
 
-
 			<Box
 				width={size !== "small" ? "70vw" : "100vw"}
 				direction={size !== "small" ? "row" : "column"}
@@ -51,6 +50,7 @@ const Overview = () => {
 				justify="between"
 			>
 				<CardImage
+					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
 					margin={{ bottom: "medium" }}
 					image={MacHandsKeyBoard}
@@ -62,6 +62,7 @@ const Overview = () => {
 				`}
 				/>
 				<CardImage
+					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
 					heading="Insure your bet"
 					image={DiceControlImage}
@@ -78,13 +79,15 @@ const Overview = () => {
 				justify="between"
 			>
 				<CardImage
+					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
-					heading="Make first deposit"
+					heading="Make a deposit"
 					margin={{ bottom: "medium" }}
 					image={HandCreditCard}
 					body="Securely deposit into our online wallet. "
 				/>
 				<CardImage
+					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
 					heading="Add bank account"
 					margin={{ bottom: "medium" }}
@@ -98,7 +101,7 @@ const Overview = () => {
 			</Box>
 
 		</Box>
-	)
-}
+	);
+};
 
-export default Overview
+export default Overview;
