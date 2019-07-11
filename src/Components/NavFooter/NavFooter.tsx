@@ -50,7 +50,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 				to="/dashboard"
 				isActive={() => location.pathname === "/dashboard"}
 				activeStyle={{
-					backgroundColor: "#9060EB",
+					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>
@@ -59,7 +59,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 			<Links
 				to="/dashboard/bet-insurance"
 				activeStyle={{
-					backgroundColor: "#9060EB",
+					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>
@@ -68,7 +68,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 			<Links
 				to="/dashboard/wallet"
 				activeStyle={{
-					backgroundColor: "#9060EB",
+					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>
@@ -77,7 +77,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 			<Links
 				to="/dashboard/cash-out"
 				activeStyle={{
-					backgroundColor: "#9060EB",
+					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>
@@ -87,7 +87,7 @@ const Footer = ({ location }: RouteComponentProps) => {
 				to="#"
 				onClick={(_) => setShowSettingsMenu(!showSettingsMenu)}
 				activeStyle={{
-					backgroundColor: "#9060EB",
+					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>

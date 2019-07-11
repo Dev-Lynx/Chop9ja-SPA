@@ -46,7 +46,7 @@ const routes = [
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
 	{ path: "/dashboard/cash-out", component: CashOut },
-	{ path: "/dashboard/settings/profile", component: Settings },
+	{ path: "/dashboard/settings", component: Settings },
 ];
 
 // Initial IState
@@ -133,8 +133,7 @@ const Dashboard = ({ history }: props) => {
 		(async () => {
 			try {
 				const response = await Axios.get("/api/account/wallet");
-				const data = response.data;
-				userDispatch({ type: "UPDATE", payload: data });
+				userDispatch({ type: "UPDATE", payload: response.data });
 			} catch (error) {
 				const err = error as AxiosError;
 			}

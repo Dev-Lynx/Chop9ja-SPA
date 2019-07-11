@@ -50,6 +50,14 @@ input:disabled {
 	border-bottom: solid 1px #9060EB !important;
 }
 
+[type="text"]:focus {
+	border-bottom-color: #9060EB !important;
+}
+
+.fwQhAZ {
+	color: white !important;
+}
+
 .fvdSSs {
 	z-index: 1000 !important;
 }

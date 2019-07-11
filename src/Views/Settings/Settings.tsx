@@ -1,14 +1,25 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { Box, Heading, TextInput, FormField, Text, Form } from 'grommet';
-import styled from 'styled-components';
-import Button from "../../Components/Button/Button";
-import { UserContext } from '../../Context/Context';
+import {
+	Accordion,
+	AccordionPanel,
+	Box,
+	Button,
+	Form,
+	FormField,
+	Heading,
+	ResponsiveContext,
+	Select,
+	Text,
+	TextInput,
+} from "grommet";
+import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
+import { UserContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
 	align-items: center;
 	padding-bottom: 2rem;
-`
+`;
 
 const Card = styled(Box)`
 
@@ -53,10 +64,23 @@ const FormFieldWrapper = styled(Box)`
 	}
 `;
 
+const SelectWrapper = styled(Box)`
+	& button {
+		border: none;
+		border-bottom: solid 1px rgba(0, 0, 0, 0.3);
+		@media(max-width: 768px) {
+			margin-top: 1rem;
+		}
+	}
+`;
+
 const Settings = () => {
 
 	// Get the user context
-	const { userState } = useContext(UserContext)
+	const { userState } = useContext(UserContext);
+
+	// Get the size context for checking the width screen
+	const size = useContext(ResponsiveContext);
 
 	// Check if the data is editable
 	const [editable, setEditable] = useState(false);
@@ -65,7 +89,7 @@ const Settings = () => {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
-	const [stateOfOrigin, setStateOfOrigin] = useState("")
+	const [stateOfOrigin, setStateOfOrigin] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [dateOfBirth, setDateOFBirth] = useState("");
 
@@ -76,9 +100,7 @@ const Settings = () => {
 		setStateOfOrigin(userState.stateOfOrigin);
 		setPhoneNumber(userState.phoneNumber);
 		setDateOFBirth(userState.dateOfBirth);
-	}, [userState.email])
-
-
+	}, [userState.email]);
 
 	return (
 		<Wrapper
@@ -88,7 +110,8 @@ const Settings = () => {
 		>
 			<Card
 				background="white"
-				pad="large"
+				pad={size !== "small" ? "xlarge" : "large"}
+				round="small"
 				width="720px"
 				elevation="small"
 			>
@@ -97,7 +120,6 @@ const Settings = () => {
 					align="baseline"
 				>
 					<Button
-						alternate={false}
 						primary={true}
 						icon={
 							<i
@@ -111,12 +133,12 @@ const Settings = () => {
 				</Edit>
 				<Box
 					width="100%"
-					align="center"
+					align="start"
 				>
 					<Box
 						height="100px"
 						width="100px"
-						background="#24501F"
+						background="#444"
 						direction="column"
 						align="center"
 						justify="center"
@@ -200,9 +222,70 @@ const Settings = () => {
 
 					</StyledForm>
 				</Box>
+				<Box
+					width="100%"
+				>
+					<Accordion>
+						<AccordionPanel
+							label={
+								<Text
+									margin={{ bottom: "medium" }}
+								>
+									<strong>Bank accounts</strong>
+								</Text>
+							}
+						>
+							<Box pad="medium">
+								<Text>None</Text>
+							</Box>
+						</AccordionPanel>
+						<AccordionPanel
+							label={
+								<Text
+									margin={{ vertical: "medium" }}
+								>
+									<strong>Change Password</strong>
+								</Text>
+							}
+						>
+							<Box
+								width={size !== "small" ? "50%" : "100%"}
+								pad={{ bottom: "medium" }}
+							>
+								<Box
+									pad="small"
+								>
+									<Text>Current Password</Text>
+									<TextInput />
+								</Box>
+								<Box
+									pad="small"
+								>
+									<Text>New Password</Text>
+									<TextInput />
+								</Box>
+								<Box
+									pad="small"
+								>
+									<Text>Confirm Password</Text>
+									<TextInput />
+								</Box>
+								<Box
+									width="100%"
+								>
+									<Button
+										label="Update"
+										color="secondary"
+										primary={true}
+									/>
+								</Box>
+							</Box>
+						</AccordionPanel>
+					</Accordion>
+				</Box>
 			</Card>
-		</Wrapper>
-	)
-}
+		</Wrapper >
+	);
+};
 
-export default Settings
+export default Settings;

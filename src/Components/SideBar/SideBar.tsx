@@ -14,7 +14,7 @@ const Links = styled(NavLink)`
 	color: #444444;
 	transition all 1s;
 	&:hover {
-		background-color: #9060EB;
+		background-color: #BAD23B;
 	}
 `;
 
@@ -59,7 +59,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						to="/dashboard"
 						isActive={() => location.pathname === "/dashboard"}
 						activeStyle={{
-							backgroundColor: "#9060EB",
+							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
@@ -69,7 +69,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 					<Links
 						to="/dashboard/bet-insurance"
 						activeStyle={{
-							backgroundColor: "#9060EB",
+							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
@@ -79,7 +79,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 					<Links
 						to="/dashboard/wallet"
 						activeStyle={{
-							backgroundColor: "#9060EB",
+							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
@@ -89,7 +89,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 					<Links
 						to="/dashboard/cash-out"
 						activeStyle={{
-							backgroundColor: "#9060EB",
+							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
@@ -97,82 +97,16 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						<Text>Withdraw</Text>
 					</Links>
 					<Links
-						to="#"
+						to="/dashboard/settings"
 						isActive={() => location.pathname.includes("/settings")}
 						activeStyle={{
-							backgroundColor: "#9060EB",
+							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 						onClick={() => setShowSettingsMenu(!showSettingsMenu)}
 					>
 						<i className="zwicon-cog" />
-						<Text>Withdraw</Text>
-						<Box
-							style={{
-								transition: "all 1s",
-								bottom: "20vh",
-								position: "fixed",
-								width: "300px",
-								display: showSettingsMenu ? "block" : "none",
-								left: show ? "310px" : "5rem",
-							}}
-							background="white"
-							elevation="small"
-						>
-
-							<SettingsLinks
-
-								pad="medium"
-								onClick={(_) => history.push("/dashboard/settings/profile")}
-								border={{ side: "bottom" }}
-							>
-								<Box
-									height="50px"
-									width="50px"
-									background="#24501F"
-									direction="column"
-									align="center"
-									justify="center"
-								>
-									<Link
-										to="/dashboard/settings/profile"
-									>
-										<Heading level="3">
-											{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
-										</Heading>
-									</Link>
-								</Box>
-								<Text>
-									{userState.firstName} {userState.lastName}
-								</Text>
-							</SettingsLinks>
-							<SettingsLinks
-								pad="medium"
-								border={{ side: "bottom" }}
-							>
-								<Link
-									to="/dashboard/settings/bank"
-								>
-									<Text
-									>
-										Bank accounts
-									</Text>
-								</Link>
-							</SettingsLinks>
-							<SettingsLinks
-								pad="medium"
-								border={{ side: "bottom" }}
-							>
-								<Link
-									to="/dashboard/settings/password"
-								>
-									<Text
-									>
-										Passwords
-									</Text>
-								</Link>
-							</SettingsLinks>
-						</Box>
+						<Text>Settings</Text>
 					</Links>
 				</Contents>
 			</Box>

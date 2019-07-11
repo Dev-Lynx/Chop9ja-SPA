@@ -1,16 +1,14 @@
-import React, { useState, useContext, useEffect, useMemo, useCallback } from 'react'
-import styled from 'styled-components';
-import { Box, Form, FormField, Heading, Text, Select, TextInput, RadioButtonGroup, Image } from 'grommet';
-import ProgressBar from '../../Components/ProgressBar/ProgressBar';
-import Axios, { AxiosError } from 'axios';
-import SnackBar from "../../Components/SnackBar/SnackBar";
-import { LoginContext } from '../../Context/Context';
-import { RouteComponentProps, Link } from 'react-router-dom';
-import { History } from 'history';
-import Button from "../../Components/Button/Button";
+import Axios, { AxiosError } from "axios";
+import { Box, Button, Form, FormField, Heading, Image, RadioButtonGroup, Select, Text, TextInput } from "grommet";
+import { History } from "history";
 import moment from "moment";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { Link, RouteComponentProps } from "react-router-dom";
+import styled from "styled-components";
 import LoginBackGroundImage from "../../assets/images/chop9ja-registration.jpeg";
-
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import SnackBar from "../../Components/SnackBar/SnackBar";
+import { LoginContext } from "../../Context/Context";
 
 const Wrapper = styled(Box)`
 	z-index: 9999;
@@ -25,7 +23,7 @@ const Wrapper = styled(Box)`
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box
-`
+`;
 
 const Headings = styled(Heading)`
 	padding: 2rem;
@@ -45,15 +43,15 @@ const BackgroundImage = styled(Box)`
 	@media (max-width: 768px) {
 		display: none;
 	}
-`
+`;
 
 const Components = styled(Box)`
 
-`
+`;
 
 const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 
-	const [componentToDisplay, setComponentToDisplay] = useState("REGISTER" as "LOGIN" | "REGISTER")
+	const [componentToDisplay, setComponentToDisplay] = useState("REGISTER" as "LOGIN" | "REGISTER");
 
 	return (
 		<Wrapper background="#D3E4DB">
@@ -80,7 +78,7 @@ const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 						<Headings
 							level="2"
 							style={{
-								backgroundColor: location.pathname !== "/login" ? "#B0CC20" : "#b0cc2ab3"
+								backgroundColor: location.pathname !== "/login" ? "#B0CC20" : "#b0cc2ab3",
 							}}
 							onClick={() => history.push("/register")}
 						>
@@ -89,7 +87,7 @@ const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 						<Headings
 							level="2"
 							style={{
-								backgroundColor: location.pathname === "/login" ? "#B0CC20" : "#b0cc2ab3"
+								backgroundColor: location.pathname === "/login" ? "#B0CC20" : "#b0cc2ab3",
 							}}
 							onClick={() => history.push("/login")}
 						>
@@ -114,9 +112,8 @@ const LoginPageComponent = ({ history, location }: RouteComponentProps) => {
 				</BackgroundImage>
 			</Box>
 		</Wrapper>
-	)
-}
-
+	);
+};
 
 const Login = ({ history }: { history: History }) => {
 	// Login context
@@ -131,8 +128,6 @@ const Login = ({ history }: { history: History }) => {
 	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [loading, setLoading] = useState(false);
 
-
-
 	/**
 	 * Fires immediately we render
 	 * Sends a get request to get the user from the back
@@ -144,13 +139,13 @@ const Login = ({ history }: { history: History }) => {
 				const response = await Axios.get("/api/Account/user");
 				if (response.status === 200) {
 					await loginDispatch({ type: "LOGIN" });
-					history.push("/dashboard")
+					history.push("/dashboard");
 				}
 			} catch (error) {
 				const err = error as AxiosError;
 			}
-		})()
-	}, [])
+		})();
+	}, []);
 
 	const validate = (): boolean => {
 		let pass = true;
@@ -158,49 +153,49 @@ const Login = ({ history }: { history: History }) => {
 		// Validate the inputs
 		if (email.trim().length < 4 || !emailTestString.test(email)) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, email: "E-mail must contain a valid email" }))
+			setErrors((errors: any) => ({ ...errors, email: "E-mail must contain a valid email" }));
 		}
 		if (password.length < 8) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, password: "Password must be at least 8 digits" }))
+			setErrors((errors: any) => ({ ...errors, password: "Password must be at least 8 digits" }));
 		}
 
 		return pass;
 
-	}
+	};
 
 	const submit = async () => {
 		setLoading(true);
 		if (validate() === false) {
-			setLoading(false)
+			setLoading(false);
 			return;
 		}
 
 		try {
-			const response = await Axios.post("/api/Auth/login", { email, password })
+			const response = await Axios.post("/api/Auth/login", { email, password });
 			if (response.status === 200) {
 				if (response.data.accessToken) {
 					localStorage.setItem("__sheghuntk__", response.data.accessToken);
 					// Set the default header to use the token
-					Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+					Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 				}
 
 				await loginDispatch({ type: "LOGIN" });
 				history.push("/dashboard");
 			}
 		} catch (error) {
-			const err = error as AxiosError
+			const err = error as AxiosError;
 			if (err.response) {
 				setSnackBar({ message: err.response.statusText, show: true, variant: "error" });
 			}
 		}
 
 		setLoading(false);
-	}
+	};
 
 	const closeSnackBar = () => {
-		setSnackBar(snack => ({ ...snack, show: false }));
-	}
+		setSnackBar((snack) => ({ ...snack, show: false }));
+	};
 
 	return (
 		<>
@@ -237,7 +232,6 @@ const Login = ({ history }: { history: History }) => {
 				<Box>
 					<Button
 						primary={true}
-						alternate={false}
 						onClick={submit}
 						label="Login"
 						style={{ margin: "0 auto 0" }}
@@ -247,8 +241,7 @@ const Login = ({ history }: { history: History }) => {
 			</Form>
 		</>
 	);
-}
-
+};
 
 const MainContent = styled(Box)`
 	background: rgba(255, 255, 255, 0.8);
@@ -260,7 +253,7 @@ const MainContent = styled(Box)`
 
 const FormFields = styled(FormField)`
 	width: 100%;
-`
+`;
 
 const SelectComponent = styled.select`
 	color: black;
@@ -294,11 +287,11 @@ const BirthDateInputs = styled(Box)`
 const loginStates = [
 	"Abuja",
 	"Lagos",
-	'Port Hacourt'
+	"Port Hacourt",
 ];
 
 const Register = ({ history }: { history: History }) => {
-	const { loginState, loginDispatch } = useContext(LoginContext)
+	const { loginState, loginDispatch } = useContext(LoginContext);
 
 	// Snackbar
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
@@ -330,7 +323,7 @@ const Register = ({ history }: { history: History }) => {
 		setDay,
 		setMonth,
 		setYear,
-		setGender
+		setGender,
 	}), []);
 
 	const yearList = useMemo(() => {
@@ -343,28 +336,28 @@ const Register = ({ history }: { history: History }) => {
 
 	// To optimize performance so that this code will only run once.
 	const monthList = useMemo(() => (
-		moment.months().map((month, index) => <option key={index} value={index + 1}>{month}</option>
+		moment.months().map((month, index) => <option key={index} value={index + 1}>{month}</option>,
 		)),
-		[])
+		[]);
 
 	const dayList = useMemo(() => {
 		const options = [];
 		// Get the list of days in the month
-		const days = moment(`${year}-${month}`, "YYYY-MM").daysInMonth()
+		const days = moment(`${year}-${month}`, "YYYY-MM").daysInMonth();
 		for (let i = 1; i <= days; ++i) {
 			options.push(<option key={i} value={i}>{i}</option>);
 		}
 		return options;
-	}, [month])
+	}, [month]);
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 		// Get the loginState setters
 		let func = inputName.charAt(0).toUpperCase();
-		func = `set${func}${inputName.substring(1)}`
+		func = `set${func}${inputName.substring(1)}`;
 		// @ts-ignore
 		loginStateSetters[func](event.target.value);
-	}, [])
+	}, []);
 
 	const validate = async (): Promise<boolean> => {
 		let pass = true;
@@ -377,35 +370,35 @@ const Register = ({ history }: { history: History }) => {
 		}
 		if (firstName.trim().length < 2) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, firstName: "First name is required" }))
+			setErrors((errors: { [key: string]: string }) => ({ ...errors, firstName: "First name is required" }));
 		}
 		if (lastName.trim().length < 2) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, lastName: "Last name is required" }))
+			setErrors((errors: { [key: string]: string }) => ({ ...errors, lastName: "Last name is required" }));
 		}
 		if (username.trim().length < 4) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, username: "Username is required " }))
+			setErrors((errors: { [key: string]: string }) => ({ ...errors, username: "Username is required " }));
 		}
 		if (phoneNumber.trim().length !== 11) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, phoneNumber: "Phone number is required and should contain 11 digits" }))
+			setErrors((errors: any) => ({ ...errors, phoneNumber: "Phone number is required and should contain 11 digits" }));
 		}
 		if (stateOfOrigin.length < 2) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, stateOfOrigin: "State Of origin is required" }))
+			setErrors((errors: any) => ({ ...errors, stateOfOrigin: "State Of origin is required" }));
 		}
 		if (year === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, year: "Please select a year" }))
+			setErrors((errors: any) => ({ ...errors, year: "Please select a year" }));
 		}
 		if (month === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, month: "Please select a month" }))
+			setErrors((errors: any) => ({ ...errors, month: "Please select a month" }));
 		}
 		if (day === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, day: "Please select day" }))
+			setErrors((errors: any) => ({ ...errors, day: "Please select day" }));
 		}
 		if (password.length < 8) {
 			pass = false;
@@ -414,17 +407,16 @@ const Register = ({ history }: { history: History }) => {
 			// Check if password does not contain letters
 			if (!(/[0-9]/.test(password)) || !(/[a-z]/.test(password)) || !(/[A-Z]/.test(password))) {
 				pass = false;
-				setErrors((errors: any) => ({ ...errors, password: "Password should contain at least one uppercase and lowercase letter" }))
+				setErrors((errors: any) => ({ ...errors, password: "Password should contain at least one uppercase and lowercase letter" }));
 			}
 		}
 		if (gender === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, gender: "Gender is required" }))
+			setErrors((errors: any) => ({ ...errors, gender: "Gender is required" }));
 		}
 
 		return pass;
 	};
-
 
 	const submit = async () => {
 		setLoading(true);
@@ -444,45 +436,43 @@ const Register = ({ history }: { history: History }) => {
 			stateOfOrigin,
 			password,
 			dateOfBirth: new Date(`${year}-${month}-${day}`),
-		}
+		};
 		try {
 			const response = await Axios.post("/api/Auth/register", data);
 			if (response.status === 200) {
 				setSnackbar({
 					show: true,
 					variant: "success",
-					message: "Registration Successful"
-				})
+					message: "Registration Successful",
+				});
 				setTimeout(() => {
 					if (response.data.accessToken) {
 						localStorage.setItem("__sheghuntk__", response.data.accessToken);
 						// Set the default header to use the token
-						Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+						Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 						loginDispatch({ type: "LOGIN" });
 						history.push("/dashboard");
 					}
 				}, 3000);
 			}
 		} catch (error) {
-			const err = error as AxiosError
+			const err = error as AxiosError;
 			if (err.response) {
 				if (err.response.status === 400) {
 					if (err.response.data) {
 						setSnackbar(snackbar => ({
 							show: true,
 							variant: "error",
-							message: err.response ? err.response.data[0].code : "Something went wrong"
-						}))
+							message: err.response ? err.response.data[0].code : "Something went wrong",
+						}));
 					}
 				}
 			}
 		}
 
-
 		setLoading(false);
 
-	}
-
+	};
 
 	return (
 		<>
@@ -506,7 +496,7 @@ const Register = ({ history }: { history: History }) => {
 						flexGrow: 1,
 						display: "flex",
 						flexDirection: "column",
-						justifyContent: "evenly"
+						justifyContent: "evenly",
 					}}
 
 				>
@@ -561,10 +551,10 @@ const Register = ({ history }: { history: History }) => {
 						<Box
 							border={{
 								side: "bottom",
-								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 							}}
 							style={{
-								height: "3rem"
+								height: "3rem",
 							}}
 						>
 							<SelectComponent
@@ -575,7 +565,7 @@ const Register = ({ history }: { history: History }) => {
 
 								<option>Select State Of Origin</option>
 								{loginStates.map((loginState, key) =>
-									<option key={key} value={loginState}>{loginState}</option>
+									<option key={key} value={loginState}>{loginState}</option>,
 								)}
 
 							</SelectComponent>
@@ -596,12 +586,12 @@ const Register = ({ history }: { history: History }) => {
 							<Box
 								border={{
 									side: "bottom",
-									color: errors.year ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+									color: errors.year ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 								}}
 							>
 								<SelectComponent
 									value={year}
-									style={{ [errors.year && "borderBottom"]: "solid .5px red", }}
+									style={{ [errors.year && "borderBottom"]: "solid .5px red" }}
 									onChange={(event) => setYear(event.target.value)}
 								>
 
@@ -620,7 +610,7 @@ const Register = ({ history }: { history: History }) => {
 							<Box
 								border={{
 									side: "bottom",
-									color: errors.month ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+									color: errors.month ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 								}}
 								style={{
 									flexBasis: "33%",
@@ -645,7 +635,7 @@ const Register = ({ history }: { history: History }) => {
 							<Box
 								border={{
 									side: "bottom",
-									color: errors.day ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)"
+									color: errors.day ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 								}}
 								style={{
 									flexBasis: "33%",
@@ -697,7 +687,7 @@ const Register = ({ history }: { history: History }) => {
 							id="password"
 							type="password"
 							value={password}
-							onChange={event => setPassword(event.target.value)}
+							onChange={(event) => setPassword(event.target.value)}
 							placeholder="Six characters"
 						/>
 					</Box>
@@ -706,7 +696,7 @@ const Register = ({ history }: { history: History }) => {
 					>
 						<RadioButtonGroup
 							name="gender"
-							options={['Male', 'Female']}
+							options={["Male", "Female"]}
 							value={gender}
 							onChange={(event) => setGender(event.target.value)}
 						/>
@@ -721,7 +711,6 @@ const Register = ({ history }: { history: History }) => {
 					<Box>
 						<Button
 							primary={true}
-							alternate={true}
 							onClick={submit}
 							label="Register"
 							style={{ margin: "0 auto 0" }}
@@ -731,8 +720,7 @@ const Register = ({ history }: { history: History }) => {
 				</Form>
 			</Box>
 		</>
-	)
-}
+	);
+};
 
-
-export default LoginPageComponent
+export default LoginPageComponent;
