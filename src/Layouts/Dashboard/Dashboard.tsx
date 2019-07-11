@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 import Axios, { AxiosError } from "axios";
 import { Box, Layer, ResponsiveContext, Text } from "grommet";
-import React, { useContext, useEffect, useReducer, useState } from "react"
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "../../Components/NavBar/NavBar";
@@ -120,8 +120,8 @@ const Dashboard = ({ history }: props) => {
 		(async () => {
 			try {
 				const response = await Axios.get("/api/Account/user");
-				const data = response.data;
-				userDispatch({ type: "UPDATE", payload: data });
+				// const data = response.data;
+				userDispatch({ type: "UPDATE", payload: response.data });
 			} catch (error) {
 				const err = error as AxiosError;
 				if (err.response) {
@@ -132,7 +132,12 @@ const Dashboard = ({ history }: props) => {
 		})();
 		(async () => {
 			try {
-				const response = await Axios.get("/api/account/wallet");
+				// Get wallet
+				let response = await Axios.get("/api/account/wallet");
+				userDispatch({ type: "UPDATE", payload: response.data });
+
+				// Get Transactions
+				response = await Axios.get("/api/account/wallet/transactions");
 				userDispatch({ type: "UPDATE", payload: response.data });
 			} catch (error) {
 				const err = error as AxiosError;

@@ -44,7 +44,7 @@ const Edit = styled(Box)`
 	}
 `;
 
-const StyledForm = styled(Form)`
+const StyledForm = styled(Form)`f
 	& input {
 		font-weight: 100;
 		font-size: 12px;

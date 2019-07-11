@@ -1,14 +1,23 @@
 import { Box, Heading, ResponsiveContext } from "grommet";
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react";
 import DiceControlImage from "../../assets/images/dice-control.jpg";
 import HandCreditCard from "../../assets/images/hand-credit-card.jpg";
 import MacHandsKeyBoard from "../../assets/images/mac-hands-keyboard.jpg";
 import PocketCreditCards from "../../assets/images/pocket-credit-cards.jpg";
 import CardImage from "../../Components/CardImage/CardImage";
+import { UserContext } from "../../Context/Context";
 
 const Overview = () => {
 
 	const size = useContext(ResponsiveContext);
+	const { userState } = useContext(UserContext);
+
+	// User data
+	const [firstName, setFirstName] = useState("");
+
+	useEffect(() => {
+		setFirstName(userState.firstName);
+	});
 
 	return (
 		<Box
@@ -37,7 +46,7 @@ const Overview = () => {
 			<Box
 			>
 				<Heading>
-					Welcome John
+					Welcome {firstName}
 				</Heading>
 			</Box>
 

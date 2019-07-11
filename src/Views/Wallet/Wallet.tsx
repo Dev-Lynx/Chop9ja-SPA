@@ -9,6 +9,8 @@ import Table from "../../Components/Table/Table";
 import WalletComponent from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 
+
+
 const Deposit = loadable(() => import("../../Views/Wallet/Deposit"), {
 	fallback: <ProgressBar show={true} />,
 });

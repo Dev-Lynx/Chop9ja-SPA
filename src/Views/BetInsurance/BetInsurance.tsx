@@ -25,6 +25,11 @@ import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 
+import Hero from "../../Components/Hero/Hero";
+
+import BetInsuranceImage from "../../assets/images/white-piggy-bank.jpg";
+
+
 const Wrapper = styled(Box)`
 	width: 100vw;
 	align-items: center;
@@ -97,7 +102,10 @@ const BetInsurance = () => {
 
 	return (
 		<Wrapper direction="column">
-			<Header>Bet Insurance</Header>
+			<Hero
+				image={BetInsuranceImage}
+				text="Bet Insurance"
+			/>
 			<Box direction="column" align="center">
 				<Spinner show={loading as any as Element | null} />
 
