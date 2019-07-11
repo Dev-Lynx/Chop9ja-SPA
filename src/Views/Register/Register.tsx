@@ -8,6 +8,7 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import Axios, { AxiosError } from 'axios';
 import { LoginContext } from '../../Context/Context';
 import { RouteComponentProps } from 'react-router';
+import { IState } from '../../Types';
 
 const MainContent = styled(Box)`
 	background: rgba(255, 255, 255, 0.8);
@@ -40,11 +41,9 @@ const SelectComponent = styled.select`
 
 type props = RouteComponentProps & {};
 
-const states = [
-	"Abuja",
-	"Lagos",
-	'Port Hacourt'
-];
+
+var states : IState[];
+
 
 const RegisterPageComponent = ({ history }: props) => {
 
@@ -104,6 +103,13 @@ const RegisterPageComponent = ({ history }: props) => {
 		}
 		return options;
 	}, [month])
+
+	//#region Other Resources
+	// TODO: Read from a local data json file
+	Axios.get<IState[]>('http://locationsng-api.herokuapp.com/api/v1/states').then(res => {
+		states = res.data
+	});
+	//#endregion
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -301,7 +307,7 @@ const RegisterPageComponent = ({ history }: props) => {
 									onChange={changeInput("stateOfOrigin")}
 								>
 									<option>Select State Of Origin</option>
-									{states.map((state, key) => <option key={key} value={state}>{state}</option>)}
+									{states.map((state, key) => <option key={key} value={state.name}>{state.name}</option>)}
 								</SelectComponent>
 								<Text color="red">{errors.stateOfOrigin}</Text>
 							</div>

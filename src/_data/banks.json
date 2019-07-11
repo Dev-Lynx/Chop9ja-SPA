@@ -4,23 +4,23 @@
 	  "name": "Access Bank",
 	  "knownAs": "Access Bank",
 	  "code": "044",
-		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535417/Banks/AccessBank.png",
-		"isAvailable": true
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535417/Banks/AccessBank.png",
+	  "isAvailable": true
 	},
 	{
 	  "id": "2",
 	  "name": "Citibank",
 	  "knownAs": "Citi Bank",
 	  "code": "023",
-		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535451/Banks/CitiBank.png",
-		"isAvailable": true
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535451/Banks/CitiBank.png",
+ 	  "isAvailable": true
 	},
 	{
 	  "id": "3",
 	  "name": "Diamond Bank",
 	  "knownAs": "Diamond Bank",
 	  "code": "063",
-		"isAvailable": false
+	  "isAvailable": false
 	},
 	{
 	  "id": "4",
@@ -34,16 +34,16 @@
 	  "name": "Ecobank Nigeria",
 	  "knownAs": "EcoBank",
 	  "code": "050",
-		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535461/Banks/EcoBank.png",
-		"isAvailable": true
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535461/Banks/EcoBank.png",
+	  "isAvailable": true
 	},
 	{
 	  "id": "6",
 	  "name": "Fidelity Bank Nigeria",
 	  "knownAs": "Fidelity Bank",
 	  "code": "070",
-		"logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535465/Banks/FidelityBank.png",
-		"isAvailable": true
+	  "logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562535465/Banks/FidelityBank.png",
+	  "isAvailable": true
 	},
 	{
 	  "id": "7",

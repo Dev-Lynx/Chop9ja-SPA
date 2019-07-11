@@ -2,13 +2,14 @@ import Axios, { AxiosError } from "axios";
 import { Box, Button, Form, FormField, Heading, Image, RadioButtonGroup, Select, Text, TextInput } from "grommet";
 import { History } from "history";
 import moment from "moment";
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import LoginBackGroundImage from "../../assets/images/chop9ja-registration.jpeg";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import { LoginContext } from "../../Context/Context";
+import { IState } from "../../Types";
 
 const Wrapper = styled(Box)`
 	z-index: 9999;
@@ -136,11 +137,29 @@ const Login = ({ history }: { history: History }) => {
 	useEffect(() => {
 		(async () => {
 			try {
+				var jwtDecode = require("jwt-decode");
+				const token = localStorage.getItem("__sheghuntk__");
+
+				if (token) {
+					const decodedToken = jwtDecode(JSON.stringify(token));
+
+					// TODO: Apply the following JWT Decode Pattern around the platform
+					if (decodedToken.exp < new Date().getTime()) {
+						await loginDispatch({ type: "LOGIN" });
+						history.push("/dashboard");
+					}
+				}
+
+				/*
+				* Avoid unnecessary calls to the API
+				*
 				const response = await Axios.get("/api/Account/user");
 				if (response.status === 200) {
 					await loginDispatch({ type: "LOGIN" });
 					history.push("/dashboard");
 				}
+				*/
+
 			} catch (error) {
 				const err = error as AxiosError;
 			}
@@ -161,8 +180,8 @@ const Login = ({ history }: { history: History }) => {
 		}
 
 		return pass;
-
 	};
+
 
 	const submit = async () => {
 		setLoading(true);
@@ -175,6 +194,7 @@ const Login = ({ history }: { history: History }) => {
 			const response = await Axios.post("/api/Auth/login", { email, password });
 			if (response.status === 200) {
 				if (response.data.accessToken) {
+					// TODO: Save the name of this token properly. Use AccessToken something more professional
 					localStorage.setItem("__sheghuntk__", response.data.accessToken);
 					// Set the default header to use the token
 					Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
@@ -279,18 +299,28 @@ const SelectWrapper = styled(Box)`
 
 const BirthDateInputs = styled(Box)`
 	height: 4rem;
-	@media (max-width: 768px) {
+	@media (max-width: 768px)s {
 		margin-top: 1rem;
 	}
 `;
 
-const loginStates = [
-	"Abuja",
-	"Lagos",
-	"Port Hacourt",
-];
+let loginStates: IState[] = [];
 
 const Register = ({ history }: { history: History }) => {
+
+	useEffect(() => {
+		(async () => {
+			try {
+				// TODO: Load states locally
+				// TODO: Find out why the loading of states is not automatic
+				loginStates = (await Axios.get<IState[]>("http://locationsng-api.herokuapp.com/api/v1/states")).data;
+			} catch (error) {
+				const err = error;
+			}
+		})()
+	}, []);
+
+
 	const { loginState, loginDispatch } = useContext(LoginContext);
 
 	// Snackbar
@@ -352,7 +382,7 @@ const Register = ({ history }: { history: History }) => {
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		// Get the loginState setters
+		// Get the loginState setterss
 		let func = inputName.charAt(0).toUpperCase();
 		func = `set${func}${inputName.substring(1)}`;
 		// @ts-ignore
@@ -417,6 +447,8 @@ const Register = ({ history }: { history: History }) => {
 
 		return pass;
 	};
+
+	
 
 	const submit = async () => {
 		setLoading(true);
@@ -564,10 +596,9 @@ const Register = ({ history }: { history: History }) => {
 							>
 
 								<option>Select State Of Origin</option>
-								{loginStates.map((loginState, key) =>
-									<option key={key} value={loginState}>{loginState}</option>,
-								)}
-
+								{
+									loginStates.map((s, key) => <option key={key} value={s.name}>{s.name}</option>)
+								}
 							</SelectComponent>
 
 							<Text

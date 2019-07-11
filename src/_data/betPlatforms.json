@@ -1,0 +1,116 @@
+[
+  {
+    "Id": 1,
+    "Name": "Accessbet",
+    "Website": "https://accessbet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/AccessBet.png"
+  },
+  {
+    "Id": 2,
+    "Name": "Bet9ja",
+    "Website": "https://www.bet9ja.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/Bet9ja.png"
+  },
+  {
+    "Id": 3,
+    "Name": "Betfarm",
+    "Website": "https://www.betfarm.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626772/BetPlatforms/BetFarm.png"
+  },
+  {
+    "Id": 4,
+    "Name": "BetKing",
+    "Website": "https://www.betking.com/",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/BetKing.png"
+  },
+  {
+    "Id": 5,
+    "Name": "1960bet",
+    "Website": "https://www.1960bet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/1960Bet.png"
+  },
+  {
+    "Id": 6,
+    "Name": "Doxxbet",
+    "Website": "https://www.doxxbet.ng",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/DoxxBet.png"
+  },
+  {
+    "Id": 7,
+    "Name": "Fortunebet",
+    "Website": "https://web.fortunebetng.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/FortuneBet.png"
+  },
+  {
+    "Id": 8,
+    "Name": "Gibetng",
+    "Website": "https://www.gibet.ng",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626771/BetPlatforms/GiBet.png"
+  },
+  {
+    "Id": 9,
+    "Name": "Kwikbet247",
+    "Website": "https://www.kwikbet247.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/KwikBet.png"
+  },
+  {
+    "Id": 10,
+    "Name": "Lionsbet",
+    "Website": "https://www.lionsbet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/LionsBet.png"
+  },
+  {
+    "Id": 11,
+    "Name": "Lovingbet",
+    "Website": "https://www.lovingbet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/LovingBet.png"
+  },
+  {
+    "Id": 12,
+    "Name": "Merrybet",
+    "Website": "https://www.merrybet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/MerryBet.png"
+  },
+  {
+    "Id": 13,
+    "Name": "NairaBet",
+    "Website": "https://www.nairabet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/NairaBet.png"
+  },
+  {
+    "Id": 14,
+    "Name": "Netbet",
+    "Website": "https://www.netbet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626773/BetPlatforms/NetBet.png"
+  },
+  {
+    "Id": 15,
+    "Name": "Surebet247",
+    "Website": "https://www.surebet247.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562627014/BetPlatforms/SureBet247.png"
+  },
+  {
+    "Id": 16,
+    "Name": "RukkaBet",
+    "Website": "https://rukkabet.com/",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626774/BetPlatforms/RukkaBet.png"
+  },
+  {
+    "Id": 17,
+    "Name": "WakaBet",
+    "Website": "https://wakabet.ng",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626775/BetPlatforms/WakaBet.png"
+  },
+  {
+    "Id": 18,
+    "Name": "Winners Golden Bet",
+    "Website": "https://www.winnersgoldenbet.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626774/BetPlatforms/WinnersGoldenBet.png"
+  },
+  {
+    "Id": 19,
+    "Name": "Yangabet",
+    "Website": "https://www.yangabetng.com",
+    "Logo": "https://res.cloudinary.com/dev-lynx/image/upload/v1562626775/BetPlatforms/YangaBet.png"
+  }
+]

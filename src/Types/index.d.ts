@@ -70,3 +70,10 @@ export interface UserContextAction {
 		>
 	}
 }
+
+//#region Extra Types
+export interface IState {
+	name: string;
+	capital: string;
+}
+//#endregion

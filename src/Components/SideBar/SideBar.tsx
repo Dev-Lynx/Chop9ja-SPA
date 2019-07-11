@@ -74,7 +74,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						}}
 					>
 						<i className="zwicon-piggy-bank" />
-						<Text>Deposits</Text>
+						<Text>Bet Insure</Text>
 					</Links>
 					<Links
 						to="/dashboard/wallet"
@@ -94,7 +94,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						}}
 					>
 						<i className="zwicon-money-bill" />
-						<Text>Withdraw</Text>
+						<Text>Cash Out</Text>
 					</Links>
 					<Links
 						to="/dashboard/settings"
@@ -103,7 +103,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
-						onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+						// onClick={() => setShowSettingsMenu(!showSettingsMenu)}
 					>
 						<i className="zwicon-cog" />
 						<Text>Settings</Text>
