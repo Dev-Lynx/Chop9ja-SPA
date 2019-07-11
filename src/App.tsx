@@ -1,35 +1,35 @@
-import React, { useRef, useReducer } from 'react';
-import { Grommet } from 'grommet';
-import theme from './theme';
-import { Switch, Route, RouteComponentProps } from 'react-router-dom';
-import loadable from '@loadable/component';
-import styled from 'styled-components';
-import { Location } from 'history';
-import LandingPage from './Views/Landing/Landing';
+import { Grommet } from "grommet";
+import React, { useReducer, useRef } from "react";
+import theme from "./theme";
+import loadable from "@loadable/component";
+import Axios from "axios";
+import { Location } from "history";
+import { Route, RouteComponentProps, Switch } from "react-router-dom";
+import styled from "styled-components";
+import ProgressBar from "./Components/ProgressBar/ProgressBar";
+import { LoginContext } from "./Context/Context";
+import { LoginContextAction, LoginContextState } from "./Types";
+import LandingPage from "./Views/Landing/Landing";
 import LoginPage from "./Views/Login/Login";
-import ProgressBar from './Components/ProgressBar/ProgressBar';
-import { LoginContextState, LoginContextAction } from './Types';
-import { LoginContext } from './Context/Context';
-import Axios from 'axios';
 
-const Dashboard = loadable(() => import('./Layouts/Dashboard/Dashboard'), {
-	fallback: <ProgressBar show={true} />
+const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
+	fallback: <ProgressBar show={true} />,
 });
 const RegisterPage = loadable(() => import("./Views/Register/Register"), {
-	fallback: <ProgressBar show={true} />
+	fallback: <ProgressBar show={true} />,
 });
 
 type props = {} & RouteComponentProps;
 
 const GrommetWrapper = styled(Grommet)`
 	height: auto;
-`
+`;
 
 const routes = [
 	{ path: "/", exact: true, component: LandingPage },
 	{ path: "/register", component: LoginPage },
 	{ path: "/login", component: LoginPage },
-	{ path: "/dashboard", component: Dashboard }
+	{ path: "/dashboard", component: Dashboard },
 ];
 
 // Initial IState
@@ -45,7 +45,7 @@ const reducer = (state: LoginContextState, action: LoginContextAction): LoginCon
 		case "LOGOUT":
 			// Delete the token and log the use out
 			localStorage.removeItem("__sheghuntk__");
-			Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+			Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 			return { ...state, loggedIn: false };
 		default:
 			return state;
@@ -60,7 +60,7 @@ const App = (props: props) => {
 	// To store the previous location
 	const prevLocation = useRef<Location<{ login: boolean }>>();
 	const { location, history } = props;
-	const isModal = !!(history.action !== "POP" && location.state && location.state.loginModal)
+	const isModal = !!(history.action !== "POP" && location.state && location.state.loginModal);
 
 	if (!isModal) {
 		prevLocation.current = location;
@@ -74,13 +74,13 @@ const App = (props: props) => {
 						<Route key={key} exact={true} path={route.path} component={route.component} />
 					) : (
 							<Route key={key} path={route.path} component={route.component} />
-						)
+						),
 					)}
 				</Switch>
 				{isModal && <Route path="/login" component={LoginPage} />}
 			</LoginContext.Provider>
 		</GrommetWrapper >
 	);
-}
+};
 
 export default App;

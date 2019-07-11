@@ -1,4 +1,28 @@
+import React from "react";
+
 const theme = {
+	accordion: {
+		icons: {
+			collapse: () => (
+				<i
+					className="zwicon-chevron-up"
+					style={{
+						color: "#9060EB",
+						fontSize: "32px"
+					}}
+				/>
+			),
+			expand: () => (
+				<i
+					className="zwicon-chevron-down"
+					style={{
+						color: "#9060EB",
+						fontSize: "32px"
+					}}
+				/>
+			),
+		},
+	},
 	button: {
 		primary: {
 			color: "#fff",

@@ -120,14 +120,19 @@ const Settings = () => {
 					align="baseline"
 				>
 					<Button
-						primary={true}
+						color="secondary"
 						icon={
 							<i
 								className="zwicon-pencil"
-								style={{ width: "0.5rem", paddingLeft: "-2rem", paddingRight: "1rem" }}
+								style={{
+									color: "#9060EB",
+									fontSize: "16px",
+									paddingRight: ".5rem",
+									width: "0.5rem",
+								}}
 							/>
 						}
-						reverse={true}
+						style={{ border: "none" }}
 						label="Edit"
 					/>
 				</Edit>
