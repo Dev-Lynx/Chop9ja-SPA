@@ -1,6 +1,7 @@
 import Axios, { AxiosError } from "axios";
 import { Box, Button, Form, FormField, Heading, Image, RadioButtonGroup, Select, Text, TextInput } from "grommet";
 import { History } from "history";
+import JWTDecode from "jwt-decode";
 import moment from "moment";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
@@ -137,13 +138,13 @@ const Login = ({ history }: { history: History }) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				var jwtDecode = require("jwt-decode");
 				const token = localStorage.getItem("__sheghuntk__");
 
 				if (token) {
-					const decodedToken = jwtDecode(JSON.stringify(token));
+					const decodedToken = JWTDecode(JSON.stringify(token));
 
 					// TODO: Apply the following JWT Decode Pattern around the platform
+					// @ts-ignore
 					if (decodedToken.exp < new Date().getTime()) {
 						await loginDispatch({ type: "LOGIN" });
 						history.push("/dashboard");
@@ -172,16 +173,15 @@ const Login = ({ history }: { history: History }) => {
 		// Validate the inputs
 		if (email.trim().length < 4 || !emailTestString.test(email)) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, email: "E-mail must contain a valid email" }));
+			setErrors((err: any) => ({ ...err, email: "E-mail must contain a valid email" }));
 		}
 		if (password.length < 8) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, password: "Password must be at least 8 digits" }));
+			setErrors((err: any) => ({ ...err, password: "Password must be at least 8 digits" }));
 		}
 
 		return pass;
 	};
-
 
 	const submit = async () => {
 		setLoading(true);
@@ -317,9 +317,8 @@ const Register = ({ history }: { history: History }) => {
 			} catch (error) {
 				const err = error;
 			}
-		})()
+		})();
 	}, []);
-
 
 	const { loginState, loginDispatch } = useContext(LoginContext);
 
@@ -342,18 +341,20 @@ const Register = ({ history }: { history: History }) => {
 	const [errors, setErrors] = useState({}) as [any, React.Dispatch<any>];
 	const [loading, setLoading] = useState(false);
 
+	// For changing the inputs (state) value in the changeInput
+	//
 	const loginStateSetters = useMemo(() => ({
+		setDay,
 		setEmail,
 		setFirstName,
+		setGender,
 		setLastName,
+		setMonth,
 		setPassword,
-		setUsername,
 		setPhoneNumber,
 		setStateOfOrigin,
-		setDay,
-		setMonth,
+		setUsername,
 		setYear,
-		setGender,
 	}), []);
 
 	const yearList = useMemo(() => {
@@ -366,7 +367,7 @@ const Register = ({ history }: { history: History }) => {
 
 	// To optimize performance so that this code will only run once.
 	const monthList = useMemo(() => (
-		moment.months().map((month, index) => <option key={index} value={index + 1}>{month}</option>,
+		moment.months().map((m, index) => <option key={index} value={index + 1}>{m}</option>,
 		)),
 		[]);
 
@@ -382,7 +383,7 @@ const Register = ({ history }: { history: History }) => {
 
 	const changeInput = useCallback((inputName: string) => (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		// Get the loginState setterss
+		// Get the loginState setters
 		let func = inputName.charAt(0).toUpperCase();
 		func = `set${func}${inputName.substring(1)}`;
 		// @ts-ignore
@@ -396,59 +397,60 @@ const Register = ({ history }: { history: History }) => {
 		// Check for the email
 		if (email.length < 5 || !emailTestString.test(email)) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, email: "E-mail is required and should be valid" }));
+			setErrors((err: { [key: string]: string }) => ({ ...err, email: "E-mail is required and should be valid" }));
 		}
 		if (firstName.trim().length < 2) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, firstName: "First name is required" }));
+			setErrors((err: { [key: string]: string }) => ({ ...err, firstName: "First name is required" }));
 		}
 		if (lastName.trim().length < 2) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, lastName: "Last name is required" }));
+			setErrors((err: { [key: string]: string }) => ({ ...err, lastName: "Last name is required" }));
 		}
 		if (username.trim().length < 4) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, username: "Username is required " }));
+			setErrors((err: { [key: string]: string }) => ({ ...err, username: "Username is required " }));
 		}
 		if (phoneNumber.trim().length !== 11) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, phoneNumber: "Phone number is required and should contain 11 digits" }));
+			setErrors((err: any) => ({ ...err, phoneNumber: "Phone number is required and should contain 11 digits" }));
 		}
 		if (stateOfOrigin.length < 2) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, stateOfOrigin: "State Of origin is required" }));
+			setErrors((err: any) => ({ ...err, stateOfOrigin: "State Of origin is required" }));
 		}
 		if (year === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, year: "Please select a year" }));
+			setErrors((err: any) => ({ ...err, year: "Please select a year" }));
 		}
 		if (month === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, month: "Please select a month" }));
+			setErrors((err: any) => ({ ...err, month: "Please select a month" }));
 		}
 		if (day === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, day: "Please select day" }));
+			setErrors((err: any) => ({ ...err, day: "Please select day" }));
 		}
 		if (password.length < 8) {
 			pass = false;
-			setErrors((errors: { [key: string]: string }) => ({ ...errors, password: "Password should be minimum of 8 length" }));
+			setErrors((err: { [key: string]: string }) => ({ ...err, password: "Password should be minimum of 8 length" }));
 		} else {
 			// Check if password does not contain letters
 			if (!(/[0-9]/.test(password)) || !(/[a-z]/.test(password)) || !(/[A-Z]/.test(password))) {
 				pass = false;
-				setErrors((errors: any) => ({ ...errors, password: "Password should contain at least one uppercase and lowercase letter" }));
+				setErrors((err: any) => ({
+					...err,
+					password: "Password should contain at least one uppercase and lowercase letter",
+				}));
 			}
 		}
 		if (gender === "") {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, gender: "Gender is required" }));
+			setErrors((err: any) => ({ ...err, gender: "Gender is required" }));
 		}
 
 		return pass;
 	};
-
-	
 
 	const submit = async () => {
 		setLoading(true);
@@ -459,23 +461,23 @@ const Register = ({ history }: { history: History }) => {
 
 		// Send request to the server
 		const data = {
-			firstName,
-			lastName,
-			phoneNumber,
-			email,
-			username,
-			gender,
-			stateOfOrigin,
-			password,
 			dateOfBirth: new Date(`${year}-${month}-${day}`),
+			email,
+			firstName,
+			gender,
+			lastName,
+			password,
+			phoneNumber,
+			stateOfOrigin,
+			username,
 		};
 		try {
 			const response = await Axios.post("/api/Auth/register", data);
 			if (response.status === 200) {
 				setSnackbar({
+					message: "Registration Successful",
 					show: true,
 					variant: "success",
-					message: "Registration Successful",
 				});
 				setTimeout(() => {
 					if (response.data.accessToken) {
@@ -492,11 +494,11 @@ const Register = ({ history }: { history: History }) => {
 			if (err.response) {
 				if (err.response.status === 400) {
 					if (err.response.data) {
-						setSnackbar(snackbar => ({
+						setSnackbar({
+							message: err.response ? err.response.data[0].code : "Something went wrong",
 							show: true,
 							variant: "error",
-							message: err.response ? err.response.data[0].code : "Something went wrong",
-						}));
+						});
 					}
 				}
 			}
@@ -513,7 +515,7 @@ const Register = ({ history }: { history: History }) => {
 				show={snackbar.show}
 				message={snackbar.message}
 				variant={snackbar.variant as any}
-				onClose={() => setSnackbar(snackbar => ({ ...snackbar, show: false }))}
+				onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 			/>
 			<Box
 				fill={true}
@@ -524,11 +526,11 @@ const Register = ({ history }: { history: History }) => {
 				<Form
 					errors={errors}
 					style={{
-						padding: "0",
-						flexGrow: 1,
 						display: "flex",
 						flexDirection: "column",
+						flexGrow: 1,
 						justifyContent: "evenly",
+						padding: "0",
 					}}
 
 				>
@@ -582,8 +584,8 @@ const Register = ({ history }: { history: History }) => {
 					>
 						<Box
 							border={{
-								side: "bottom",
 								color: errors.stateOfOrigin ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
+								side: "bottom",
 							}}
 							style={{
 								height: "3rem",
@@ -616,8 +618,8 @@ const Register = ({ history }: { history: History }) => {
 						>
 							<Box
 								border={{
-									side: "bottom",
 									color: errors.year ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
+									side: "bottom",
 								}}
 							>
 								<SelectComponent
@@ -640,8 +642,8 @@ const Register = ({ history }: { history: History }) => {
 							</Box>
 							<Box
 								border={{
-									side: "bottom",
 									color: errors.month ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
+									side: "bottom",
 								}}
 								style={{
 									flexBasis: "33%",
@@ -666,9 +668,9 @@ const Register = ({ history }: { history: History }) => {
 							<Box
 								border={{
 									side: "bottom",
-									color: errors.day ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 								}}
 								style={{
+									color: errors.day ? "rgba(0, 0, 0, 0)" : "rgba(0, 0, 0, 0.3)",
 									flexBasis: "33%",
 								}}
 							>

@@ -84,77 +84,13 @@ const Footer = ({ location }: RouteComponentProps) => {
 				<i className="zwicon-money-bill" />
 			</Links>
 			<Links
-				to="#"
-				onClick={(_) => setShowSettingsMenu(!showSettingsMenu)}
+				to="/dashboard/settings"
 				activeStyle={{
 					backgroundColor: "#BAD23B",
 					color: "white",
 				}}
 			>
 				<i className="zwicon-cog" />
-				<Box
-					style={{
-						bottom: "10vh",
-						display: showSettingsMenu ? "block" : "none",
-						position: "fixed",
-						transition: "all 1s",
-						width: "300px",
-					}}
-					background="white"
-					elevation="small"
-				>
-
-					<SettingsLinks
-						pad="medium"
-						border={{ side: "bottom" }}
-					>
-						<Box
-							height="50px"
-							width="50px"
-							background="#24501F"
-							direction="column"
-							align="center"
-							justify="center"
-						>
-							<Link
-								to="/dashboard/settings/profile"
-							>
-								<Heading level="3">
-									{`${userState.firstName.charAt(0)}${userState.lastName.charAt(0)}`}
-								</Heading>
-							</Link>
-						</Box>
-						<Text>
-							{userState.firstName} {userState.lastName}
-						</Text>
-					</SettingsLinks>
-					<SettingsLinks
-						pad="medium"
-						border={{ side: "bottom" }}
-					>
-						<Link
-							to="/dashboard/settings/bank"
-						>
-							<Text
-							>
-								Bank accounts
-									</Text>
-						</Link>
-					</SettingsLinks>
-					<SettingsLinks
-						pad="medium"
-						border={{ side: "bottom" }}
-					>
-						<Link
-							to="/dashboard/settings/bank"
-						>
-							<Text
-							>
-								Passwords
-									</Text>
-						</Link>
-					</SettingsLinks>
-				</Box>
 			</Links>
 		</Wrapper>
 	);

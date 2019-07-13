@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components';
-import { Box, Paragraph, Button } from 'grommet';
-import { Validate, Close, Alert, Icon } from 'grommet-icons';
-import { CSSTransition } from 'react-transition-group';
+import { Box, Button, Paragraph } from "grommet";
+import { Alert, Close, Validate } from "grommet-icons";
+import React, { useEffect } from "react";
+import { CSSTransition } from "react-transition-group";
+import styled from "styled-components";
 import "./SnackBar.css";
-
 
 const Wrapper = styled(Box)`
 	width: 100%;
@@ -16,34 +15,33 @@ const Wrapper = styled(Box)`
 	@media (min-width: 900px) {
 		width: 500px
 	}
-`
+`;
 
-type props = {
-	variant: "success" | "error" | "warning";
+interface IProps {
+	variant: "success" | "error" | "warning" | string;
 	message: string;
 	onClose: (event: React.MouseEvent<HTMLElement, MouseEvent> | null) => void;
 	show: boolean;
 }
 
 const iconVariant = {
-	"success": Validate,
-	"warning": Alert,
-	"error": Close,
-}
+	error: Close,
+	success: Validate,
+	warning: Alert,
+};
 
-const SnackBarComponent = ({ show, message, variant, onClose}: props)  => {
+const SnackBarComponent = ({ show, message, variant, onClose }: IProps) => {
 	// @ts-ignore
-	const Icon = iconVariant[variant] as any as Icon
-
+	const Icon = iconVariant[variant] as any;
 
 	useEffect(() => {
 		if (show) {
 			// Wait for 6 seconds after displaying message then call the close function
 			setTimeout(() => {
 				onClose(null);
-			}, 4000)
+			}, 4000);
 		}
-	}, [show])
+	}, [show]);
 
 	return (
 		<CSSTransition in={show} delay={500} classNames="SnackBar" timeout={3000}>
@@ -52,7 +50,7 @@ const SnackBarComponent = ({ show, message, variant, onClose}: props)  => {
 				<Paragraph>{message}</Paragraph>
 			</Wrapper>
 		</CSSTransition>
-	)
-}
+	);
+};
 
-export default SnackBarComponent
+export default SnackBarComponent;

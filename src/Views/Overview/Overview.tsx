@@ -10,14 +10,12 @@ import { UserContext } from "../../Context/Context";
 const Overview = () => {
 
 	const size = useContext(ResponsiveContext);
+
+	/**
+	 * Corrected so that we will just fetch directly
+	 * Using the useEffect cause more work for the application
+	 */
 	const { userState } = useContext(UserContext);
-
-	// User data
-	const [firstName, setFirstName] = useState("");
-
-	useEffect(() => {
-		setFirstName(userState.firstName);
-	});
 
 	return (
 		<Box
@@ -46,7 +44,7 @@ const Overview = () => {
 			<Box
 			>
 				<Heading>
-					Welcome {firstName}
+					Welcome {userState.firstName}
 				</Heading>
 			</Box>
 

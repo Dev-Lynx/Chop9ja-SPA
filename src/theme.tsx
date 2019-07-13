@@ -8,7 +8,7 @@ const theme = {
 					className="zwicon-chevron-up"
 					style={{
 						color: "#9060EB",
-						fontSize: "32px"
+						fontSize: "32px",
 					}}
 				/>
 			),
@@ -17,7 +17,7 @@ const theme = {
 					className="zwicon-chevron-down"
 					style={{
 						color: "#9060EB",
-						fontSize: "32px"
+						fontSize: "32px",
 					}}
 				/>
 			),
@@ -106,6 +106,10 @@ const theme = {
 		extend: () => `
 			border: none;
 			border-bottom: 1px solid rgba(0,0,0,0.33);
+			font-size: 14px;
+			&:focus {
+				border-bottom-color: #9060EB !important;
+			}
 		`,
 	},
 };
