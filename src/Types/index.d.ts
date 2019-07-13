@@ -76,4 +76,21 @@ export interface IState {
 	name: string;
 	capital: string;
 }
+
+export interface IBetPlatform {
+	id: number;
+	name: string;
+	website: string;
+	logo: string;
+}
+
+export interface IBet {
+	date?: Date;
+	platformId: number;
+	platform?: IBetPlatform;
+	slipNumber: string;
+	odds: number;
+	stake: number;
+	potentialWinnings: number;
+}
 //#endregion
