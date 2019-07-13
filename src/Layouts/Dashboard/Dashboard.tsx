@@ -135,10 +135,13 @@ const Dashboard = ({ history }: props) => {
 				// Get wallet
 				let response = await Axios.get("/api/account/wallet");
 				userDispatch({ type: "UPDATE", payload: response.data });
+				console.log(response.data);
 
 				// Get Transactions
 				response = await Axios.get("/api/account/wallet/transactions");
-				userDispatch({ type: "UPDATE", payload: response.data });
+				console.log(response.data);
+
+				userDispatch({ type: "UPDATE", payload: { "transactions": response.data } });
 			} catch (error) {
 				const err = error as AxiosError;
 			}

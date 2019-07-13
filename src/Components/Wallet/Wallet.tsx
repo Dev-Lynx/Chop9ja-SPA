@@ -51,7 +51,7 @@ const Wallet = () => {
 				<Heading
 					level="1"
 				>
-					{"₦" + userState.balance}
+					{"₦ " + userState.balance.toLocaleString()}
 				</Heading>
 			</Box>
 		</Box>

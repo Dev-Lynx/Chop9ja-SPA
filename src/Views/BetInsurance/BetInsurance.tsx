@@ -386,6 +386,11 @@ const BetInsurance = () => {
 									Stake
 								</strong>
 							</TableCell>
+							<TableCell>
+								<strong>
+									Potential Winnings
+								</strong>
+							</TableCell>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -413,6 +418,11 @@ const BetInsurance = () => {
 								<TableCell>
 									<strong>
 										{bet.stake.toLocaleString()}
+									</strong>
+								</TableCell>
+								<TableCell>
+									<strong>
+										{bet.potentialWinnings.toLocaleString()}
 									</strong>
 								</TableCell>
 							</TableRow>
