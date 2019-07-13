@@ -8,6 +8,7 @@ import { DepositButton, WithdrawButton } from "../../Components/Buttons/Buttons"
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
+import { IBank } from "../../Types/index.js";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -40,14 +41,7 @@ const SelectWrapper = styled(Box)`
 	}
 `;
 
-interface IBank {
-	code: string;
-	id: string;
-	isAvailable: boolean;
-	knownAs: string;
-	logo?: string;
-	name: string;
-};
+
 
 const Withdraw = () => {
 

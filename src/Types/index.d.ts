@@ -93,4 +93,21 @@ export interface IBet {
 	stake: number;
 	potentialWinnings: number;
 }
+
+export interface IBank {
+	code: string;
+	id: string;
+	isAvailable: boolean;
+	knownAs: string;
+	logo: string | undefined;
+	name: string;
+};
+
+export interface IUserBanks {
+	accountName: string;
+	accountNumber: string;
+	bankId: number;
+	id: number;
+}
+
 //#endregion

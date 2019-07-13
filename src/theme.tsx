@@ -2,6 +2,7 @@ import React from "react";
 
 const theme = {
 	accordion: {
+		border: undefined,
 		icons: {
 			collapse: () => (
 				<i

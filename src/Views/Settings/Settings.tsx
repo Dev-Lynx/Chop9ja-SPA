@@ -1,3 +1,4 @@
+import Axios, { AxiosError } from "axios";
 import {
 	Accordion,
 	AccordionPanel,
@@ -6,6 +7,7 @@ import {
 	Form,
 	FormField,
 	Heading,
+	Image,
 	ResponsiveContext,
 	Select,
 	Text,
@@ -13,10 +15,11 @@ import {
 } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import banksData from "../../_data/banks.json";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import { UserContext } from "../../Context/Context";
-import ProgressBar from "../../Components/ProgressBar/ProgressBar";
-import Axios, { AxiosError } from "axios";
+import { IBank, IUserBanks } from "../../Types/index.js";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -54,6 +57,15 @@ const StyledForm = styled(Form)`f
 	}
 `;
 
+const SelectWrapper = styled(Box)`
+	& button {
+		border: none !important;
+		@media(max-width: 768px) {
+			margin-top: 1rem;
+		}
+	}
+`;
+
 const FormFieldWrapper = styled(Box)`
 	@media (min-width: 768px) {
 		display: flex;
@@ -63,16 +75,6 @@ const FormFieldWrapper = styled(Box)`
 
 		& div {
 			flex-basis: 45%;
-		}
-	}
-`;
-
-const SelectWrapper = styled(Box)`
-	& button {
-		border: none;
-		border-bottom: solid 1px rgba(0, 0, 0, 0.3);
-		@media(max-width: 768px) {
-			margin-top: 1rem;
 		}
 	}
 `;
@@ -99,15 +101,95 @@ const Settings = () => {
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [dateOfBirth, setDateOFBirth] = useState("");
 
+	const [banks, setBanks] = useState([] as IUserBanks[]);
+	const [accountName, setAccountName] = useState("");
+	const [accountNo, setAccountNo] = useState("");
+	const [newBank, setNewBank] = useState({
+		code: "",
+		id: "",
+		isAvailable: true,
+		knownAs: "",
+		name: "",
+	} as IBank);
+	const [bankChangedToggle, setBankChangedToggle] = useState(false);
+
 	// For changing the password
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [errors, setErrors] = useState({
-		confirmPassword,
-		currentPassword,
-		newPassword,
+		accountName: "",
+		accountNo: "",
+		confirmPassword: "",
+		currentPassword: "",
+		newBank: "",
+		newPassword: "",
 	});
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const response = await Axios.get("/api/Account/bankAccounts");
+				setBanks(response.data)
+			} catch (error) {
+
+			}
+
+		})()
+	}, [bankChangedToggle])
+
+	const submitAddBank = async () => {
+		setLoading(true);
+		// Validate the inputs
+		let pass = true;
+		const err = {
+			accountName: "",
+			accountNo: "",
+			newBank: "",
+		};
+		// @ts-ignore
+		setErrors(err);
+		if (accountName.trim().length < 1) {
+			pass = false;
+			err.accountName = "Account name must be filled";
+		}
+		if (accountNo.trim().length < 10) {
+			pass = false;
+			err.accountNo = "Account number must contain at least 10 digits";
+		}
+		if (newBank.id === "") {
+			pass = false;
+			err.newBank = "A bank must be selected";
+		}
+
+		if (pass === false) {
+			setLoading(false);
+			// @ts-ignore
+			setErrors(err);
+			return;
+		}
+
+		try {
+			const data = {
+				accountName,
+				accountNumber: accountNo,
+				bankId: newBank.id,
+			}
+			const response = await Axios.post("/api/Account/manage/bankAccounts/add", data);
+			if (response.status === 200) {
+				setSnackbar({
+					message: "Successful",
+					show: true,
+					variant: "success",
+				});
+				setBankChangedToggle((toggle) => !toggle);
+			}
+		} catch (error) {
+			const err = error as AxiosError;
+		}
+
+		setLoading(false);
+	};
 
 	const submitChangePassword = async () => {
 		// Reset all the validating values
@@ -118,6 +200,7 @@ const Settings = () => {
 			currentPassword: "",
 			newPassword: "",
 		};
+		// @ts-ignore
 		setErrors(err);
 
 		// Validate the passwords input
@@ -139,6 +222,7 @@ const Settings = () => {
 		}
 		if (pass === false) {
 			setLoading(false);
+			// @ts-ignore
 			setErrors(err);
 			return;
 		}
@@ -193,7 +277,7 @@ const Settings = () => {
 				/>
 				<Card
 					background="white"
-					pad={size !== "small" ? "xlarge" : "large"}
+					pad={size !== "small" ? "large" : "medium"}
 					round="small"
 					width="720px"
 					elevation="small"
@@ -322,9 +406,174 @@ const Settings = () => {
 										<strong>Bank accounts</strong>
 									</Text>
 								}
+								style={{
+									marginBottom: "1rem",
+								}}
 							>
-								<Box pad="medium">
-									<Text>None</Text>
+								<Box
+									margin={{ bottom: "large" }}
+								>
+									{banks.map((b) => (
+										<Box
+											width="100%"
+											round={true}
+											background="white"
+											elevation="small"
+											pad={{ vertical: "small", right: "large", left: "small" }}
+											margin={{ vertical: "medium" }}
+											align="center"
+											direction="row"
+											justify="between"
+											key={b.id}
+										>
+											<i
+												className="zwicon-close"
+											/>
+											<Text
+												textAlign="center"
+												weight={100}
+											>
+												{b.accountName}
+											</Text>
+											<Text
+												textAlign="center"
+												weight={100}
+											>
+												{b.accountNumber}
+											</Text>
+											<Text
+												textAlign="center"
+												weight={100}
+												style={{
+													alignItems: "center",
+													display: "flex",
+													flexDirection: "column",
+												}}
+											>
+												<Image
+													fit="contain"
+													width="20px"
+													height="50px"
+													src={banksData[b.bankId - 1].logo}
+												/>
+												{banksData[b.bankId - 1].name}
+											</Text>
+										</Box>
+									))}
+									<Box
+										margin={{ vertical: "medium" }}
+										elevation="small"
+										width="100%"
+										round={true}
+										pad="medium"
+									>
+										<Box
+											width={size !== "small" ? "60%" : "100%"}
+										>
+											<TextInput
+												style={{
+													borderBottom: errors.accountName ? "solid 1px red" : "",
+												}}
+												placeholder="Account name"
+												value={accountName}
+												onChange={(event) => {
+													setErrors((err) => ({ ...err, accoutName: "" }));
+													setAccountName(event.target.value);
+												}}
+											/>
+											<Text
+												color="status-critical"
+											>
+												{errors.accountName}
+											</Text>
+											<TextInput
+												style={{
+													borderBottom: errors.accountNo ? "solid 1px red" : "",
+												}}
+												placeholder="Account number"
+												value={accountNo}
+												onChange={(event) => {
+													setErrors((err) => ({ ...err, accountNo: "" }));
+													setAccountNo(event.target.value);
+												}}
+											/>
+											<Text
+												color="status-critical"
+											>
+												{errors.accountNo}
+											</Text>
+										</Box>
+										<Box
+											margin={{ vertical: "large" }}
+											width="100%"
+											direction="column"
+										>
+											<Box
+												height="50px"
+											>
+												{newBank.logo && (
+													<Image
+														height="50px !important"
+														fit="contain"
+														src={newBank.logo}
+													/>
+												)}
+											</Box>
+											<SelectWrapper
+												round={true}
+											>
+												{
+													// @ts-ignore
+													<Select
+														icon={
+															<i
+																className="zwicon-chevron-down"
+																style={{
+																	color: "#9060EB",
+																}}
+															/>
+														}
+														value={newBank.name}
+														style={{
+															borderBottom: errors.newBank ? "solid 1px red" : "",
+														}}
+														placeholder="Select your account"
+														onChange={
+															({ option }) => {
+																setNewBank(banksData.find((b) => option === b.name) as IBank);
+																setErrors((err) => ({ ...err, newBank: "" }));
+															}
+														}
+														options={banksData.map((b) => b.name)}
+													/>
+												}
+												<Text
+													style={{
+														color: "red",
+													}}
+												>
+													{errors.newBank}
+												</Text>
+											</SelectWrapper>
+										</Box>
+										<Box
+											direction="row"
+											gap="small"
+											justify="end"
+										>
+											<Button
+												color="secondary"
+												primary={true}
+												label="Cancel"
+											/>
+											<Button
+												color="secondary"
+												label="Add"
+												onClick={submitAddBank}
+												primary={true}
+											/>
+										</Box>
+									</Box>
 								</Box>
 							</AccordionPanel>
 							<AccordionPanel

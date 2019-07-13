@@ -145,10 +145,10 @@ const Login = ({ history }: { history: History }) => {
 
 					// TODO: Apply the following JWT Decode Pattern around the platform
 					// @ts-ignore
-					if (decodedToken.exp < new Date().getTime()) {
-						await loginDispatch({ type: "LOGIN" });
-						history.push("/dashboard");
-					}
+					// if (decodedToken.exp < new Date().getTime()) {
+					// 	await loginDispatch({ type: "LOGIN" });
+					// 	history.push("/dashboard");
+					// }
 				}
 
 				/*
