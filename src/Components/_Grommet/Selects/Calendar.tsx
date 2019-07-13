@@ -3,7 +3,7 @@ import { Close, FormDown } from "grommet-icons";
 import { grommet } from "grommet/themes";
 import React, { Component, useContext, useState } from "react";
 
-const CalendarDropButton = (date: Date) => {
+const CalendarDropButton = () => {
     const [date, setDate] = useState(new Date());
     const [open, setOpen] = useState<any>(false);
 
