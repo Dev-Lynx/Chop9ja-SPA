@@ -1,10 +1,7 @@
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import {
 	Box,
 	Button,
-	Form,
-	FormField,
-	Grommet,
 	ResponsiveContext,
 	Select,
 	SelectProps,
@@ -14,9 +11,10 @@ import {
 	TableHeader,
 	TableRow,
 	Text,
+	TextInput,
 } from "grommet";
 import { grommet } from "grommet/themes";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import styled, { CSSObject } from "styled-components";
 import { UserContext } from "../../Context/Context";
 
@@ -27,6 +25,8 @@ import BetInsuranceImage from "../../assets/images/white-piggy-bank.jpg";
 import { IBet, IBetPlatform } from "../../Types";
 
 import CalendarDropButton from "../../Components/_Grommet/Selects/Calendar";
+import Spinner from "../../Components/Spinner/Spinner";
+import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -48,383 +48,357 @@ const DateSelector = styled(CustomSelect)`
 	font-weight: 700;
 `;
 
-let bets: IBet[] = [];
-let platforms: IBetPlatform[] = [];
-
 const BetInsurance = () => {
 	const size = useContext(ResponsiveContext);
-	const [betPlatform, setBetPlatform] = useState<IBetPlatform>({
-		id: 0,
-		logo: "",
-		name: "",
-		website: "",
-	} as IBetPlatform);
 
 	// Get the user state
 	const { userState } = useContext(UserContext);
 
 	const [loading, setLoading] = useState(false);
+	const [bets, setBets] = useState([] as IBet[]);
 
-	const [amount, setAmount] = useState(0);
-	const [error, setError] = useState(false);
-	const [loadError, setLoadError] = useState(false);
-
-	const [bet, setBet] = useState<IBet>({
-		platformId: 1,
-	} as IBet);
-
-	const amountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setError(false);
-		const a = Number(event.target.value);
-		if (isNaN(a)) {
-			return;
-		}
-		setAmount(a);
-	};
-
-	const spinning = (
-		<svg
-			version="1.1"
-			viewBox="0 0 32 32"
-			width="32px"
-			height="32px"
-			fill="#333333"
-		>
-			<path
-				opacity=".25"
-				d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"
-			/>
-			<path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
-				<animateTransform
-					attributeName="transform"
-					type="rotate"
-					from="0 16 16"
-					to="360 16 16"
-					dur="0.8s"
-					repeatCount="indefinite"
-				/>
-			</path>
-		</svg>
-	);
-
-	const loadingBox = (
-		<Box align="center" justify="center" style={{ height: "100px" }}>
-			{spinning}
-		</Box>
-	);
-
-	const submit = () => {
-		setLoading(true);
-		setError(false);
-		/*
-				if (amount < 500) {
-					setError(true);
-					setLoading(false);
-					return;
-				}
-
-				setLoading(false);
-				*/
-	};
+	const [forceUpdate, setForceUpdate] = useState(0);
+	const [date, setDate] = useState(new Date());
+	const [slipNumber, setSlipNumber] = useState("");
+	const [odds, setOdds] = useState("");
+	const [stake, setStake] = useState("");
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
+	const [potentialWinnings, setPotentialWinnings] = useState("");
+	const [canSubmit, setCanSubmit] = useState(false);
+	const [platform, setPlatform] = useState({
+		id: 0,
+		logo: "",
+		name: "",
+		website: "",
+	});
 
 	useEffect(() => {
 		(async () => {
 			try {
-				platforms = BetPlatformData;
-				setBetPlatform(platforms[0]);
-
-				if (!await loadBets()) {
-					setLoadError(true);
+				const response = await Axios.get("/api/Bet/all");
+				if (response.status === 200) {
+					setBets(response.data);
 				}
-
-			} catch (error) {
-				const err = error;
-			}
+			} catch (error) {/* No code */ }
 		})();
-	}, []);
+	}, [forceUpdate]);
 
-	const loadBets = async () => {
-		try {
-			const res = await Axios.get<IBet[]>("/api/Bet/all");
-			if (res.status === 200) {
-				bets = res.data;
-				console.log(res.data);
-			}
-
-			for (const bet of bets) {
-				bet.platform = platforms[bet.platformId - 1];
-				console.log(bet.platform.name);
-			}
-		} catch {
-			return false;
+	const changeInputs = useCallback((name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+		checkIfInputsCanBeSubmitted();
+		if (name === "platform") {
+			setPlatform(BetPlatformData.find((p) => p.name === (event as any).option) as IBetPlatform);
+			return;
 		}
-		return true;
+		const value = event.target.value;
+		// Validate for only numbers
+		if ((name === "potentialWinnings" || name === "odds" || name === "stake") && (value !== "")) {
+			if (!(/^([0-9]+)(|\.)(|[0-9]+)$/.test(value))) {
+				return;
+			}
+		}
+		switch (name) {
+			case "stake":
+				setStake(value);
+				break;
+			case "potentialWinnings":
+				setPotentialWinnings(value);
+				break;
+			case "odds":
+				setOdds(value);
+				break;
+			case "slipNumber":
+				setSlipNumber(value);
+				break;
+		}
+
+	}, [slipNumber, odds, stake, potentialWinnings, date, platform]);
+
+	const checkIfInputsCanBeSubmitted = () => {
+		// Check if the user can submit
+		setCanSubmit(false);
+		if (
+			slipNumber.length > 1 && platform.id > 1 && odds.length > 1 &&
+			stake.length > 1 && potentialWinnings.length > 1 && date
+		) {
+			setCanSubmit(true);
+		}
 	};
 
+	const submit = async () => {
+		setLoading(true);
+		const data = {
+			date,
+			odds: Number(odds),
+			platformId: platform.id,
+			potentialWinnings: Number(potentialWinnings),
+			slipNumber,
+			stake: Number(stake),
+		};
+		try {
+			const response = await Axios.post("/api/Bet/insure", data);
+			if (response.status === 200) {
+				setForceUpdate((f) => f + 1);
+				setSnackbar({
+					message: "Successful",
+					show: true,
+					variant: "success",
+				});
+			}
+		} catch (error) {
+			const err = error as AxiosError;
+			if (err.response) {
+				setForceUpdate((f) => f + 1);
+				if (err.response.status === 400) {
+					setSnackbar({
+						message: err.response.data,
+						show: true,
+						variant: "error",
+					});
+				}
+			}
+		}
+		setLoading(false);
+	};
 	const insureBet = async () => {
 		try {
 			const bet = {} as IBet;
-
-			// bet.date =
-			// bet.platformId =
-
 			const res = await Axios.post("/api/bet/insure");
-		} catch {/* No code*/}
+		} catch {/* No code*/ }
 	};
 
 	return (
-		<Grommet theme={grommet}>
-			<Wrapper direction="column">
-				<Hero
-					image={BetInsuranceImage}
-					text="Bet Insurance"
+		<Wrapper direction="column">
+			<Hero
+				image={BetInsuranceImage}
+				text="Bet Insurance"
+			/>
+			<Spinner show={loading} />
+			<SnackBarComponent
+					message={snackbar.message}
+					show={snackbar.show}
+					variant={snackbar.variant}
+					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 				/>
-				<Box direction="column" align="center">
-					{/*
-				<Spinner show={loading as any as Element | null} />
-				*/}
-					<Box
-						pad="large"
-						width={size !== "small" ? "60vw" : "80vw"}
-						overflow={{ horizontal: "hidden" }}
-						background="white"
-						margin={{ top: "xlarge" }}
-						round="small"
-						elevation="large"
-					>
-
-						<Box width={size !== "small" ? "40%" : "100%"} direction="column" align="start" justify="between">
-							<Text weight="bold" size="small">Date</Text>
-							<CalendarDropButton />
-						</Box>
-
-						<Box
-							width="90%"
-							direction="column"
-							align="start"
-						>
-							<Box
-								width="100%"
-								direction={size !== "small" ? "row" : "column"}
-								align="baseline"
-								justify="between"
-								pad="none"
-								gap="medium"
-							>
-								<Box
-									direction="column"
-									justify="between"
-
-								>
-									<Text
-										weight="bold"
-										size="small"
-									>
-										Platform
-									</Text>
-
-									<Select
-										placeholder="Select your platform"
-										value={betPlatform.name}
-										options={platforms.map((b) => b.name)}
-										dropHeight="medium"
-										onChange={({ option }) => {
-											const p = platforms.find((b) => b.name === option) as IBetPlatform;
-											setBetPlatform(p);
-											bet.platformId = p.id;
-											console.log(bet.platformId);
-										}}
-									/>
-
-									{/*
-								const p = platforms.find((b) => b.name === option);
-										setBetPlatform(p);
-										bet.platformId = p.id;
-								*/}
-								</Box>
-								<Box
-									flex="grow"
-								>
-									<Form>
-										<FormField
-											label="Slip Number"
-											placeholder={size !== "small" ? "Enter your slip number" : "Enter slip Number"}
-											onChange={(event) => bet.slipNumber = event.target.value}
-										/>
-									</Form>
-								</Box>
-							</Box>
-							{size !== "small" && (<Box margin={{ top: "small" }} />)}
-
-							<Box
-								width="100%"
-								direction={size !== "small" ? "row" : "column"}
-								align="baseline"
-								justify="between"
-								pad="none"
-								gap="medium"
-							>
-								<Box
-									flex={true}
-								>
-									<Form>
-										<FormField
-											label="Stake"
-											placeholder="Enter the amount"
-											onChange={(event) => {
-												const value = event.target.value;
-												bet.stake = Number(value);
-											}}
-											validate={{
-												message: "Only numbers are allowed",
-												regexp: /^[0-9]/i,
-											}}
-										/>
-									</Form>
-								</Box>
-								<Box>
-									<Form>
-										<FormField
-											label="Odds"
-											placeholder="Enter the odds"
-											onChange={(event) => {
-												const value = event.target.value;
-												bet.odds = Number(value);
-											}}
-											validate={{
-												message: "Only numbers are allowed",
-												regexp: /^[0-9](\.[0-9]+)?$/,
-											}}
-										/>
-									</Form>
-								</Box>
-							</Box>
-
-							<Box
-								width="100%"
-								align="baseline"
-								justify="between"
-								pad="none"
-								gap="medium"
-							>
-								<Box width="100%">
-									<Form>
-										<FormField
-											label="Potential Winnings"
-											placeholder="Enter your potential winnings"
-											onChange={(event) => {
-												const value = event.target.value;
-												bet.potentialWinnings = Number(value);
-											}}
-										/>
-									</Form>
-								</Box>
-							</Box>
-						</Box>
-
-						<Box
-							width="90%"
-							round={true}
-							direction="row"
-							justify="end"
-							pad={{
-								top: "medium",
-							}}
-						>
-							<Button
-								primary={true}
-								label={"Insure"}
-								onClick={submit}
-								gap="xlarge"
-							/>
-						</Box>
-					</Box>
-				</Box>
+			<Box direction="column" align="center">
 				<Box
 					pad="large"
-					width={size !== "small" ? "960px" : "80vw"}
+					width={size !== "small" ? "60vw" : "80vw"}
+					overflow={{ horizontal: "hidden" }}
 					background="white"
-					overflow={{ horizontal: "scroll" }}
-					direction="row"
-					align="center"
 					margin={{ top: "xlarge" }}
-					elevation="small"
+					round="small"
+					elevation="large"
 				>
-					<Table
-						style={{ width: size !== "small" ? "920px" : "80vw" }}
+
+					<Box width={size !== "small" ? "40%" : "100%"} direction="column" align="start" justify="between">
+						<Text weight="bold" size="small">Date</Text>
+						<CalendarDropButton
+							date={date}
+							setDate={setDate}
+						/>
+					</Box>
+
+					<Box
+						width="90%"
+						direction="column"
+						align="start"
 					>
-						<TableHeader>
+						<Box
+							width="100%"
+							direction={size !== "small" ? "row" : "column"}
+							align="baseline"
+							justify="between"
+							pad="none"
+							gap="medium"
+						>
+							<Box
+								direction="column"
+								justify="between"
+
+							>
+								<Text
+									weight="bold"
+									size="small"
+								>
+									Platform
+								</Text>
+
+								<Select
+									placeholder="Select your platform"
+									value={platform.name}
+									options={BetPlatformData.map((b) => b.name)}
+									dropHeight="medium"
+
+									onChange={changeInputs("platform")}
+								/>
+
+							</Box>
+							<Box
+								flex="grow"
+							>
+								<Text>
+									Slip Number
+								</Text>
+								<TextInput
+									value={slipNumber}
+									onBlur={checkIfInputsCanBeSubmitted}
+									placeholder={size !== "small" ? "Enter your slip number" : "Enter slip Number"}
+									onChange={changeInputs("slipNumber")}
+								/>
+							</Box>
+						</Box>
+						{size !== "small" && (<Box margin={{ top: "small" }} />)}
+
+						<Box
+							width="100%"
+							direction={size !== "small" ? "row" : "column"}
+							align="baseline"
+							justify="between"
+							pad="none"
+							gap="medium"
+						>
+							<Box
+								flex={true}
+							>
+								<Text>
+									Enter the amount
+								</Text>
+								<TextInput
+									onBlur={checkIfInputsCanBeSubmitted}
+									placeholder="Enter the amount"
+									value={stake}
+									onChange={changeInputs("stake")}
+								/>
+							</Box>
+							<Box>
+								<Text>
+									Odds
+								</Text>
+								<TextInput
+									onBlur={checkIfInputsCanBeSubmitted}
+									placeholder="Enter the odds"
+									value={odds}
+									onChange={changeInputs("odds")}
+								/>
+							</Box>
+						</Box>
+
+						<Box
+							width="100%"
+							align="baseline"
+							justify="between"
+							pad="none"
+							gap="medium"
+						>
+							<Box width="100%">
+								<Text>
+									Potential winnings
+								</Text>
+								<TextInput
+									placeholder="Enter your potential winnings"
+									value={potentialWinnings}
+									onChange={changeInputs("potentialWinnings")}
+								/>
+							</Box>
+						</Box>
+					</Box>
+
+					<Box
+						width="90%"
+						round={true}
+						direction="row"
+						justify="end"
+						pad={{
+							top: "medium",
+						}}
+					>
+						<Button
+							primary={true}
+							color="secondary"
+							disabled={!canSubmit}
+							label={"Insure"}
+							onClick={submit}
+							gap="xlarge"
+						/>
+					</Box>
+				</Box>
+			</Box>
+			<Box
+				pad="large"
+				width={size !== "small" ? "960px" : "80vw"}
+				background="white"
+				overflow={{ horizontal: "scroll" }}
+				direction="row"
+				align="center"
+				margin={{ top: "xlarge" }}
+				elevation="small"
+			>
+				<Table
+					style={{ width: size !== "small" ? "920px" : "80vw" }}
+				>
+					<TableHeader>
+						<TableRow
+							style={{
+								borderBottom: "solid 1px #ccc",
+								fontSize: "14px !important",
+								width: size !== "small" ? "720px" : "80vw",
+							}}
+						>
+							<TableCell>
+								Platform
+							</TableCell>
+							<TableCell>
+								Slip Number
+							</TableCell>
+							<TableCell>
+								Odds
+							</TableCell>
+							<TableCell>
+								<strong>
+									Stake
+								</strong>
+							</TableCell>
+							<TableCell>
+								<strong>
+									Potential Winnings
+								</strong>
+							</TableCell>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{bets.map((bet, index) => (
 							<TableRow
+								key={index}
 								style={{
-									borderBottom: "solid 1px #ccc",
-									fontSize: "14px !important",
-									width: size !== "small" ? "720px" : "80vw",
+									padding: ".1rem",
 								}}
 							>
 								<TableCell>
-									Date
-							</TableCell>
+									{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
+								</TableCell>
 								<TableCell>
-									Platform
-							</TableCell>
+									{bet.slipNumber}
+								</TableCell>
 								<TableCell>
-									Slip Number
-							</TableCell>
-								<TableCell>
-									Odds
-							</TableCell>
-								<TableCell>
-									<strong>
-										Stake
-								</strong>
+									{bet.odds}
 								</TableCell>
 								<TableCell>
 									<strong>
-										Potential Winnings
-								</strong>
+										{bet.stake.toLocaleString()}
+									</strong>
+								</TableCell>
+								<TableCell>
+									<strong>
+										{bet.potentialWinnings.toLocaleString()}
+									</strong>
 								</TableCell>
 							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{bets.map((bet, index) => (
-								<TableRow
-									key={index}
-									style={{
-										padding: ".1rem",
-									}}
-								>
-									<TableCell
-										scope="row"
-									>
-										{bet.date}
-									</TableCell>
-									<TableCell>
-										{bet.platform!.name}
-									</TableCell>
-									<TableCell>
-										{bet.slipNumber}
-									</TableCell>
-									<TableCell>
-										{bet.odds}
-									</TableCell>
-									<TableCell>
-										<strong>
-											{bet.stake.toLocaleString()}
-										</strong>
-									</TableCell>
-									<TableCell>
-										<strong>
-											{bet.potentialWinnings.toLocaleString()}
-										</strong>
-									</TableCell>
-								</TableRow>
 
-							))}
-						</TableBody>
-					</Table>
-				</Box>
-			</Wrapper>
-		</Grommet>
+						))}
+					</TableBody>
+				</Table>
+			</Box>
+		</Wrapper>
 	);
 };
 

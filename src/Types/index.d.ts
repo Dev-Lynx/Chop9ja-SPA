@@ -87,7 +87,6 @@ export interface IBetPlatform {
 export interface IBet {
 	date?: Date;
 	platformId: number;
-	platform?: IBetPlatform;
 	slipNumber: string;
 	odds: number;
 	stake: number;
@@ -110,4 +109,4 @@ export interface IUserBanks {
 	id: number;
 }
 
-//#endregion
+//#end region
