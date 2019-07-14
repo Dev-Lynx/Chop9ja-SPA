@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginContextAction, LoginContextState, UserContextState, UserContextAction } from "../Types";
+import { LoginContextAction, LoginContextState, UserContextState, UserContextAction, IBet } from "../Types";
 
 const loginState: LoginContextState = { loggedIn: false };
 const loginDispatch = (action: LoginContextAction) => {/* Login implemented in App.tsx */ };
@@ -23,7 +23,7 @@ const userState: UserContextState = {
 	stateOfOrigin: "",
 	username: "",
 	paymentChannels: [],
-
+	// bets: [],
 };
 
 const userDispatch = (action: UserContextAction) => { };

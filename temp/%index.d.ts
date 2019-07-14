@@ -35,7 +35,7 @@ export interface UserContextState {
 			usesFeePercentage: boolean;
 			usesFixedFee: boolean;
 		}
-	>;
+	>
 	bets?: IBet[];
 }
 
@@ -68,7 +68,7 @@ export interface UserContextAction {
 				usesFeePercentage: boolean;
 				usesFixedFee: boolean;
 			}
-		>;
+		>
 		bets?: IBet[];
 	}
 }
@@ -97,26 +97,11 @@ export interface IBet {
 	status?: Status;
 }
 
+// TODO: Move to enums file
 enum Status {
 	Pending = 0,
 	Approved = 1,
 	Declined = 2
 }
 
-export interface IBank {
-	code: string;
-	id: string;
-	isAvailable: boolean;
-	knownAs: string;
-	logo: string | undefined;
-	name: string;
-};
-
-export interface IUserBanks {
-	accountName: string;
-	accountNumber: string;
-	bankId: number;
-	id: number;
-}
-
-//#end region
+//#endregion

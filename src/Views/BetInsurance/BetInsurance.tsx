@@ -2,6 +2,7 @@ import Axios, { AxiosError } from "axios";
 import {
 	Box,
 	Button,
+	Image,
 	ResponsiveContext,
 	Select,
 	SelectProps,
@@ -25,8 +26,8 @@ import BetInsuranceImage from "../../assets/images/white-piggy-bank.jpg";
 import { IBet, IBetPlatform } from "../../Types";
 
 import CalendarDropButton from "../../Components/_Grommet/Selects/Calendar";
-import Spinner from "../../Components/Spinner/Spinner";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -91,20 +92,29 @@ const BetInsurance = () => {
 		}
 		const value = event.target.value;
 		// Validate for only numbers
+
+		let val = value.replace("N ", "").replace(/,/g, "");
+		if (val === "" && name !== "odds") {
+			val = "0";
+		}
+
+		const num = Number(val);
 		if ((name === "potentialWinnings" || name === "odds" || name === "stake") && (value !== "")) {
-			if (!(/^([0-9]+)(|\.)(|[0-9]+)$/.test(value))) {
+			// TODO: Make this limit from the API
+			if (Number.isNaN(num) || num > 9999999999) {
 				return;
 			}
 		}
+
 		switch (name) {
 			case "stake":
-				setStake(value);
+				setStake("N " + num.toLocaleString());
 				break;
 			case "potentialWinnings":
-				setPotentialWinnings(value);
+				setPotentialWinnings("N " + num.toLocaleString());
 				break;
 			case "odds":
-				setOdds(value);
+				setOdds(val);
 				break;
 			case "slipNumber":
 				setSlipNumber(value);
@@ -115,12 +125,13 @@ const BetInsurance = () => {
 
 	const checkIfInputsCanBeSubmitted = () => {
 		// Check if the user can submit
-		setCanSubmit(false);
 		if (
-			slipNumber.length > 1 && platform.id > 1 && odds.length > 1 &&
+			slipNumber.length > 1 && platform.id > 1 && odds.length >= 1 &&
 			stake.length > 1 && potentialWinnings.length > 1 && date
 		) {
 			setCanSubmit(true);
+		} else {
+			setCanSubmit(false);
 		}
 	};
 
@@ -128,11 +139,11 @@ const BetInsurance = () => {
 		setLoading(true);
 		const data = {
 			date,
-			odds: Number(odds),
+			odds: Number(odds.trim()),
 			platformId: platform.id,
-			potentialWinnings: Number(potentialWinnings),
+			potentialWinnings: Number(potentialWinnings.replace("N ", "").replace(/,/g, "").trim()),
 			slipNumber,
-			stake: Number(stake),
+			stake: Number(stake.replace("N", "").replace(/,/g, "").trim()),
 		};
 		try {
 			const response = await Axios.post("/api/Bet/insure", data);
@@ -149,8 +160,11 @@ const BetInsurance = () => {
 			if (err.response) {
 				setForceUpdate((f) => f + 1);
 				if (err.response.status === 400) {
+					console.log(err.response.data);
 					setSnackbar({
-						message: err.response.data,
+						// Don't output API errors to the user.
+						// TODO: Improve error message
+						message: "An unexpected error occured. Please try again later", // err.response.data
 						show: true,
 						variant: "error",
 					});
@@ -158,12 +172,6 @@ const BetInsurance = () => {
 			}
 		}
 		setLoading(false);
-	};
-	const insureBet = async () => {
-		try {
-			const bet = {} as IBet;
-			const res = await Axios.post("/api/bet/insure");
-		} catch {/* No code*/ }
 	};
 
 	return (
@@ -178,7 +186,7 @@ const BetInsurance = () => {
 					show={snackbar.show}
 					variant={snackbar.variant}
 					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
-				/>
+			/>
 			<Box direction="column" align="center">
 				<Box
 					pad="large"
@@ -223,14 +231,15 @@ const BetInsurance = () => {
 									Platform
 								</Text>
 
-								<Select
-									placeholder="Select your platform"
-									value={platform.name}
-									options={BetPlatformData.map((b) => b.name)}
-									dropHeight="medium"
-
-									onChange={changeInputs("platform")}
-								/>
+								<Box direction="row" justify="between">
+									<Select
+										placeholder="Select your platform"
+										value={platform.name}
+										options={BetPlatformData.map((b) => b.name)}
+										dropHeight="medium"
+										onChange={changeInputs("platform")}
+									/>
+								</Box>
 
 							</Box>
 							<Box
@@ -333,6 +342,7 @@ const BetInsurance = () => {
 				margin={{ top: "xlarge" }}
 				elevation="small"
 			>
+				{/* TODO: Add date to table */}
 				<Table
 					style={{ width: size !== "small" ? "920px" : "80vw" }}
 				>
