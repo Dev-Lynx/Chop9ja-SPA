@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { Status } from "enums";
 
 export interface LoginContextAction {
 	type: "LOGIN" | "LOGOUT";
@@ -97,11 +98,6 @@ export interface IBet {
 	status?: Status;
 }
 
-enum Status {
-	Pending = 0,
-	Approved = 1,
-	Declined = 2
-}
 
 export interface IBank {
 	code: string;

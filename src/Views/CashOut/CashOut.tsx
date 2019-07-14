@@ -16,17 +16,20 @@ import {
 	Text,
 	TextInput,
 } from "grommet";
-import BetPlatformData from "../../_data/betPlatforms.json";
+//import { Status } from "../../Types/enums"; <- This is returning an error...Why?
 import { grommet } from "grommet/themes";
 import moment from "moment";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import BetPlatformData from "../../_data/betPlatforms.json";
 import Logo from "../../assets/images/chop9ja.png";
 import CashOutImage from "../../assets/images/pc-withdrawal.jpg";
 import spinner from "../../assets/svg/spinner.svg";
 import PatientInput from "../../Components/_Grommet/Inputs/PatientInput";
 import Hero from "../../Components/Hero/Hero";
-import { IBet, IBetPlatform } from "../../Types";
+import SnackBarComponent from "../../Components/SnackBar/SnackBar";
+import Spinner from "../../Components/Spinner/Spinner";
+import { IBet } from "../../Types";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -73,35 +76,82 @@ const Bets = [
 	},
 ];
 
-
 // const [load]
 
 const CashOut = () => {
 
 	const size = useContext(ResponsiveContext);
 
-	
+	const [loading, setLoading] = useState(false);
+	const [forceUpdate, setForceUpdate] = useState(0);
 	const [loadingBet, setLoadingBet] = useState(false);
 	const [currentBet, setCurrentBet] = useState<IBet>({
 		platformId: 1,
 	} as IBet);
-	const [currentPlatform, setCurrentPlatform] = useState<IBetPlatform>({} as IBetPlatform);
+	const [cashOuts, setCashOuts] = useState([] as IBet[]);
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
+
 
 	let slipNumber: string = "";
 	let cancelRequest: Canceler;
-	let loading: boolean = false;
+	let _loadingBet: boolean = false;
 
-	const getCashOuts = async () => {
-		await Axios.get<IBet[]>("api/bet/cashout/all");
-	}
+	useEffect(() => {
+		(async () => {
+			await loadCashOuts();
+		})();
+	}, [forceUpdate]);
+
+	const loadCashOuts = async () => {
+		try {
+			const res = await Axios.get<IBet[]>("api/bet/cashout/all");
+			if (res.status === 200) {
+				setCashOuts(res.data);
+			}
+		} catch (error) {/* No Code */}
+	};
+
+	const cashOut = () => {
+		console.log("Slip Number " + currentBet.slipNumber);
+		setLoading(true);
+
+		const model = {
+			"slipNumber": currentBet.slipNumber
+		};
+		Axios.post("/api/bet/cashOut", model).then((res) => {
+			if (res.status === 200) {
+				loadCashOuts();
+				slipNumber = currentBet.slipNumber;
+				setCurrentBet({} as IBet);
+
+				setSnackbar({
+					message: "Successfully Cashed Out Bet " + slipNumber
+						+ ". Your request will be reviewed and validated within 48 hours",
+					show: true,
+					variant: "success",
+				})
+				slipNumber = "";
+			}
+		}).catch((err: AxiosError) => {
+			console.log(err);
+			setSnackbar({
+				message: "Failed to cashout bet. Please make sure this" +
+				" slip number has not been cashed out before.",
+				show: true,
+				variant: "error",
+			})
+		}).finally(() => {
+			setLoading(false);
+		});
+	};
 
 	const retrieveBet = () => {
-		if (loading || slipNumber.length <= 4) {
+		if (_loadingBet || slipNumber.length <= 4) {
 			return;
 		}
 
 		setLoadingBet(true);
-		loading = true;
+		_loadingBet = true;
 
 		Axios.get<IBet>("/api/bet", {cancelToken: new Axios.CancelToken((c) => cancelRequest = c),
 			params: {
@@ -117,17 +167,23 @@ const CashOut = () => {
 			console.log(reason);
 		}).finally(() => {
 			setLoadingBet(false);
-			loading = false;
-		})
+			_loadingBet = false;
+		});
 	};
-	
+
 	return (
 		<Wrapper>
 			{/* TODO: Move this to the highest level */}
-			<Grommet theme={grommet}>
 				<Hero
 					image={CashOutImage}
 					text="Cash Out"
+				/>
+				<Spinner show={_loadingBet} />
+				<SnackBarComponent
+					message={snackbar.message}
+					show={snackbar.show}
+					variant={snackbar.variant}
+					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 				/>
 				<Box
 					width="100%"
@@ -157,7 +213,7 @@ const CashOut = () => {
 											retrieveBet();
 										}}
 										onUndelayedChange={() => {
-											if (loading) {
+											if (_loadingBet) {
 												cancelRequest();
 											}
 											setCurrentBet({} as IBet);
@@ -167,18 +223,18 @@ const CashOut = () => {
 								</Box>
 								{
 									loadingBet ? (
-									<Box align="baseline" justify="evenly" 
-										margin={size == "small" ? {"top": "1.8rem", "left": "3px"} : {"top": "1rem"}}>
-										 <img src={spinner} width={size == "small"? "24px" : "32px"} 
+									<Box align="baseline" justify="evenly"
+										margin={size == "small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
+										 <img src={spinner} width={size == "small" ? "24px" : "32px"}
 										  height={size == "small" ? "24px" : "32px"}/>
 									</Box>) : null
 								}
-								
+
 							</Box>
 						</Form>
 
 						{ currentBet && currentBet.platform ? (
-							<Box direction="column" width="100%" 
+							<Box direction="column" width="100%"
 								justify="between" align="stretch"
 								gap="medium">
 								<Box
@@ -226,7 +282,7 @@ const CashOut = () => {
 											}}
 										>
 											<strong>
-												{currentBet.date}
+												{new Date(currentBet.date as Date).toLocaleDateString()}
 											</strong>
 										</Text>
 									</Box>
@@ -307,22 +363,22 @@ const CashOut = () => {
 										</Text>
 									</Box>
 
-									<Box justify="end" pad={{"top": "medium"}}>
-										<Button primary
+									<Box justify="end" pad={{top: "medium"}}>
+										<Button 
+											primary={true}
+											color="secondary"
 											label={"Cash Out"}
-											
+											onClick={cashOut}
 										/>
 									</Box>
 							</Box>
 
-							
 
 
-							
+
+
 							) : null
 						}
-
-						
 
 {/*
 						<Box
@@ -434,7 +490,7 @@ const CashOut = () => {
 							/>
 						</Box>
 
-						
+
 						*/}
 					</Box>
 
@@ -488,21 +544,20 @@ const CashOut = () => {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{Bets.map((bet, index) => (
+								{cashOuts.map((bet, index) => (
 									<TableRow
 										key={index}
 									>
 										<TableCell
 											scope="row"
 										>
-											{bet.date}
-										</TableCell>
-										<TableCell
-										>
-											{bet.platform}
+											{new Date(bet.date as Date).toDateString()}
 										</TableCell>
 										<TableCell>
-											{bet.number}
+											{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
+										</TableCell>
+										<TableCell>
+											{bet.slipNumber}
 										</TableCell>
 										<TableCell>
 											{bet.odds}
@@ -515,8 +570,8 @@ const CashOut = () => {
 										<TableCell>
 											<Text
 												color={
-													bet.status === "Pending" ?
-														"status-warning" : bet.status === "Declined" ?
+													bet.status === 0 ?
+														"status-warning" : bet.status === 2 ?
 															"status-error" : "secondary"
 												}
 											>
@@ -529,9 +584,8 @@ const CashOut = () => {
 							</TableBody>
 						</Table>
 					</Box>
-				</Box>	
-			</Grommet>
-		
+				</Box>
+
 		</Wrapper>
 	);
 };

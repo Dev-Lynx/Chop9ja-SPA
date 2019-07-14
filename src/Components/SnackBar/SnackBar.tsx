@@ -36,7 +36,7 @@ const SnackBarComponent = ({ show, message, variant, onClose }: IProps) => {
 
 	useEffect(() => {
 		if (show) {
-			// Wait for 6 seconds after displaying message then call the close function
+			// Wait for 4 seconds after displaying message then call the close function
 			setTimeout(() => {
 				onClose(null);
 			}, 4000);

@@ -160,7 +160,6 @@ const BetInsurance = () => {
 			if (err.response) {
 				setForceUpdate((f) => f + 1);
 				if (err.response.status === 400) {
-					console.log(err.response.data);
 					setSnackbar({
 						// Don't output API errors to the user.
 						// TODO: Improve error message
