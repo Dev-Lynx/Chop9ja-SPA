@@ -5,6 +5,7 @@ import { Link, Route, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { WithdrawButton } from "../../Components/Buttons/Buttons";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
@@ -59,6 +60,7 @@ const Deposit = () => {
 
 	const [banks, setBanks] = useState([] as Bank[]);
 	const [loading, setLoading] = useState(false);
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
 	useEffect(() => {
 		// Try getting the list of banks from the local storage
@@ -76,6 +78,12 @@ const Deposit = () => {
 
 	return (
 		<Wrapper direction="column">
+			<SnackBarComponent
+				message={snackbar.message}
+				show={snackbar.show}
+				variant={snackbar.variant}
+				onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
+			/>
 			<Wallet />
 			<Box margin="medium">
 				<WithdrawButton />
@@ -184,6 +192,7 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 	const [fee, setFee] = useState("" as any as number);
 	const [total, setTotal] = useState("" as any as number);
 	const [error, setError] = useState(false);
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
 	const paymentChannel = paymentChannels.find((channel) => channel.name === match.params.paymentChannel);
 
@@ -228,8 +237,23 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 				paymentChannel: paymentChannel && paymentChannel.name,
 			};
 			const response = await Axios.post("/api/account/Wallet/deposit", data);
+			console.log(response);
+
+			if (response.status === 202) {
+				const tab = window.open(response.data, "_blank");
+				if (tab) {
+					tab.focus();
+				}
+			} else if (response.status === 200) {
+				setSnackbar({
+					message: "Deposit was successful and will be reviewed within 24 hours",
+					show: true,
+					variant: "success",
+				})
+			}
 		} catch (error) {
 			const err = error as AxiosError;
+			console.log(error);
 		}
 		setLoading(false);
 	};
@@ -243,6 +267,12 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 				margin={{ top: "small" }}
 				round={true}
 			>
+				<SnackBarComponent
+					message={snackbar.message}
+					show={snackbar.show}
+					variant={snackbar.variant}
+					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
+				/>
 				<ProgressBar show={loading as any} />
 				{paymentChannel && (
 					<>
