@@ -1,4 +1,4 @@
-import { Box, Heading, Image, ResponsiveContext, Text } from "grommet";
+import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { useContext } from "react"
 import styled from "styled-components";
 import WalletImage from "../../assets/images/wallet.jpg";

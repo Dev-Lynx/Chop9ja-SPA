@@ -1,10 +1,8 @@
-import Axios, { AxiosError } from "axios";
-import { Box, Button, Form, Heading, Image, ResponsiveContext, Select, Text, TextInput } from "grommet";
-import React, { useContext, useEffect, useState } from "react";
-import { Link, Route, RouteComponentProps } from "react-router-dom";
+import { Box, Button, Form, Image, ResponsiveContext, Select, Text, TextInput } from "grommet";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import banks from "../../_data/banks.json";
-import { DepositButton, WithdrawButton } from "../../Components/Buttons/Buttons";
+import { DepositButton } from "../../Components/Buttons/Buttons";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";

@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
-import { Box, Button, Heading, Image, ResponsiveContext, Text } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
-import { Link, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import styled from "styled-components";
 import { DepositButton, WithdrawButton } from "../../Components/Buttons/Buttons";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
@@ -22,26 +22,6 @@ const Wrapper = styled(Box)`
 	width: 100vw;
 	padding-bottom: 2rem;
 `;
-
-const Card = styled(Box)`
-	background-color: rgba(178, 205, 37, 0.36);
-	color: white;
-	height: 215px;
-	max-width: 612px;
-	padding-left: 3rem;
-	@media (max-width: 768px) {
-		height: 150px;
-	}
-`;
-
-const Transactions = styled(Box)`
-
-`;
-
-const transactions = [
-	{ id: 1, date: "Aug 7, 2019", type: "Credit", amount: 5000 },
-	{ id: 2, date: "Aug 7, 2019", type: "Withdrawal", amount: 4000 },
-];
 
 const Wallet = () => {
 	const size = useContext(ResponsiveContext);

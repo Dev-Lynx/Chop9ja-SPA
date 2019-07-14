@@ -1,12 +1,10 @@
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import {
 	Box,
 	Button,
 	Form,
 	FormField,
 	Grommet,
-	Heading,
-	Image,
 	ResponsiveContext,
 	Select,
 	SelectProps,
@@ -16,15 +14,10 @@ import {
 	TableHeader,
 	TableRow,
 	Text,
-	TextInput,
 } from "grommet";
-import moment from "moment";
 import { grommet } from "grommet/themes";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Route, RouteComponentProps } from "react-router-dom";
 import styled, { CSSObject } from "styled-components";
-import Spinner from "../../Components/Spinner/Spinner";
-import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 
 import Hero from "../../Components/Hero/Hero";
@@ -34,8 +27,6 @@ import BetInsuranceImage from "../../assets/images/white-piggy-bank.jpg";
 import { IBet, IBetPlatform } from "../../Types";
 
 import CalendarDropButton from "../../Components/_Grommet/Selects/Calendar";
-import ProgressBar from "../../Components/ProgressBar/ProgressBar";
-
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -43,18 +34,6 @@ const Wrapper = styled(Box)`
 	padding-bottom: 2rem;
 	@media (min-width: 768px) {
 		// align-items: start;
-	}
-`;
-
-const Header = styled(Text)`
-	font-size: 32px;
-	font-family: Roboto;
-	font-weight: 100;
-	margin-top: 2rem;
-	color: #24501F;
-	@media (min-width:768px) {
-		margin-top: 5rem;
-		font-size: 55px;
 	}
 `;
 
@@ -91,9 +70,8 @@ const BetInsurance = () => {
 	const [loadError, setLoadError] = useState(false);
 
 	const [bet, setBet] = useState<IBet>({
-		platformId: 1
+		platformId: 1,
 	} as IBet);
-
 
 	const amountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
@@ -106,47 +84,47 @@ const BetInsurance = () => {
 
 	const spinning = (
 		<svg
-		  version="1.1"
-		  viewBox="0 0 32 32"
-		  width="32px"
-		  height="32px"
-		  fill="#333333"
+			version="1.1"
+			viewBox="0 0 32 32"
+			width="32px"
+			height="32px"
+			fill="#333333"
 		>
-		  <path
-			opacity=".25"
-			d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"
-		  />
-		  <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
-			<animateTransform
-			  attributeName="transform"
-			  type="rotate"
-			  from="0 16 16"
-			  to="360 16 16"
-			  dur="0.8s"
-			  repeatCount="indefinite"
+			<path
+				opacity=".25"
+				d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"
 			/>
-		  </path>
+			<path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+				<animateTransform
+					attributeName="transform"
+					type="rotate"
+					from="0 16 16"
+					to="360 16 16"
+					dur="0.8s"
+					repeatCount="indefinite"
+				/>
+			</path>
 		</svg>
-	  );
-	  
-	  const loadingBox = (
+	);
+
+	const loadingBox = (
 		<Box align="center" justify="center" style={{ height: "100px" }}>
-		  {spinning}
+			{spinning}
 		</Box>
-	  );
+	);
 
 	const submit = () => {
 		setLoading(true);
 		setError(false);
-/*
-		if (amount < 500) {
-			setError(true);
-			setLoading(false);
-			return;
-		}
-		
-		setLoading(false);
-		*/
+		/*
+				if (amount < 500) {
+					setError(true);
+					setLoading(false);
+					return;
+				}
+
+				setLoading(false);
+				*/
 	};
 
 	useEffect(() => {
@@ -160,8 +138,8 @@ const BetInsurance = () => {
 				}
 
 			} catch (error) {
-			const err = error;
-		}
+				const err = error;
+			}
 		})();
 	}, []);
 
@@ -185,253 +163,267 @@ const BetInsurance = () => {
 
 	const insureBet = async () => {
 		try {
-			let bet = {} as IBet;
-			
-			// bet.date = 
-			//bet.platformId = 
+			const bet = {} as IBet;
 
-			const res = await Axios.post("/api/bet/insure")
-		} catch {
+			// bet.date =
+			// bet.platformId =
 
-		}
+			const res = await Axios.post("/api/bet/insure");
+		} catch {/* No code*/}
 	};
 
 	return (
 		<Grommet theme={grommet}>
 			<Wrapper direction="column">
-			<Hero
-				image={BetInsuranceImage}
-				text="Bet Insurance"
-			/>
-			<Box direction="column" align="center">
-				{/*
+				<Hero
+					image={BetInsuranceImage}
+					text="Bet Insurance"
+				/>
+				<Box direction="column" align="center">
+					{/*
 				<Spinner show={loading as any as Element | null} />
 				*/}
-				<Box
-					pad="large"
-					width={size !== "small" ? "60vw" : "80vw"}
-					overflow={{ horizontal: "hidden" }}
-					background="white"
-					margin={{ top: "xlarge" }}
-					round="small"
-					elevation="large"
-				>
-
-					<Box width={size !== "small" ? "40%" : "100%"} direction="column" align="start" justify="between">
-						<Text weight="bold" size="small">Date</Text>
-						<CalendarDropButton />
-					</Box>
-
-
 					<Box
-						width="90%"
-						direction="column"
-						align="start"
+						pad="large"
+						width={size !== "small" ? "60vw" : "80vw"}
+						overflow={{ horizontal: "hidden" }}
+						background="white"
+						margin={{ top: "xlarge" }}
+						round="small"
+						elevation="large"
 					>
+
+						<Box width={size !== "small" ? "40%" : "100%"} direction="column" align="start" justify="between">
+							<Text weight="bold" size="small">Date</Text>
+							<CalendarDropButton />
+						</Box>
+
 						<Box
-							width="100%"
-							direction={size !== "small" ? "row" : "column"}
-							align="baseline"
-							justify="between"
-							pad="none"
-							gap="medium"
+							width="90%"
+							direction="column"
+							align="start"
 						>
-							<Box  direction="column" justify="between"
-								
+							<Box
+								width="100%"
+								direction={size !== "small" ? "row" : "column"}
+								align="baseline"
+								justify="between"
+								pad="none"
+								gap="medium"
 							>
-								<Text weight="bold" size="small">Platform</Text>
+								<Box
+									direction="column"
+									justify="between"
 
-								<Select placeholder="Select your platform"
-									value={betPlatform.name}
-									options={platforms.map((b) => b.name)}
-									dropHeight="medium"
-									onChange={({ option }) => {
-										const p = platforms.find((b) => b.name === option) as IBetPlatform;
-										setBetPlatform(p);
-										bet.platformId = p.id;
-										console.log(bet.platformId);
-									}}
-								/>
+								>
+									<Text
+										weight="bold"
+										size="small"
+									>
+										Platform
+									</Text>
 
-								{/*
+									<Select
+										placeholder="Select your platform"
+										value={betPlatform.name}
+										options={platforms.map((b) => b.name)}
+										dropHeight="medium"
+										onChange={({ option }) => {
+											const p = platforms.find((b) => b.name === option) as IBetPlatform;
+											setBetPlatform(p);
+											bet.platformId = p.id;
+											console.log(bet.platformId);
+										}}
+									/>
+
+									{/*
 								const p = platforms.find((b) => b.name === option);
 										setBetPlatform(p);
 										bet.platformId = p.id;
 								*/}
+								</Box>
+								<Box
+									flex="grow"
+								>
+									<Form>
+										<FormField
+											label="Slip Number"
+											placeholder={size !== "small" ? "Enter your slip number" : "Enter slip Number"}
+											onChange={(event) => bet.slipNumber = event.target.value}
+										/>
+									</Form>
+								</Box>
 							</Box>
-							<Box flex="grow"
-							>
-								<Form>
-									<FormField label="Slip Number"
-										placeholder={size !== "small" ? "Enter your slip number" : "Enter slip Number"}
-										onChange={event => bet.slipNumber = event.target.value}
-									/>
-								</Form>
-							</Box>
-						</Box>
-						{size !== "small" && (<Box margin={{ top: "small" }} />)}
-						
-						<Box
-							width="100%"
-							direction={size !== "small" ? "row" : "column"}
-							align="baseline"
-							justify="between"
-							pad="none"
-							gap="medium"
-						>
+							{size !== "small" && (<Box margin={{ top: "small" }} />)}
+
 							<Box
-								flex={true}
+								width="100%"
+								direction={size !== "small" ? "row" : "column"}
+								align="baseline"
+								justify="between"
+								pad="none"
+								gap="medium"
 							>
-								<Form>
-									<FormField
+								<Box
+									flex={true}
+								>
+									<Form>
+										<FormField
 											label="Stake"
 											placeholder="Enter the amount"
-											onChange={event => {
+											onChange={(event) => {
 												const value = event.target.value;
 												bet.stake = Number(value);
 											}}
-											validate={{ 
+											validate={{
+												message: "Only numbers are allowed",
 												regexp: /^[0-9]/i,
-												message: "Only numbers are allowed"
 											}}
 										/>
-								</Form>
+									</Form>
+								</Box>
+								<Box>
+									<Form>
+										<FormField
+											label="Odds"
+											placeholder="Enter the odds"
+											onChange={(event) => {
+												const value = event.target.value;
+												bet.odds = Number(value);
+											}}
+											validate={{
+												message: "Only numbers are allowed",
+												regexp: /^[0-9](\.[0-9]+)?$/,
+											}}
+										/>
+									</Form>
+								</Box>
 							</Box>
-							<Box>
-								<Form>
-									<FormField
-										label="Odds"
-										placeholder="Enter the odds"
-										onChange={event => {
-											const value = event.target.value;
-											bet.odds = Number(value);
-										}}
-										validate={{ 
-											regexp: /^[0-9](\.[0-9]+)?$/,
-											message: "Only numbers are allowed"
-										}}
-									/>
-								</Form>
+
+							<Box
+								width="100%"
+								align="baseline"
+								justify="between"
+								pad="none"
+								gap="medium"
+							>
+								<Box width="100%">
+									<Form>
+										<FormField
+											label="Potential Winnings"
+											placeholder="Enter your potential winnings"
+											onChange={(event) => {
+												const value = event.target.value;
+												bet.potentialWinnings = Number(value);
+											}}
+										/>
+									</Form>
+								</Box>
 							</Box>
 						</Box>
 
 						<Box
-							width="100%"
-							align="baseline"
-							justify="between"
-							pad="none"
-							gap="medium"
-						>
-							<Box width="100%">
-								<Form>
-									<FormField
-										label="Potential Winnings"
-										placeholder="Enter your potential winnnings"
-										onChange={event => {
-											const value = event.target.value;
-											bet.potentialWinnings = Number(value);
-										}}
-									/>
-								</Form>
-							</Box>
-						</Box>
-					</Box>
-
-					<Box width="90%" round={true} direction="row" justify="end" pad={{
-						"top": "medium"
-					}}>
-						<Button primary
-							label={"Insure"}
-							onClick={submit}
-							gap="xlarge"
-						/>
-					</Box>
-				</Box>
-			</Box>
-			<Box
-				pad="large"
-				width={size !== "small" ? "960px" : "80vw"}
-				background="white"
-				overflow={{ horizontal: "scroll" }}
-				direction="row"
-				align="center"
-				margin={{ top: "xlarge" }}
-				elevation="small"
-			>
-				<Table
-					style={{ width: size !== "small" ? "920px" : "80vw" }}
-				>
-					<TableHeader>
-						<TableRow
-							style={{
-								borderBottom: "solid 1px #ccc",
-								fontSize: "14px !important",
-								width: size !== "small" ? "720px" : "80vw",
+							width="90%"
+							round={true}
+							direction="row"
+							justify="end"
+							pad={{
+								top: "medium",
 							}}
 						>
-							<TableCell>
-								Date
-							</TableCell>
-							<TableCell>
-								Platform
-							</TableCell>
-							<TableCell>
-								Slip Number
-							</TableCell>
-							<TableCell>
-								Odds
-							</TableCell>
-							<TableCell>
-								<strong>
-									Stake
-								</strong>
-							</TableCell>
-							<TableCell>
-								<strong>
-									Potential Winnings
-								</strong>
-							</TableCell>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{bets.map((bet, index) => (
+							<Button
+								primary={true}
+								label={"Insure"}
+								onClick={submit}
+								gap="xlarge"
+							/>
+						</Box>
+					</Box>
+				</Box>
+				<Box
+					pad="large"
+					width={size !== "small" ? "960px" : "80vw"}
+					background="white"
+					overflow={{ horizontal: "scroll" }}
+					direction="row"
+					align="center"
+					margin={{ top: "xlarge" }}
+					elevation="small"
+				>
+					<Table
+						style={{ width: size !== "small" ? "920px" : "80vw" }}
+					>
+						<TableHeader>
 							<TableRow
-								key={index}
 								style={{
-									padding: ".1rem",
+									borderBottom: "solid 1px #ccc",
+									fontSize: "14px !important",
+									width: size !== "small" ? "720px" : "80vw",
 								}}
 							>
-								<TableCell
-									scope="row"
-								>
-									{bet.date}
-								</TableCell>
 								<TableCell>
-									{bet.platform!.name}
-								</TableCell>
+									Date
+							</TableCell>
 								<TableCell>
-									{bet.slipNumber}
-								</TableCell>
+									Platform
+							</TableCell>
 								<TableCell>
-									{bet.odds}
+									Slip Number
+							</TableCell>
+								<TableCell>
+									Odds
+							</TableCell>
+								<TableCell>
+									<strong>
+										Stake
+								</strong>
 								</TableCell>
 								<TableCell>
 									<strong>
-										{bet.stake.toLocaleString()}
-									</strong>
-								</TableCell>
-								<TableCell>
-									<strong>
-										{bet.potentialWinnings.toLocaleString()}
-									</strong>
+										Potential Winnings
+								</strong>
 								</TableCell>
 							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{bets.map((bet, index) => (
+								<TableRow
+									key={index}
+									style={{
+										padding: ".1rem",
+									}}
+								>
+									<TableCell
+										scope="row"
+									>
+										{bet.date}
+									</TableCell>
+									<TableCell>
+										{bet.platform!.name}
+									</TableCell>
+									<TableCell>
+										{bet.slipNumber}
+									</TableCell>
+									<TableCell>
+										{bet.odds}
+									</TableCell>
+									<TableCell>
+										<strong>
+											{bet.stake.toLocaleString()}
+										</strong>
+									</TableCell>
+									<TableCell>
+										<strong>
+											{bet.potentialWinnings.toLocaleString()}
+										</strong>
+									</TableCell>
+								</TableRow>
 
-						))}
-					</TableBody>
-				</Table>
-			</Box>
-		</Wrapper>
+							))}
+						</TableBody>
+					</Table>
+				</Box>
+			</Wrapper>
 		</Grommet>
 	);
 };

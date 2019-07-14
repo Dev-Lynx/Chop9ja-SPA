@@ -1,4 +1,4 @@
-import { Box, Button, Image, Layer, Menu, ResponsiveContext, Text } from "grommet";
+import { Box, Button, Image, Layer, Menu, Text } from "grommet";
 import React, { useContext, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import styled from "styled-components";
@@ -9,16 +9,6 @@ const Wrapper = styled(Box)`
 	top: 0;
 	z-index: 999;
 	color: #24501F !important;
-`;
-
-const ArrowDown = styled.span`
-color: #B0CC20;
-width: 0;
-margin-left: .5rem;
-height: 0;
-border-left: .5rem solid transparent;
-border-right: .5rem solid transparent;
-border-top: .5rem solid #D9251B;
 `;
 
 const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: boolean } & RouteComponentProps) => {

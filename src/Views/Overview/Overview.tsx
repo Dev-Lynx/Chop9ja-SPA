@@ -1,5 +1,5 @@
 import { Box, Heading, ResponsiveContext } from "grommet";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import DiceControlImage from "../../assets/images/dice-control.jpg";
 import HandCreditCard from "../../assets/images/hand-credit-card.jpg";
 import MacHandsKeyBoard from "../../assets/images/mac-hands-keyboard.jpg";

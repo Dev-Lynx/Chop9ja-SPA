@@ -1,6 +1,6 @@
-import { Box, Heading, Text } from "grommet";
+import { Box } from "grommet";
 import React, { useContext, useState } from "react";
-import { Link, NavLink, RouteComponentProps, withRouter } from "react-router-dom";
+import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "../../Context/Context";
 
@@ -22,14 +22,6 @@ const Links = styled(NavLink)`
 
 	& i {
 		width: 100%
-	}
-`;
-
-const SettingsLinks = styled(Box)`
-	cursor: pointer;
-	&:hover {
-		text-decoration: underline;
-		background-color: rgba(0, 0, 0, 0.05);
 	}
 `;
 

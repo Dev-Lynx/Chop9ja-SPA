@@ -1,9 +1,8 @@
-import { Box, Heading, Menu, Text } from "grommet";
-import React, { CSSProperties, useContext, useEffect, useState } from "react";
+import { Box, Text } from "grommet";
+import React from "react";
 import { RouteChildrenProps, withRouter } from "react-router";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { UserContext } from "../../Context/Context";
 
 const Links = styled(NavLink)`
 	padding: 20px;
@@ -25,20 +24,7 @@ const Contents = styled(Box)`
 	width: 300px;
 `;
 
-const SettingsLinks = styled(Box)`
-	cursor: pointer;
-	&:hover {
-		text-decoration: underline;
-		background-color: rgba(0, 0, 0, 0.05);
-	}
-`;
-
 const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boolean } & RouteChildrenProps) => {
-
-	const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-	const { userState } = useContext(UserContext);
-
-	console.log(userState);
 
 	return (
 		<>

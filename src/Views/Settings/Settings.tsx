@@ -127,16 +127,23 @@ const Settings = () => {
 	});
 
 	useEffect(() => {
+		setFirstName(userState.firstName);
+		setLastName(userState.lastName);
+		setEmail(userState.email);
+		setStateOfOrigin(userState.stateOfOrigin);
+		setPhoneNumber(userState.phoneNumber);
+		setDateOFBirth(userState.dateOfBirth);
+	}, [userState.email, userState.firstName]);
+
+	useEffect(() => {
 		(async () => {
 			try {
 				const response = await Axios.get("/api/Account/bankAccounts");
-				setBanks(response.data)
-			} catch (error) {
+				setBanks(response.data);
+			} catch (error) { /* NO code */ }
 
-			}
-
-		})()
-	}, [bankChangedToggle])
+		})();
+	}, [bankChangedToggle]);
 
 	const submitAddBank = async () => {
 		setLoading(true);
@@ -174,7 +181,7 @@ const Settings = () => {
 				accountName,
 				accountNumber: accountNo,
 				bankId: newBank.id,
-			}
+			};
 			const response = await Axios.post("/api/Account/manage/bankAccounts/add", data);
 			if (response.status === 200) {
 				setSnackbar({
@@ -184,9 +191,7 @@ const Settings = () => {
 				});
 				setBankChangedToggle((toggle) => !toggle);
 			}
-		} catch (error) {
-			const err = error as AxiosError;
-		}
+		} catch (error) {/* No code*/ }
 
 		setLoading(false);
 	};
@@ -208,6 +213,7 @@ const Settings = () => {
 			case currentPassword.length < 1:
 				pass = false;
 				err.currentPassword = "Your current password should be filled";
+			// falls through
 
 			case (
 				newPassword.length < 8 || !(/[a-z]/.test(newPassword)) || !(/[A-Z]/.test(newPassword)) ||
@@ -216,6 +222,8 @@ const Settings = () => {
 				pass = false;
 				err.newPassword = `Should contain at least 8 characters an uppercase,
 					lowercase letter, a number and a symbol`;
+			// falls through
+
 			case confirmPassword !== newPassword:
 				pass = false;
 				err.confirmPassword = "New passwords does not match";
@@ -249,15 +257,6 @@ const Settings = () => {
 		}
 		setLoading(false);
 	};
-
-	useEffect(() => {
-		setFirstName(userState.firstName);
-		setLastName(userState.lastName);
-		setEmail(userState.email);
-		setStateOfOrigin(userState.stateOfOrigin);
-		setPhoneNumber(userState.phoneNumber);
-		setDateOFBirth(userState.dateOfBirth);
-	}, [userState.email]);
 
 	return (
 		<>
@@ -477,7 +476,7 @@ const Settings = () => {
 												placeholder="Account name"
 												value={accountName}
 												onChange={(event) => {
-													setErrors((err) => ({ ...err, accoutName: "" }));
+													setErrors((err) => ({ ...err, accountName: "" }));
 													setAccountName(event.target.value);
 												}}
 											/>

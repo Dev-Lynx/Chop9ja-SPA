@@ -1,13 +1,13 @@
-import { Grommet } from "grommet";
-import React, { useReducer, useRef } from "react";
-import theme from "./theme";
 import loadable from "@loadable/component";
 import Axios from "axios";
+import { Grommet } from "grommet";
 import { Location } from "history";
+import React, { useReducer, useRef } from "react";
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
 import styled from "styled-components";
 import ProgressBar from "./Components/ProgressBar/ProgressBar";
 import { LoginContext } from "./Context/Context";
+import theme from "./theme";
 import { LoginContextAction, LoginContextState } from "./Types";
 import LandingPage from "./Views/Landing/Landing";
 import LoginPage from "./Views/Login/Login";
@@ -15,11 +15,8 @@ import LoginPage from "./Views/Login/Login";
 const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
 	fallback: <ProgressBar show={true} />,
 });
-const RegisterPage = loadable(() => import("./Views/Register/Register"), {
-	fallback: <ProgressBar show={true} />,
-});
 
-type props = {} & RouteComponentProps;
+type IProps = {} & RouteComponentProps;
 
 const GrommetWrapper = styled(Grommet)`
 	height: auto;
@@ -52,7 +49,7 @@ const reducer = (state: LoginContextState, action: LoginContextAction): LoginCon
 	}
 };
 
-const App = (props: props) => {
+const App = (props: IProps) => {
 
 	// Set the reducer
 	const [loginState, loginDispatch] = useReducer(reducer, initialState);

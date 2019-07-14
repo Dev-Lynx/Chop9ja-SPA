@@ -1,7 +1,6 @@
-import { Box, Button, Calendar, DropButton, Grommet, Heading, Text } from "grommet";
-import { Close, FormDown } from "grommet-icons";
-import { grommet } from "grommet/themes";
-import React, { Component, useContext, useState } from "react";
+import { Box, Calendar, DropButton, Text } from "grommet";
+import { FormDown } from "grommet-icons";
+import React, { useState } from "react";
 
 const CalendarDropButton = () => {
 	const [date, setDate] = useState(new Date());

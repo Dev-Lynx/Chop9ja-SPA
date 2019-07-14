@@ -1,15 +1,5 @@
-import { Box, Heading, Image, ResponsiveContext, Text } from "grommet";
+import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { useContext } from "react";
-import styled from "styled-components";
-import WalletImage from "../../assets/images/wallet.jpg";
-import { UserContext } from "../../Context/Context";
-
-const Card = styled(Box)`
-	color: white;
-	@media (max-width: 768px) {
-		height: 150px;
-	}
-`;
 
 interface IProps {
 	text: string | JSX.Element;
@@ -19,7 +9,6 @@ interface IProps {
 const Hero = ({ text, image }: IProps) => {
 
 	const size = useContext(ResponsiveContext);
-	const { userState } = useContext(UserContext);
 
 	return (
 		<Box

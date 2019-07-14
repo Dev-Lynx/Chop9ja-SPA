@@ -1,14 +1,7 @@
 /* eslint-disable no-undef */
-import React, { useEffect, useState } from 'react'
-import { Text, Heading } from "grommet";
-import styled from 'styled-components';
+import { Heading } from "grommet";
+import React from "react";
 import "./ProgressBar.css";
-
-const Wrapper = styled.div`
-	position: absolute;
-	z-index: 999;
-`
-
 
 const ProgressBar = ({ show }: { show: boolean }) => {
 	return (
@@ -25,7 +18,7 @@ const ProgressBar = ({ show }: { show: boolean }) => {
 				<>
 				</>
 			)
-	)
-}
+	);
+};
 
-export default ProgressBar
+export default ProgressBar;

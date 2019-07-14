@@ -1,14 +1,13 @@
-import { Box, BoxProps, Button, Heading, Image, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
+import { Box, BoxProps, Button, Heading, Image, Text } from "grommet";
+import React from "react";
 
-type props = {
+interface IProps extends BoxProps {
 	heading: string | JSX.Element;
 	body: string | JSX.Element;
 	image: string;
-} & BoxProps;
+}
 
-const CardImage = ({ heading, body, image, ...props }: props) => {
-	const size = useContext(ResponsiveContext);
+const CardImage = ({ heading, body, image, ...props }: IProps) => {
 
 	return (
 		<Box
@@ -52,8 +51,8 @@ const CardImage = ({ heading, body, image, ...props }: props) => {
 				<Button
 					style={{
 						color: "white",
-						width: "150px",
 						textAlign: "center",
+						width: "150px",
 					}}
 					color="secondary"
 					primary={true}
