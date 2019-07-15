@@ -11,6 +11,8 @@ import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import { LoginContext } from "../../Context/Context";
 import { IState } from "../../Types";
+// import ReactMarkdown from 'react-markdown';
+// import VerificationTemplate from "../../assets/templates/email/verification.html"; <- This doesn't work as expected. Why?
 
 const Wrapper = styled(Box)`
 	z-index: 9999;
@@ -307,8 +309,22 @@ const BirthDateInputs = styled(Box)`
 let loginStates: IState[] = [];
 
 const Register = ({ history }: { history: History }) => {
-
 	useEffect(() => {
+		// This doesn't work as expected either
+		const template = window.location.origin + "../../assets/templates/email/verification.html";
+		console.log(template);
+
+		const rawFile = new XMLHttpRequest();
+		rawFile.open("GET", template, true);
+		rawFile.onreadystatechange = () => {
+			if (rawFile.readyState === 4) {
+				if (rawFile.status === 200 || rawFile.status === 0) {
+					console.log(rawFile.responseText);
+				}
+			}
+		};
+		rawFile.send();
+
 		(async () => {
 			try {
 				// TODO: Load states locally

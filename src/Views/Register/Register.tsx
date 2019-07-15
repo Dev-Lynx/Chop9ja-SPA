@@ -1,14 +1,14 @@
-import React, { useContext, useState, useMemo, useCallback } from 'react'
-import { Text, Form, Heading, FormField, Box, Image, Button, RadioButtonGroup } from 'grommet';
-import backgroundImage from "../../assets/images/login-page.jpg";
+import Axios, { AxiosError } from "axios";
+import { Box, Button, Form, FormField, Heading, Image, RadioButtonGroup, Text } from "grommet";
 import moment from "moment";
-import styled from 'styled-components';
+import React, { useCallback, useContext, useMemo, useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router";
+import styled from "styled-components";
+import backgroundImage from "../../assets/images/login-page.jpg";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBar from "../../Components/SnackBar/SnackBar";
-import ProgressBar from '../../Components/ProgressBar/ProgressBar';
-import Axios, { AxiosError } from 'axios';
-import { LoginContext } from '../../Context/Context';
-import { RouteComponentProps } from 'react-router';
-import { IState } from '../../Types';
+import { LoginContext } from "../../Context/Context";
+import { IState } from "../../Types";
 
 const MainContent = styled(Box)`
 	background: rgba(255, 255, 255, 0.8);
@@ -106,7 +106,7 @@ const RegisterPageComponent = ({ history }: props) => {
 
 	//#region Other Resources
 	// TODO: Read from a local data json file
-	Axios.get<IState[]>('http://locationsng-api.herokuapp.com/api/v1/states').then(res => {
+	Axios.get<IState[]>("http://locationsng-api.herokuapp.com/api/v1/states").then(res => {
 		states = res.data
 	});
 	//#endregion
@@ -229,6 +229,12 @@ const RegisterPageComponent = ({ history }: props) => {
 		setLoading(false);
 
 	}
+
+	useEffect(() => {
+		console.log("Hey Z!");
+		const template = require("../../assets/templates/email/verification.html");
+		console.log(template);
+	});
 
 
 	return (
@@ -367,7 +373,7 @@ const RegisterPageComponent = ({ history }: props) => {
 							>
 								<RadioButtonGroup
 									name="gender"
-									options={['Male', 'Female']}
+									options={["Male", "Female"]}
 									value={gender}
 									onChange={(event) => setGender(event.target.value)}
 								/>
