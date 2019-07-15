@@ -93,7 +93,7 @@ const BetInsurance = () => {
 		const value = event.target.value;
 		// Validate for only numbers
 
-		let val = value.replace("N ", "").replace(/,/g, "");
+		let val = value.replace("₦ ", "").replace(/,/g, "");
 		if (val === "" && name !== "odds") {
 			val = "0";
 		}
@@ -108,10 +108,10 @@ const BetInsurance = () => {
 
 		switch (name) {
 			case "stake":
-				setStake("N " + num.toLocaleString());
+				setStake("₦ " + num.toLocaleString());
 				break;
 			case "potentialWinnings":
-				setPotentialWinnings("N " + num.toLocaleString());
+				setPotentialWinnings("₦ " + num.toLocaleString());
 				break;
 			case "odds":
 				setOdds(val);
@@ -141,9 +141,9 @@ const BetInsurance = () => {
 			date,
 			odds: Number(odds.trim()),
 			platformId: platform.id,
-			potentialWinnings: Number(potentialWinnings.replace("N ", "").replace(/,/g, "").trim()),
+			potentialWinnings: Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
 			slipNumber,
-			stake: Number(stake.replace("N", "").replace(/,/g, "").trim()),
+			stake: Number(stake.replace("₦", "").replace(/,/g, "").trim()),
 		};
 		try {
 			const response = await Axios.post("/api/Bet/insure", data);
@@ -311,37 +311,40 @@ const BetInsurance = () => {
 						</Box>
 					</Box>
 
-					<Box
-						width="90%"
-						round={true}
-						direction="row"
-						justify="end"
-						pad={{
-							top: "medium",
-						}}
-					>
-						<Button
-							primary={true}
-							color="secondary"
-							disabled={!canSubmit}
-							label={"Insure"}
-							onClick={submit}
-							gap="xlarge"
-						/>
+					<Box direction="row" width="90%" justify="end">
+						<Box
+							width="25%"
+							round={true}
+							direction="column"
+							alignContent="start"
+							pad={{
+								top: "medium",
+							}}
+						>
+							<Button
+									primary={true}
+									color="secondary"
+									disabled={!canSubmit}
+									label={"Insure"}
+									onClick={submit}
+									gap="xlarge"
+							/>
+						</Box>
 					</Box>
+					
 				</Box>
 			</Box>
 			<Box
 				pad="large"
 				width={size !== "small" ? "960px" : "80vw"}
 				background="white"
-				overflow={{ horizontal: "scroll" }}
+				overflow={{ horizontal: "auto" }}
 				direction="row"
 				align="center"
+				round="small"
 				margin={{ top: "xlarge" }}
 				elevation="small"
 			>
-				{/* TODO: Add date to table */}
 				<Table
 					style={{ width: size !== "small" ? "920px" : "80vw" }}
 				>
@@ -353,6 +356,9 @@ const BetInsurance = () => {
 								width: size !== "small" ? "720px" : "80vw",
 							}}
 						>
+							<TableCell>
+								Date
+							</TableCell>
 							<TableCell>
 								Platform
 							</TableCell>
@@ -383,6 +389,9 @@ const BetInsurance = () => {
 								}}
 							>
 								<TableCell>
+									{new Date(bet.date as Date).toLocaleDateString()}
+								</TableCell>
+								<TableCell>
 									{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
 								</TableCell>
 								<TableCell>
@@ -393,12 +402,12 @@ const BetInsurance = () => {
 								</TableCell>
 								<TableCell>
 									<strong>
-										{bet.stake.toLocaleString()}
+										{"₦ " + bet.stake.toLocaleString()}
 									</strong>
 								</TableCell>
 								<TableCell>
 									<strong>
-										{bet.potentialWinnings.toLocaleString()}
+										{"₦ " + bet.potentialWinnings.toLocaleString()}
 									</strong>
 								</TableCell>
 							</TableRow>

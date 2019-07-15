@@ -112,11 +112,10 @@ const CashOut = () => {
 	};
 
 	const cashOut = () => {
-		console.log("Slip Number " + currentBet.slipNumber);
 		setLoading(true);
 
 		const model = {
-			"slipNumber": currentBet.slipNumber
+			slipNumber: currentBet.slipNumber,
 		};
 		Axios.post("/api/bet/cashOut", model).then((res) => {
 			if (res.status === 200) {
@@ -133,7 +132,6 @@ const CashOut = () => {
 				slipNumber = "";
 			}
 		}).catch((err: AxiosError) => {
-			console.log(err);
 			setSnackbar({
 				message: "Failed to cashout bet. Please make sure this" +
 				" slip number has not been cashed out before.",
@@ -498,10 +496,10 @@ const CashOut = () => {
 						Cash Outs
 					</Header>
 					<Box
-						pad="small"
+						pad="large"
 						width={size !== "small" ? "960px" : "80vw"}
 						background="white"
-						overflow={{ horizontal: "scroll" }}
+						overflow={{ horizontal: "auto" }}
 						direction="row"
 						align="center"
 						round="small"
