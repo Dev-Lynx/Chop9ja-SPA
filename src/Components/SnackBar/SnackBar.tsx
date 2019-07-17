@@ -8,7 +8,7 @@ import "./SnackBar.css";
 const Wrapper = styled(Box)`
 	width: 100%;
 	padding: 10px;
-	z-index: 999;
+	z-index: 99999;
 	position: fixed;
 	display: none;
 	top: 0;
@@ -39,12 +39,12 @@ const SnackBarComponent = ({ show, message, variant, onClose }: IProps) => {
 			// Wait for 4 seconds after displaying message then call the close function
 			setTimeout(() => {
 				onClose(null);
-			}, 4000);
+			}, 5000);
 		}
 	}, [show]);
 
 	return (
-		<CSSTransition in={show} delay={500} classNames="SnackBar" timeout={3000}>
+		<CSSTransition in={show} delay={500} classNames="SnackBar" timeout={4500}>
 			<Wrapper elevation="large" background={variant} align="center" justify="evenly" direction="row">
 				<Button plain={true} icon={<Icon color="white" />} onClick={onClose} color="white" />
 				<Paragraph>{message}</Paragraph>

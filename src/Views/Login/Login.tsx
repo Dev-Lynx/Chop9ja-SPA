@@ -311,6 +311,7 @@ let loginStates: IState[] = [];
 const Register = ({ history }: { history: History }) => {
 	useEffect(() => {
 		// This doesn't work as expected either
+		/*
 		const template = window.location.origin + "../../assets/templates/email/verification.html";
 		console.log(template);
 
@@ -324,6 +325,7 @@ const Register = ({ history }: { history: History }) => {
 			}
 		};
 		rawFile.send();
+		*/
 
 		(async () => {
 			try {

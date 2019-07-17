@@ -115,4 +115,20 @@ export interface IUserBanks {
 	id: number;
 }
 
+export interface IUserRegContext {
+	username: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	gender: string = "Empty";
+	phoneNumber: string;
+	stateOfOrigin: string;
+	address: string;
+	couponCode: string;
+	dateOfBirth: date;
+	password: string;
+	confirmPassword: string;
+	compliant: boolean;
+}
+
 //#end region

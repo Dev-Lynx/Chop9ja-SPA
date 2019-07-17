@@ -11,6 +11,7 @@ import theme from "./theme";
 import { LoginContextAction, LoginContextState } from "./Types";
 import LandingPage from "./Views/Landing/Landing";
 import LoginPage from "./Views/Login/Login";
+import ReceptionTest from "./Views/Reception/Register";
 
 const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
 	fallback: <ProgressBar show={true} />,
@@ -27,6 +28,7 @@ const routes = [
 	{ path: "/register", component: LoginPage },
 	{ path: "/login", component: LoginPage },
 	{ path: "/dashboard", component: Dashboard },
+	{ path: "/reception", component: ReceptionTest }
 ];
 
 // Initial IState

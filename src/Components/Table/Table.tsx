@@ -7,13 +7,13 @@ const Wrapper = styled(Box)`
 	margin: 3rem auto 0;
 `;
 
-const Table = ({ transactions }: { transactions: { id: number, date: string, type: string, amount: number }[] }) => {
+const Table = ({ transactions }: { transactions: { id: number, addedAt: string, type: string, amount: number }[] }) => {
 
 	const setWidth = () => {
 		if (window.innerWidth > 720) {
-			return 680
+			return 680;
 		}
-		return window.innerWidth - 100
+		return window.innerWidth - 100;
 	}
 
 	return (
@@ -22,7 +22,6 @@ const Table = ({ transactions }: { transactions: { id: number, date: string, typ
 			pad="medium"
 			elevation="medium"
 		>
-			<Text><strong>Wallet Transactions</strong></Text>
 			<GroTable
 				style={{
 					width: setWidth()
@@ -30,9 +29,9 @@ const Table = ({ transactions }: { transactions: { id: number, date: string, typ
 			>
 				<TableBody>
 					{transactions.map(transaction => (
-						<TableRow key={transaction.id} style={{ padding: ".5rem" }}>
-							<TableCell style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
-								{transaction.date}
+						<TableRow key={transaction.id}>
+							<TableCell align="left" style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
+								{new Date(transaction.addedAt).toLocaleString()}
 							</TableCell>
 							<TableCell style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
 								{transaction.type}
@@ -43,7 +42,7 @@ const Table = ({ transactions }: { transactions: { id: number, date: string, typ
 									borderBottom: "solid 1px rgba(0, 0, 0, 0.3)"
 								}}
 							>
-								{transaction.type === "Withdrawal" ? "-" + transaction.amount : transaction.amount}
+								{transaction.type === "withdrawal" ? "-" + transaction.amount : transaction.amount}
 							</TableCell>
 						</TableRow>
 					))}

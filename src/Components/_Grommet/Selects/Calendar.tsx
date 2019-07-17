@@ -1,42 +1,68 @@
 import { Box, Calendar, DropButton, Text } from "grommet";
 import { FormDown } from "grommet-icons";
-import React, { useState } from "react";
+import React, { Component } from "react";
 
-const CalendarDropButton = ({ date, setDate }: { date: Date, setDate: any }) => {
-	const [open, setOpen] = useState<any>(false);
+type props = {
+	date: Date;
+	setDate?: any;
+	open?: boolean;
+	onChange?: ((date: changedEvent) => void);
+};
 
-	const renderCalendar = () => (
+type changedEvent = {
+	target: CalendarDropDown,
+}
+
+export default class CalendarDropDown extends Component<props> {
+	public state = {
+		date: new Date(),
+	} as props;
+
+	public value: Date = new Date();
+
+	constructor(p: props) {
+		super(p);
+	}
+
+	public render() {
+		return (
+			<Box>
+				<DropButton
+					open={this.state.open}
+					onClose={() => this.setState({ open: false })}
+					onOpen={() => this.setState({ open: true })}
+					dropContent={this.renderCalendar()}
+				>
+					<Box direction="row" gap="medium" align="center" pad="small">
+						<Text>
+							{this.state.date ? new Date(this.state.date).toDateString() : "Select date"}
+						</Text>
+						<FormDown color="brand" />
+					</Box>
+				</DropButton>
+			</Box>
+		);
+	}
+
+	private renderCalendar = () => (
 		<Calendar
-			size="small"
-			date={date.toDateString()}
+			size="medium"
+			date={this.state.date.toDateString()}
 			onSelect={
 				(d: any) => {
-					setDate(new Date(d));
-					setOpen(false);
+					this.value = new Date(d);
+
+					if (this.props.setDate) {
+						this.props.setDate(this.value);
+					}
+
+					if (this.props.onChange) {
+						this.props.onChange({ target: this });
+					}
+
+					this.setState({ open: false, date: this.value });
 				}
 			}
 		/>
-	);
-
-	const renderItems = () => (
-		<Box>
-			<DropButton
-				open={open}
-				onClose={() => setOpen(false)}
-				onOpen={() => setOpen(true)}
-				dropContent={renderCalendar()}
-			>
-				<Box direction="row" gap="medium" align="center" pad="small">
-					<Text>
-						{date ? new Date(date).toDateString() : "Select date"}
-					</Text>
-					<FormDown color="brand" />
-				</Box>
-			</DropButton>
-		</Box>
-	);
-
-	return renderItems();
-};
-
-export default CalendarDropButton;
+	)
+}
