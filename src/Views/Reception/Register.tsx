@@ -18,7 +18,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import { Masks, RegularExpressions } from "../../constants";
+
 const states = StateData as IState[];
+const daysInMonth = (month: number) => new Date(2019, month, 0).getDate();
 
 const RegisterPage = ({ history }: { history: History }) => {
 	const [loading, setLoading] = useState(false);
@@ -26,14 +29,13 @@ const RegisterPage = ({ history }: { history: History }) => {
 	const [context, setContext] = useState({
 		gender: "Empty", // TODO: Fix this.
 		dateOfBirth: new Date(),
-		stateOfOrigin: states[0].name,
 	} as IUserRegContext);
 
-	const [stateOfOrgin, setStateOfOrigin] = useState(states[0].name);
+	const [stateOfOrgin, setStateOfOrigin] = useState("");
 	const [compliant, setCompliant] = useState(false)
 	const [snackBar, setSnackBar] = useState({ show: false, message: "", variant: "success" });
 	const emailRegExpr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+	const [dob, setDob] = useState(""); // Date Of Birth
 
 	const { loginState, loginDispatch } = useContext(LoginContext);
 
@@ -43,6 +45,10 @@ const RegisterPage = ({ history }: { history: History }) => {
 	let slider: any;
 	let submitPage1: any;
 	let submitPage2: any;
+	let phoneField: any;
+	let emailField: any;
+	let dateField: any;
+	let stateField: any;
 
 	const size = useContext(ResponsiveContext);
 
@@ -87,6 +93,25 @@ const RegisterPage = ({ history }: { history: History }) => {
 		return "";
 	}
 
+	const validatePhoneNumber = (num: string, sourceContext: IUserRegContext) => {
+		if (!RegularExpressions.phone.test(context.phoneNumber)) {
+			return "Please enter a valid phone number";
+		}
+		
+		return "";
+	}
+
+	const validateEmail = (email: string, sourceContext: IUserRegContext) => {
+		//validate={{regexp: emailRegExpr, message: "Please enter a valid email address"}}
+		if (!RegularExpressions.email.test(context.email)) {
+			return "Please enter a valid email address";
+		}
+
+		return "";
+	}
+
+
+
 	const submit = () => {
 		setLoading(true);
 		
@@ -108,7 +133,6 @@ const RegisterPage = ({ history }: { history: History }) => {
 	}
 
 
-
 	return (
 		<>
 			<SnackBar
@@ -126,13 +150,14 @@ const RegisterPage = ({ history }: { history: History }) => {
 				/>
 
 				<Box margin={{ 
-						horizontal: size == "small" ? "20px" : "25%", 
-						top: size == "small" ? "30px" : "50px"
+						horizontal: size == "small" || size == "medium?" ? "5%" : "20%",
+						top: "50px"
 					}}
+					
 				>
 					
 
-					<Heading textAlign="center" level={size === "small" ? "5" : "2"}>Register Account</Heading>
+					<Heading alignSelf="center" level={size === "small" ? "5" : "2"}>Register Account</Heading>
 
 					<Box direction="row" justify="center" gap={
 						size === "small" ? "50px" : "150px"
@@ -189,72 +214,40 @@ const RegisterPage = ({ history }: { history: History }) => {
 									</Box>
 
 									<Box>
-										<FormField
-											//required
+										
+										<FormField ref={(el: any) => phoneField = el} 
 											label="Phone Number"
 											name="phoneNumber"
-											value={context.phoneNumber}
-											// validate={{ regexp: /^[0-9]{11}$/, message: "Please enter a valid phone number" }}
-											onChange={(event: any) => context.phoneNumber = event.target.value}
+											validate={validatePhoneNumber}
+											//validate={{ regexp: /^[0-9]{11}$/, message: "Please enter a valid phone number" }}
+											onChange={(event: any) => {
+												context.phoneNumber = event;
+												context.username = event;
+												console.log(event);
+											}}
 										>
-											<MaskedInput mask={[
-												{ fixed: "+234 " },
-												{
-													length: 3,
-													regexp: /^(?!0)[0-9]{1,3}$/,
-												},
-												{ fixed: " "},
-												{
-													length: 3,
-													regexp: /^[0-9]{1,3}$/,
-												},
-												{ fixed: " "},
-												{
-													length: 4,
-													regexp: /^[0-9]{1,4}$/,
-												}
-											]}
+											<MaskedInput mask={Masks.phone}
 												onChange={(event: any) => {
 													let num = event.target.value;
-													console.log(num);
-													num = num.replace(/\s/g,'').replace(/^(\+234)/, "");
+													num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
 													num = "0" + num;
 													context.phoneNumber = num;
-													console.log(context);
+													phoneField.props.onChange(num);
 												}}
 											/>
 										</FormField>
 
-										<FormField
+										<FormField ref={(el: any) => emailField = el} 
 											label="Email Address"
 											name="email"
-											//required
-											value={context.email}
-											//validate={{regexp: emailRegExpr, message: "Please enter a valid email address"}}
-											onChange={(event) => {
-												context.email = event.target.value;
+											validate={validateEmail}
+											onChange={(event: any) => {
+												context.email = event;
 											}}
 										>
 											<MaskedInput
-												mask={[
-													{
-														regexp: /^[\w\-_.]+$/,
-														placeholder: "email"
-													},
-													{ fixed: "@" },
-													{
-														regexp: /^[\w]+$/,
-														placeholder: "example"
-													},
-													{ fixed: "." },
-													{
-														regexp: /^[\w]+$/,
-														placeholder: "com"
-													}
-												]}
-												onChange={(event: any) => {
-													context.email = event.target.value;
-												}}
+												mask={Masks.email}
+												onChange={(event: any) => emailField.props.onChange(event.target.value)}
 											/>
 										</FormField>
 									</Box>
@@ -296,7 +289,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 
 								<Box margin={{top: "20px"}}>
 									<Text textAlign="center" weight="bold">
-										Already have an account? <Anchor><strong>Log In
+										Already have an account? <Anchor href="/login"><strong>Log In
 											</strong>
 										</Anchor>
 									</Text>
@@ -307,6 +300,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 						<Box pad="small">
 							<Form onSubmit={submit}>
 								<Box id="register2" margin={{ top: size === "small" ? "5px" : "50px"}}>
+									{/*
 									<Box>
 										<FormField
 											required
@@ -315,27 +309,87 @@ const RegisterPage = ({ history }: { history: History }) => {
 											onChange={(event) => context.username = event.target.value}
 										/>
 									</Box>
+									*/}
 									
 									<Box direction={size === "small" ? "column" : "row"} justify="between" gap="small">
+										{/*
 										<FormField 
 											label="Date Of Birth"
 											name="dateOfBirth"
 											component={CalendarDropButton}
 											onChange={(event) => context.dateOfBirth = event.target.value}
 										/>
+										*/}
+
+										<FormField 
+											label="Date Of Birth"
+											name="dateOfBirth"
+											onChange={(event) => context.dateOfBirth = event}
+											ref={(el: any) => dateField = el} 
+										>
+											<MaskedInput
+												mask={[
+													{
+														length: [1, 2],
+														options: Array.from({ length: 12 }, (v, k) => (k + 1).toString()),
+														regexp: /^1[0,1-2]$|^0?[1-9]$|^0$/,
+														placeholder: "MM"
+													},
+													{ fixed: "/" },
+													{
+														length: [1, 2],
+														options: Array.from(
+															{
+																length: daysInMonth(parseInt(dob.split("/")[0], 10))
+															},
+															(v, k) => (k + 1).toString()
+															
+													),
+														regexp: /^[1-2][0-9]$|^3[0-1]$|^0?[1-9]$|^0$/,
+														placeholder: "DD"
+													},
+													{ fixed: "/" },
+													{
+														length: 4,
+														// TODO: Use today's year
+														options: Array.from({ length: 100 }, (v, k) => (2019 - k).toString()),
+														regexp: /^[1-2]$|^19$|^20$|^19[0-9]$|^20[0-9]$|^19[0-9][0-9]$|^20[0-9][0-9]$/,
+														placeholder: "YYYY"
+													}
+												]}
+												value={dob}
+												onChange={(event: any) => {
+													const val = event.target.value;
+													setDob(val);
+													dateField.props.onChange(new Date(val))
+												}}
+            								/>
+
+
+										</FormField>
+
 
 										<Box width={size === "small" ? "100%" : "50%"}>
-											<FormField
+											<FormField ref={(el: any) => stateField = el}
+												required
 												label="State Of Origin"
-												name="stateOfOrgin"
+												name="stateOfOrigin"
+												placeholder="Select a state"
+												onChange={(event: any) => {
+													context.stateOfOrigin = event;
+													console.log(event);
+												}}
 											>
 												<Select
 													value={stateOfOrgin}
+													placeholder="Select a state"
 													options={states.map((s) => s.name)}
 													onChange={(option) => {
-														context.stateOfOrigin = option.value;
+														//context.stateOfOrigin = option.value;
 														setStateOfOrigin(option.value);
+														stateField.props.onChange(option.value);
 													}}
+
 												/>
 											</FormField>
 										</Box>
