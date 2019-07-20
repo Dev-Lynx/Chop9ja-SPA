@@ -2,6 +2,7 @@ import { Button } from "grommet";
 import React from "react"
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { History } from "history";
 
 const ButtonPurple = styled(Button)`
 	border-radius: 5px;
@@ -18,14 +19,14 @@ const ButtonPurple = styled(Button)`
 	}
 `;
 
-export const DepositButton = () => {
+export const DepositButton = ({ history }: { history: History }) => {
 	return (
-		<Button
+		<Button onClick={(event: any) => history.push("/dashboard/wallet/deposit")}
 			style={{
 				width: "150px",
 			}}
 			color="secondary"
-			label={<Link to="/dashboard/wallet/deposit">Deposit</Link>}
+			label="Deposit"
 		/>
 	);
 };

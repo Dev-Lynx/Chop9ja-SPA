@@ -1,5 +1,5 @@
 import Axios, { AxiosError } from "axios";
-import { Anchor, Box, Button, Form, FormField, Grommet, Heading, ResponsiveContext, Text } from "grommet";
+import { Anchor, Box, Button, Form, FormField, Grommet, Heading, ResponsiveContext, MaskedInput, Text } from "grommet";
 import { grommet } from "grommet/themes";
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import { History } from "history";
@@ -7,6 +7,8 @@ import React, { useState, useContext } from "react";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import NavBar from "../../Components/NavBar/NavBar";
 import { LoginContext } from "../../Context/Context";
+
+import { Masks, RegularExpressions } from "../../constants";
 
 const LoginPage = ({ history }: { history: History }) => {
     const [loading, setLoading] = useState(false);
@@ -19,15 +21,17 @@ const LoginPage = ({ history }: { history: History }) => {
         password: "",
     });
 
+    let phoneField: any;
+
     const submit = () => {
         setLoading(true);
 
-        Axios.post("api/auth/login", { email: context.username, password: context.password }).then(async (response) => {
+        Axios.post("api/auth/login", { userName: context.username, password: context.password }).then(async (response) => {
             if (response.status === 200) {
                 // TODO: Save the name of this token properly. Use AccessToken something more professional
 				localStorage.setItem("__sheghuntk__", response.data.accessToken);
 				// Set the default header to use the token
-				Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+				Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
                 await loginDispatch({ type: "LOGIN" });
                 history.push("/dashboard")
             }
@@ -66,12 +70,29 @@ const LoginPage = ({ history }: { history: History }) => {
 						top: size == "small" ? "40px" : "80px"
                     }}>
                         <Form value={context} onSubmit={submit}>
+                            {/*
                             <FormField
                                 required
                                 label="Email\Phone Number"
                                 name="username"
                                 onChange={(event) => context.username = event.target.value}
                             />
+
+*/}
+                            <FormField ref={(el: any) => phoneField = el} 
+                                label="Mobile Number"
+                                name="username"
+                                onChange={(event: any) => context.username = event}
+                            >
+                                <MaskedInput mask={Masks.phone}
+                                    onChange={(event: any) => {
+                                        let num = event.target.value;
+                                        num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
+                                        num = "0" + num;
+                                        phoneField.props.onChange(num);
+                                    }}
+                                />
+							</FormField>
 
                             <FormField
                                 required

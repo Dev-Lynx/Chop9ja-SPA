@@ -10,8 +10,6 @@ const HeaderHeight = styled.div`
 `;
 
 const LandingPageComponent = () => {
-
-
 	return (
 		<AppBody>
 			<HeaderHeight>
@@ -22,11 +20,11 @@ const LandingPageComponent = () => {
 					justify="center"
 					background={
 						{
-							"color": "neutral-1",
-							"dark": true,
-							"opacity": true,
-							"position": "bottom",
-							"image": `url(${background})`
+							color: "neutral-1",
+							dark: true,
+							image: `url(${background})`,
+							opacity: true,
+							position: "bottom",
 						}
 					}
 				>
@@ -51,16 +49,26 @@ const LandingPageComponent = () => {
 					</Text>
 				</Box>
 			</HeaderHeight>
+			{/*
 			<Box margin="medium">
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate. Dolores, numquam a! Illo, perspiciatis corrupti.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit.
+				Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum
+				aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate.
+				Dolores, numquam a! Illo, perspiciatis corrupti.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit.
+				Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum
+				aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate.
+				Dolores, numquam a! Illo, perspiciatis corrupti.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit.
+				Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum
+				aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate.
+				Dolores, numquam a! Illo, perspiciatis corrupti.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit.
+				Quam ipsa mollitia sequi! Mollitia nobis laboriosam cum
+				aliquid soluta explicabo iste harum. Repellendus, accusamus cupiditate.
+				Dolores, numquam a! Illo, perspiciatis corrupti.
 			</Box>
+			*/}
 		</AppBody>
 	)
 }

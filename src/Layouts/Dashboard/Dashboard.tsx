@@ -45,7 +45,7 @@ const routes = [
 	{ path: "/dashboard", exact: true, component: Overview },
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
-	{ path: "/dashboard/cash-out", component: CashOut },
+	{ path: "/dashboard/claim", component: CashOut },
 	{ path: "/dashboard/settings", component: Settings },
 ];
 
@@ -116,6 +116,7 @@ const Dashboard = ({ history }: props) => {
 		// Run the check function
 		if (window.screen.width > 768) {
 			setIsPc(true);
+			//setShowSideBar(true);
 		}
 		(async () => {
 			try {

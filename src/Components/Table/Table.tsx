@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table as GroTable, Box, Text, TableBody, TableRow, TableCell } from "grommet";
 import styled from 'styled-components';
+import moment from "moment";
 
 const Wrapper = styled(Box)`
 	max-width: 720px;
@@ -31,18 +32,18 @@ const Table = ({ transactions }: { transactions: { id: number, addedAt: string, 
 					{transactions.map(transaction => (
 						<TableRow key={transaction.id}>
 							<TableCell align="left" style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
-								{new Date(transaction.addedAt).toLocaleString()}
+								{moment(transaction.addedAt).format("llll")}
 							</TableCell>
 							<TableCell style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
 								{transaction.type}
 							</TableCell>
 							<TableCell
 								style={{
-									color: transaction.type === "Withdrawal" ? "#D9251B" : "#009746",
+									color: transaction.type === "Withdrawal" || transaction.type === "Debit" ? "#D9251B" : "#009746",
 									borderBottom: "solid 1px rgba(0, 0, 0, 0.3)"
 								}}
 							>
-								{transaction.type === "withdrawal" ? "-" + transaction.amount : transaction.amount}
+								{transaction.type === "Withdrawal" || transaction.type === "Debit" ? "-" + transaction.amount.toLocaleString() : transaction.amount.toLocaleString()}
 							</TableCell>
 						</TableRow>
 					))}

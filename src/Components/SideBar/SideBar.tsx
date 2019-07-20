@@ -7,7 +7,7 @@ import styled from "styled-components";
 const Links = styled(NavLink)`
 	padding: 20px;
 	display: flex;
-	min-width: 300px;
+	min-width: 200px;
 	justify-content: space-between;
 	font-size: 40px;
 	color: #444444;
@@ -19,9 +19,9 @@ const Links = styled(NavLink)`
 
 const Contents = styled(Box)`
 	width: 2rem;
-	margin-top: 5rem;
+	margin-top: 3rem;
 	height: 100%;
-	width: 300px;
+	width: 200px;
 `;
 
 const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boolean } & RouteChildrenProps) => {
@@ -36,7 +36,7 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 					overflowX: "hidden",
 					position: "fixed",
 					transition: "all 1s",
-					width: show ? "300px" : "4rem",
+					width: show ? "200px" : "4rem",
 					zIndex: 998,
 				}}
 			>
@@ -53,16 +53,6 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						<Text>Dashboard</Text>
 					</Links>
 					<Links
-						to="/dashboard/bet-insurance"
-						activeStyle={{
-							backgroundColor: "#BAD23B",
-							color: "white",
-						}}
-					>
-						<i className="zwicon-piggy-bank" />
-						<Text>Bet Insure</Text>
-					</Links>
-					<Links
 						to="/dashboard/wallet"
 						activeStyle={{
 							backgroundColor: "#BAD23B",
@@ -73,14 +63,24 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						<Text>Wallet</Text>
 					</Links>
 					<Links
-						to="/dashboard/cash-out"
+						to="/dashboard/bet-insurance"
+						activeStyle={{
+							backgroundColor: "#BAD23B",
+							color: "white",
+						}}
+					>
+						<i className="zwicon-piggy-bank" />
+						<Text>Bet Insure</Text>
+					</Links>
+					<Links
+						to="/dashboard/claim"
 						activeStyle={{
 							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
 						<i className="zwicon-money-bill" />
-						<Text>Cash Out</Text>
+						<Text>Claim</Text>
 					</Links>
 					<Links
 						to="/dashboard/settings"
@@ -89,7 +89,6 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
-						// onClick={() => setShowSettingsMenu(!showSettingsMenu)}
 					>
 						<i className="zwicon-cog" />
 						<Text>Settings</Text>

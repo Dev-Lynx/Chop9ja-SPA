@@ -1,18 +1,18 @@
-import { BoxProps, FormField } from "grommet";
+import { BoxProps, FormField, FormFieldProps } from "grommet";
 import React, { Component } from "react";
 
 const ENTER_KEY = 13;
 
 type props = {
     event?: React.ChangeEvent<HTMLInputElement>;
-    label: string;
-    placeholder: string;
     waitInterval: number;
-    timer: any;
+    placeholder?: string;
+    timer?: any;
     value: any;
+    throwOnLostFocus?: boolean;
     onChange: ((event: React.ChangeEvent<HTMLInputElement>) => void);
-    onUndelayedChange: ((event: React.ChangeEvent<HTMLInputElement>) => void);
-} & BoxProps;
+    onUndelayedChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void);
+} & FormFieldProps;
 
 
 export default class PatientInput extends Component<props> {
@@ -32,8 +32,11 @@ export default class PatientInput extends Component<props> {
     
     handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
-        this.properties.onUndelayedChange(event);
-        console.log(event);
+
+        if (this.properties.onUndelayedChange) {
+            this.properties.onUndelayedChange(event);
+        }
+        
         clearTimeout(this.timer);
     
         this.setState({ event: event, value: event.target.value });
@@ -49,7 +52,6 @@ export default class PatientInput extends Component<props> {
 
     triggerChange = () => {
         const { event } = this.state;
-    
         this.properties.onChange(event!);
     }
 
@@ -59,14 +61,22 @@ export default class PatientInput extends Component<props> {
 
     
     render() {
-
         return (
             <FormField label={this.properties.label}
                 placeholder={this.properties.placeholder}
                 value={this.state.value}
                 onChange={this.handleChange}
                 onKeyDown={this.handleKeyDown}
-            />
+                onBlur={(event: any) => {
+                    if (this.props.throwOnLostFocus) {
+                        event.persist();
+                        this.props.onChange(event!);
+                    }
+                }}
+                component={this.props.component}
+            >
+                {this.props.children}
+            </FormField>
         )
     }    
 }

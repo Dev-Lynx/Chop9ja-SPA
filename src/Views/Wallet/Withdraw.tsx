@@ -7,6 +7,7 @@ import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 import { IBank } from "../../Types/index.js";
+import { History } from "history";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -41,7 +42,7 @@ const SelectWrapper = styled(Box)`
 
 
 
-const Withdraw = () => {
+const Withdraw = ({ history }: { history: History }) => {
 
 	const size = useContext(ResponsiveContext);
 
@@ -84,7 +85,7 @@ const Withdraw = () => {
 		<Wrapper direction="column">
 			<Wallet />
 			<Box margin="medium">
-				<DepositButton />
+			<DepositButton history={history} />
 			</Box>
 			<Header>Withdraw</Header>
 			<Box direction="column" align="center">

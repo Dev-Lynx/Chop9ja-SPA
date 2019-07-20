@@ -8,6 +8,7 @@ import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import Table from "../../Components/Table/Table";
 import WalletComponent from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
+import { History } from "history";
 
 
 
@@ -23,7 +24,7 @@ const Wrapper = styled(Box)`
 	padding-bottom: 2rem;
 `;
 
-const Wallet = () => {
+const Wallet = ({ history }: { history: History }) => {
 	const size = useContext(ResponsiveContext);
 	const { userState } = useContext(UserContext);
 
@@ -45,17 +46,22 @@ const Wallet = () => {
 							pad={{ horizontal: "xlarge" }}
 							gap="medium"
 						>
-							<DepositButton />
+							<DepositButton history={history} />
+							{/*
 							<WithdrawButton />
+							*/}
 						</Box>
+
+						<Box
+							width={size !== "small" ? "720px" : "80vw"}
+							direction="row"
+							margin={{ top: "xlarge", bottom: "medium" }}
+						>
+							<Text size="xxlarge" weight={100}>Transactions</Text>
+						</Box>
+
 						<Box width="100vw">
-							<Text
-								textAlign="center"
-								color="#24501F"
-								style={{ fontSize: "34px", fontWeight: 100, lineHeight: "78px" }}
-							>
-								Transactions
-							</Text>
+							
 							<Table transactions={userState.transactions} />
 						</Box>
 					</Wrapper>

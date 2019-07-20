@@ -85,9 +85,11 @@ const Deposit = () => {
 				onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 			/>
 			<Wallet />
+			{/*
 			<Box margin="medium">
 				<WithdrawButton />
 			</Box>
+			*/}
 			<Header >Make a Deposit</Header>
 			<Box
 				direction="column"

@@ -1,31 +1,37 @@
-import Axios, { AxiosError } from "axios";
+import Axios, { AxiosError, Canceler } from "axios";
 import { Anchor, Box, Button, Form, FormField, Grommet, Heading, MaskedInput, Select, Text, TextArea, TextInput, CheckBox, ResponsiveContext } from "grommet";
 import { grommet } from "grommet/themes";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { History } from "history";
-import styled from "styled-components";
-import ProgressBar from "../../Components/ProgressBar/ProgressBar";
-import SnackBar from "../../Components/SnackBar/SnackBar";
-import NavBar from "../../Components/NavBar/NavBar";
+import moment from "moment";
+
+
 import { IUserRegContext, IState } from "../../Types";
-import CalendarDropButton from "../../Components/_Grommet/Selects/Calendar";
-import StateData from "../../_data/states.json";
 import { LoginContext } from "../../Context/Context";
 
+import NavBar from "../../Components/NavBar/NavBar";
+import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import SnackBar from "../../Components/SnackBar/SnackBar";
 import ToggleBall from "../../Components/_Grommet/Toggles/ToggleBall";
+import spinner from "../../assets/svg/spinner.svg";
+import cross from "../../assets/svg/cross.svg";
+import check from "../../assets/svg/check.svg";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import StateData from "../../_data/states.json";
+
 import { Masks, RegularExpressions } from "../../constants";
+import PatientInput from "../../Components/_Grommet/Inputs/PatientInput";
+
 
 const states = StateData as IState[];
 const daysInMonth = (month: number) => new Date(2019, month, 0).getDate();
 
 const RegisterPage = ({ history }: { history: History }) => {
 	const [loading, setLoading] = useState(false);
-	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 	const [context, setContext] = useState({
 		gender: "Empty", // TODO: Fix this.
 		dateOfBirth: new Date(),
@@ -34,7 +40,6 @@ const RegisterPage = ({ history }: { history: History }) => {
 	const [stateOfOrgin, setStateOfOrigin] = useState("");
 	const [compliant, setCompliant] = useState(false)
 	const [snackBar, setSnackBar] = useState({ show: false, message: "", variant: "success" });
-	const emailRegExpr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [dob, setDob] = useState(""); // Date Of Birth
 
 	const { loginState, loginDispatch } = useContext(LoginContext);
@@ -50,6 +55,33 @@ const RegisterPage = ({ history }: { history: History }) => {
 	let dateField: any;
 	let stateField: any;
 
+
+	type VerificationContext = {
+		verifyingEmail: boolean;
+		emailValid: boolean;
+		verifyingPhone: boolean;
+		phoneValid: boolean;
+		emailCancelRequest: Canceler;
+		phoneCancelRequest: Canceler;
+	}
+	
+	const [verificationContext, setVerificationContext] = useState({
+		verifyingEmail: true
+	} as VerificationContext);
+
+	/*
+	let _verifyingEmail = false;
+	const [ verifyingEmail, setVerifyingEmail ] = useState(false);
+	const [ emailValid, setEmailValid ] = useState(false);
+	*/
+
+	let _verifyingPhone = false;
+	const [ verifyingPhone, setVerifyingPhone ] = useState(false);
+	const [ phoneValid, setPhoneValid ] = useState(false);
+
+	// let emailCancelRequest: Canceler;
+	let phoneCancelRequest: Canceler;
+
 	const size = useContext(ResponsiveContext);
 
 	const gotoPage = (p: number) => {
@@ -57,36 +89,38 @@ const RegisterPage = ({ history }: { history: History }) => {
 		slider.slickGoTo(p, false);
 	}
 
-	const validatePassword = (password: string, context: IUserRegContext) => {
-		
-		if (password.length < 8) {
-			return "Your password should not be less than 8 characters";
+	//#region Validation
+	const validatePassword = (password: string, soureContext: IUserRegContext) => {
+		if (password.length < 6) {
+			return "Your password should not be less than 6 characters";
 		}
 
 		if (password.length > 32) {
 			return "Your password should not be more than 32 characters";
 		}
 
-		if (password.search(/\d/) == -1) {
+		/*
+		if (password.search(/\d/) === -1) {
 			return "Your password should contain at least one number";
 		}
 
-		if (password.search(/[a-z]/) == -1) {
+		if (password.search(/[a-z]/) === -1) {
 			return "Your password should contain at least one lowercase letter";
 		}
 
-		if (password.search(/[A-Z]/) == -1) {
+		if (password.search(/[A-Z]/) === -1) {
 			return "Your password should contain at least one uppercase letter";
 		}
 
 		if ((/^[a-zA-Z0-9]+$/).test(password)) {
 			return "Your password should contain at least one symbol";
 		}
+		*/
 
 		return "";
 	}
 
-	const validateNextPassword = (password: string, context: IUserRegContext) => {
+	const validateNextPassword = (password: string, soureContext: IUserRegContext) => {
 		if (password != context.password) {
 			return "Passwords do not match";
 		}
@@ -97,12 +131,10 @@ const RegisterPage = ({ history }: { history: History }) => {
 		if (!RegularExpressions.phone.test(context.phoneNumber)) {
 			return "Please enter a valid phone number";
 		}
-		
 		return "";
 	}
 
 	const validateEmail = (email: string, sourceContext: IUserRegContext) => {
-		//validate={{regexp: emailRegExpr, message: "Please enter a valid email address"}}
 		if (!RegularExpressions.email.test(context.email)) {
 			return "Please enter a valid email address";
 		}
@@ -110,18 +142,78 @@ const RegisterPage = ({ history }: { history: History }) => {
 		return "";
 	}
 
+	const validateStateOfOrigin = (state: string, soureContext: IUserRegContext) => {
+		if (!context.stateOfOrigin) {
+			return "Please select your state of origin";
+		}
+
+		return "";
+	}
+
+	const validateDateOfBirth = (date: Date, sourceContext: IUserRegContext) => {
+		if (!context.dateOfBirth) {
+			return "Please enter your date of birth";
+		}
+
+		// TODO: Get the accurate time from an API
+		// TODO: Make sure user is 18 - 150 years
+		//const now = new Date();
+		//const diff = now - context.dateOfBirth);
+	}
+	//#endregion
+
+	//#region Verification
+	const verifyEmail = () => {
+		console.log(verificationContext);
+		console.log("Verification Context");
+		
+		verificationContext.verifyingEmail = true;
+		Axios.get<boolean>("/api/auth/user/exists", { cancelToken: new Axios.CancelToken((c) => verificationContext.emailCancelRequest = c),
+			params: { email: context.email } })
+			.then((res) => {
+				verificationContext.emailValid = !res.data;
+				//setEmailValid(!res.data);
+			}).catch((error) => {
+				verificationContext.emailValid = false;
+				//setEmailValid(false);
+				// TODO: Email Verification Error handling
+				console.log(error);
+			}).finally(() => {
+				verificationContext.verifyingEmail = false;
+				// _verifyingEmail = false;
+				// setVerifyingEmail(false);
+			});
+	}
+
+	const verifyPhone = () => {
+		_verifyingPhone = true;
+		setVerifyingPhone(true);
+		Axios.get<boolean>("/api/auth/user/exists", { cancelToken: new Axios.CancelToken((c) => phoneCancelRequest = c),
+			params: { userName: context.username } })
+			.then((res) => {
+				setPhoneValid(!res.data);
+			}).catch((error) => {
+				setPhoneValid(false);
+				// TODO: Phone Verification Error handling
+				console.log(error);
+			}).finally(() => {
+				_verifyingPhone = false;
+				setVerifyingPhone(false);
+			});
+	}
+	//#endregion
 
 
 	const submit = () => {
 		setLoading(true);
-		
+
 		Axios.post("api/auth/register", context).then(async (response) => {
 			if (response.status === 200){
 				// TODO: Save the name of this token properly. Use AccessToken something more professional
 				localStorage.setItem("__sheghuntk__", response.data.accessToken);
 				// Set the default header to use the token
 				Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
-				history.push("/dashboard")
+				history.push("/dashboard");
 			}
 
 			await loginDispatch({ type: "LOGIN" });
@@ -132,14 +224,13 @@ const RegisterPage = ({ history }: { history: History }) => {
 		});
 	}
 
-
 	return (
 		<>
 			<SnackBar
-				show={snackbar.show}
-				message={snackbar.message}
-				variant={snackbar.variant as any}
-				onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
+				show={snackBar.show}
+				message={snackBar.message}
+				variant={snackBar.variant as any}
+				onClose={() => setSnackBar((s) => ({ ...s, show: false }))}
 			/>
 			<Grommet theme={grommet}>
 				<ProgressBar show={loading} />
@@ -149,19 +240,18 @@ const RegisterPage = ({ history }: { history: History }) => {
 					toggleSideBar={true}
 				/>
 
-				<Box margin={{ 
-						horizontal: size == "small" || size == "medium?" ? "5%" : "20%",
+				<Box 
+					margin={{ 
+						horizontal: size === "small" || size === "medium?" ? "5%" : "20%",
 						top: "50px"
 					}}
-					
 				>
-					
-
 					<Heading alignSelf="center" level={size === "small" ? "5" : "2"}>Register Account</Heading>
 
-					<Box direction="row" justify="center" gap={
-						size === "small" ? "50px" : "150px"
-					}
+					<Box 
+						direction="row"
+						justify="center"
+						gap={ size === "small" ? "50px" : "150px" }
 						margin={ size === "small" ? { top: "-20px" } : {} }
 					>
 						<ToggleBall 
@@ -184,9 +274,9 @@ const RegisterPage = ({ history }: { history: History }) => {
 					</Box>
 
 
-					<Slider 
-						ref={el => slider = el} 
-						dots={false} speed={250} 
+					<Slider
+						ref={el => slider = el}
+						dots={false} speed={250}
 						infinite={false} slidesToShow={1} slidesToScroll={1}
 						swipe={false} draggable={false} swipeToSlide={false}
 						touchMove={false} arrows={false}>
@@ -246,10 +336,54 @@ const RegisterPage = ({ history }: { history: History }) => {
 											}}
 										>
 											<MaskedInput
-												mask={Masks.email}
-												onChange={(event: any) => emailField.props.onChange(event.target.value)}
-											/>
+													mask={Masks.email}
+													onChange={(event: any) => emailField.props.onChange(event.target.value)}
+												/>
 										</FormField>
+
+										{/*
+										<Box direction="row">
+											<Box width="100%" align="stretch">
+												<PatientInput
+													label="Email Address"
+													ref={(el: any) => emailField = el}
+													value={context.email}
+													validate={validateEmail}
+													onChange={(event: any) => {
+														context.email = event.target.value;
+														verifyEmail();
+													}}
+													onUndelayedChange={(event: any) => {
+														console.log(verificationContext.verifyingEmail);
+														if (verificationContext.verifyingEmail && verificationContext.emailCancelRequest) {
+															verificationContext.emailCancelRequest();
+														}
+													}}
+													waitInterval={3000}
+													throwOnLostFocus={true}
+												>
+													<MaskedInput
+														mask={Masks.email}
+														onChange={(event: any) => emailField.handleChange(event)}
+													/>
+												</PatientInput>
+											</Box>
+
+											<Box align="baseline" justify="evenly"
+												margin={size == "small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
+													{
+														verificationContext.verifyingEmail ? (
+															<img src={spinner} width={size == "small" ? "24px" : "32px"}
+																height={size == "small" ? "24px" : "32px"}/>
+														) : (
+															<img src={verificationContext.emailValid ? check : cross} width={size == "small" ? "24px" : "32px"}
+																height={size == "small" ? "24px" : "32px"}/>
+														)
+													}
+											</Box>
+										</Box>
+										*/}
+										
 									</Box>
 
 									<Box
@@ -312,20 +446,12 @@ const RegisterPage = ({ history }: { history: History }) => {
 									*/}
 									
 									<Box direction={size === "small" ? "column" : "row"} justify="between" gap="small">
-										{/*
-										<FormField 
-											label="Date Of Birth"
-											name="dateOfBirth"
-											component={CalendarDropButton}
-											onChange={(event) => context.dateOfBirth = event.target.value}
-										/>
-										*/}
-
 										<FormField 
 											label="Date Of Birth"
 											name="dateOfBirth"
 											onChange={(event) => context.dateOfBirth = event}
-											ref={(el: any) => dateField = el} 
+											ref={(el: any) => dateField = el}
+											validate={validateDateOfBirth}
 										>
 											<MaskedInput
 												mask={[
@@ -371,7 +497,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 
 										<Box width={size === "small" ? "100%" : "50%"}>
 											<FormField ref={(el: any) => stateField = el}
-												required
+												validate={validateStateOfOrigin}
 												label="State Of Origin"
 												name="stateOfOrigin"
 												placeholder="Select a state"
@@ -419,7 +545,6 @@ const RegisterPage = ({ history }: { history: History }) => {
 											onChange={(event: any) => {
 												context.compliant = event.target.checked;
 												setCompliant(event.target.checked);
-												console.log(context);
 											}}
 										/>
 									</Box>

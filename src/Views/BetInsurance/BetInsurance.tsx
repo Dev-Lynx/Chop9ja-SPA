@@ -126,8 +126,8 @@ const BetInsurance = () => {
 	const checkIfInputsCanBeSubmitted = () => {
 		// Check if the user can submit
 		if (
-			slipNumber.length > 1 && platform.id > 1 && odds.length >= 1 &&
-			stake.length > 1 && potentialWinnings.length > 1 && date
+			slipNumber.length > 1 && platform.id >= 0 && odds.length >= 1 &&
+			stake.length > 1 && date // && potentialWinnings.length > 1
 		) {
 			setCanSubmit(true);
 		} else {
@@ -141,7 +141,7 @@ const BetInsurance = () => {
 			date,
 			odds: Number(odds.trim()),
 			platformId: platform.id,
-			potentialWinnings: Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
+			potentialWinnings: "0", //Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
 			slipNumber,
 			stake: Number(stake.replace("₦", "").replace(/,/g, "").trim()),
 		};
@@ -291,6 +291,7 @@ const BetInsurance = () => {
 							</Box>
 						</Box>
 
+						{/*
 						<Box
 							width="100%"
 							align="baseline"
@@ -309,6 +310,7 @@ const BetInsurance = () => {
 								/>
 							</Box>
 						</Box>
+						*/}
 					</Box>
 
 					<Box direction="row" width="90%" justify="end">
@@ -331,9 +333,17 @@ const BetInsurance = () => {
 							/>
 						</Box>
 					</Box>
-					
 				</Box>
 			</Box>
+
+			<Box
+				width={size !== "small" ? "960px" : "80vw"}
+				direction="row"
+				margin={{ top: "xlarge", bottom: "medium" }}
+			>
+				<Text size="xxlarge" weight={100}>Bets</Text>
+			</Box>
+
 			<Box
 				pad="large"
 				width={size !== "small" ? "960px" : "80vw"}
@@ -342,7 +352,6 @@ const BetInsurance = () => {
 				direction="row"
 				align="center"
 				round="small"
-				margin={{ top: "xlarge" }}
 				elevation="small"
 			>
 				<Table
@@ -373,11 +382,13 @@ const BetInsurance = () => {
 									Stake
 								</strong>
 							</TableCell>
+							{/*
 							<TableCell>
 								<strong>
 									Potential Winnings
 								</strong>
 							</TableCell>
+							*/}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -405,11 +416,13 @@ const BetInsurance = () => {
 										{"₦ " + bet.stake.toLocaleString()}
 									</strong>
 								</TableCell>
+								{/*
 								<TableCell>
 									<strong>
 										{"₦ " + bet.potentialWinnings.toLocaleString()}
 									</strong>
 								</TableCell>
+								*/}
 							</TableRow>
 
 						))}

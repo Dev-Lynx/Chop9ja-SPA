@@ -8,7 +8,7 @@ import Axios, { AxiosError } from 'axios';
 import SnackBar from "../../Components/SnackBar/SnackBar";
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { LoginContext } from '../../Context/Context';
-
+import { RegularExpressions } from "../../constants";
 
 const AppBarSpace = styled.div`
 	margin-top: 3rem;
@@ -37,9 +37,10 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState({}) as any;
 	const [snackBar, setSnackBar] = useState({ show: false, message: "", variant: "success" });
-	const emailTestString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const [loading, setLoading] = useState(false);
-	const size = useContext(ResponsiveContext)
+	const size = useContext(ResponsiveContext);
+
+	let finalMail = "";
 
 	useEffect(() => {
 		const subscription = Services.navbar.subscribe(type => setBackground(type))
@@ -52,13 +53,27 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 		let pass = true;
 		setErrors({});
 		// Validate the inputs
-		if (email.trim().length < 4 || !emailTestString.test(email)) {
+		/*
+		if (email.trim().length < 4 || !RegularExpressions.email.test(email)) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, email: "E-mail must contain a valid email" }))
+			setErrors((errors: any) => ({ ...errors, email: "Email must contain a valid email" }))
 		}
-		if (password.length < 8) {
+		*/
+		finalMail = email;
+		if (email && email[0] !== "0") {
+			const newMail = "0" + email;
+			setEmail(newMail); // Doesn't work, why?
+			finalMail = newMail;
+		}
+
+		if (email.length !== 11) {
 			pass = false;
-			setErrors((errors: any) => ({ ...errors, password: "Password must be at least 8 digits" }))
+			setErrors((errors: any) => ({ ...errors, email: "Your phone number should be eleven digits" }))
+		}
+
+		if (password.length < 6) {
+			pass = false;
+			setErrors((errors: any) => ({ ...errors, password: "Password must be at least 6 digits" }))
 		}
 
 		return pass;
@@ -73,17 +88,16 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 		}
 
 		try {
-			const response = await Axios.post("/api/Auth/login", { email, password })
+			const response = await Axios.post("/api/Auth/login", { userName: finalMail, password })
 			if (response.data.accessToken) {
 
 				localStorage.setItem("__sheghuntk__", response.data.accessToken);
-				// Set the default header to use the token
-				Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
+				Axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 				loginDispatch({ type: "LOGIN" });
 				history.push("/dashboard");
 			}
 		} catch (error) {
-			const err = error as AxiosError
+			const err = error as AxiosError;
 			if (err.response) {
 				setSnackBar({ message: err.response.statusText, show: true, variant: "error" });
 			}
@@ -110,10 +124,11 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 				{size === "small" ? (
 					<Box direction="row" pad="medium" justify="between">
 						<Link
-							to={{
-								pathname: "/login",
-								state: { loginModal: true }
-							}}
+							to="/login"
+							// to={{
+							// 	pathname: "/login",
+							// 	state: { loginModal: true }
+							// }}
 						>
 							<Text
 								tag="small"
@@ -124,7 +139,7 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 								Login
 							</Text>
 						</Link>
-						<Link to="/login">
+						<Link to="/register">
 							<Text
 								margin="small"
 								tag="small"
@@ -139,14 +154,28 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 						<InputsWrapper errors={errors}>
 							<Box direction="row" flex={true} justify="between" align="baseline">
 								<Inputs>
-									<FormField
-										placeholder="E-mail"
-										style={{ background: "white", color: "black" }}
-										value={email}
-										name="email"
-										type="email"
-										onChange={event => setEmail(event.target.value)}
-									/>
+									<Box>
+										<Box direction="row">
+											<Box background="#009746" align="center" pad={{
+												horizontal: "10px", top: "10px",
+												bottom: "0px"
+											}} margin={{
+												bottom: "12px"
+											}}>
+												<Text>+234</Text>
+											</Box>
+											<Box width="100%">
+												<FormField
+													placeholder="Mobile Number"
+													style={{ background: "white", color: "black" }}
+													value={email}
+													type="phone"
+													onChange={event => setEmail(event.target.value)}
+												/>
+											</Box>
+										</Box>
+									</Box>
+									
 									<Link to="#">
 										<Text
 											tag="small"
@@ -158,14 +187,20 @@ const AppBodyComponent = ({ children, history }: RouteComponentProps & { childre
 									</Link>
 								</Inputs>
 								<Inputs>
-									<FormField
-										placeholder="password"
-										style={{ background: "white", color: "black" }}
-										value={password}
-										type="password"
-										name="password"
-										onChange={event => setPassword(event.target.value)}
-									/>
+									<Box>
+										<Box width="100%" margin={{
+												bottom: "12px"
+											}}>
+											<FormField
+												placeholder="password"
+												style={{ background: "white", color: "black" }}
+												value={password}
+												type="password"
+												name="password"
+												onChange={event => setPassword(event.target.value)}
+											/>
+										</Box>
+									</Box>
 									<Link to="/register">
 										<Text
 											tag="small"

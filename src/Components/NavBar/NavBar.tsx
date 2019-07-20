@@ -29,8 +29,8 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 	return (
 		<Wrapper
 			pad={{
-				left: isPc ? "large" : "-4rem",
-				right: isPc ? "large" : "large",
+				left: isPc ? "medium" : "-4rem",
+				right: isPc ? "small" : "large",
 				vertical: "small",
 			}}
 			direction="row"
@@ -43,6 +43,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 			width="100%"
 			background="white"
 		>
+			
 			{isPc && (
 				<Box
 					direction="row"
@@ -57,6 +58,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 					MENU
 				</Box>
 			)}
+			
 			<Box
 				height="40px"
 				pad={{ vertical: "-2rem" }}

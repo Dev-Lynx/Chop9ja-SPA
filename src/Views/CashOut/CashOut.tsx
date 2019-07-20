@@ -174,7 +174,7 @@ const CashOut = () => {
 			{/* TODO: Move this to the highest level */}
 				<Hero
 					image={CashOutImage}
-					text="Cash Out"
+					text="Claim"
 				/>
 				<Spinner show={_loadingBet} />
 				<SnackBarComponent
@@ -216,6 +216,7 @@ const CashOut = () => {
 											}
 											setCurrentBet({} as IBet);
 										}}
+										throwOnLostFocus={true}
 										waitInterval={3000}
 									/>
 								</Box>
@@ -365,7 +366,7 @@ const CashOut = () => {
 										<Button 
 											primary={true}
 											color="secondary"
-											label={"Cash Out"}
+											label={"Claim"}
 											onClick={cashOut}
 										/>
 									</Box>
@@ -492,9 +493,14 @@ const CashOut = () => {
 						*/}
 					</Box>
 
-					<Header>
-						Cash Outs
-					</Header>
+					<Box
+						width={size !== "small" ? "960px" : "80vw"}
+						direction="row"
+						margin={{ top: "xlarge", bottom: "medium" }}
+					>
+						<Text size="xxlarge" weight={100}>Claims</Text>
+					</Box>
+
 					<Box
 						pad="large"
 						width={size !== "small" ? "960px" : "80vw"}
@@ -503,7 +509,6 @@ const CashOut = () => {
 						direction="row"
 						align="center"
 						round="small"
-						margin={{ top: "xlarge" }}
 						elevation="small"
 					>
 						<Table
