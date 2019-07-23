@@ -1,0 +1,42 @@
+.zero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: stretch;
+}
+
+.background {
+    background-image: url("../../assets/images/LiveMatch.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* padding: 32px; */
+    z-index: 1;
+}
+
+.alpha {
+    background: #FFFFFF;
+    position: absolute;
+    height: 100%;
+    /* width: 55%; */
+    width: 795px;
+    top: 0;
+    left: 0;
+    padding: 32px;
+}
+
+.logo {
+    height: 64px;
+    width: auto;
+}

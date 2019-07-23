@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginContextAction, LoginContextState, UserContextState, UserContextAction, IBet } from "../Types";
+import { LoginContextAction, LoginContextState, UserContextState, UserContextAction, IBet, IUserRegContext, RegContextAction } from "../Types";
 
 const loginState: LoginContextState = { loggedIn: false };
 const loginDispatch = (action: LoginContextAction) => {/* Login implemented in App.tsx */ };
@@ -25,6 +25,26 @@ const userState: UserContextState = {
 	paymentChannels: [],
 	// bets: [],
 };
+
+const regState: IUserRegContext = {
+	userName: "",
+	firstName: "",
+	lastName: "",
+	email: "",
+	gender: "Empty",
+	phoneNumber: "",
+	stateOfOrigin: "",
+	address: "",
+	couponCode: "",
+	dateOfBirth: new Date(),
+	password: "",
+	confirmPassword: "",
+	compliant: false,
+};
+
+const regDispatch = (action: RegContextAction) => { };
+
+export const RegContext = React.createContext({ regState, regDispatch });
 
 const userDispatch = (action: UserContextAction) => { };
 

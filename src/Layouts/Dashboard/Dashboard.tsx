@@ -45,7 +45,7 @@ const routes = [
 	{ path: "/dashboard", exact: true, component: Overview },
 	{ path: "/dashboard/wallet", component: Wallet },
 	{ path: "/dashboard/bet-insurance", component: BetInsurance },
-	{ path: "/dashboard/claim", component: CashOut },
+	{ path: "/dashboard/claims", component: CashOut },
 	{ path: "/dashboard/settings", component: Settings },
 ];
 
@@ -136,13 +136,13 @@ const Dashboard = ({ history }: props) => {
 				// Get wallet
 				let response = await Axios.get("/api/account/wallet");
 				userDispatch({ type: "UPDATE", payload: response.data });
-				console.log(response.data);
+				// console.log(response.data);
 
 				// Get Transactions
 				response = await Axios.get("/api/account/wallet/transactions");
-				console.log(response.data);
+				// console.log(response.data);
 
-				userDispatch({ type: "UPDATE", payload: { "transactions": response.data } });
+				userDispatch({ type: "UPDATE", payload: { transactions: response.data } });
 			} catch (error) {
 				const err = error as AxiosError;
 			}

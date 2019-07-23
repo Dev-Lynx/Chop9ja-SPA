@@ -15,6 +15,8 @@ import RegisterTest from "./Views/Reception/Register";
 import LoginTest from "./Views/Reception/Login";
 import ForgotPasswordTest from "./Views/Reception/ForgotPassword";
 
+import LandingPageTest from "./Views/Reception/Landing";
+
 const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
 	fallback: <ProgressBar show={true} />,
 });
@@ -26,7 +28,7 @@ const GrommetWrapper = styled(Grommet)`
 `;
 
 const routes = [
-	{ path: "/", exact: true, component: LandingPage },
+	{ path: "/", exact: true, component: LandingPageTest },
 	{ path: "/register", component: RegisterTest },
 	{ path: "/login", component: LoginTest },
 	{ path: "/dashboard", component: Dashboard },

@@ -7,7 +7,7 @@ import moment from "moment";
 
 
 import { IUserRegContext, IState } from "../../Types";
-import { LoginContext } from "../../Context/Context";
+import { RegContext, LoginContext } from "../../Context/Context";
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
@@ -32,10 +32,7 @@ const daysInMonth = (month: number) => new Date(2019, month, 0).getDate();
 
 const RegisterPage = ({ history }: { history: History }) => {
 	const [loading, setLoading] = useState(false);
-	const [context, setContext] = useState({
-		gender: "Empty", // TODO: Fix this.
-		dateOfBirth: new Date(),
-	} as IUserRegContext);
+	const { regState, regDispatch } = useContext(RegContext);
 
 	const [stateOfOrgin, setStateOfOrigin] = useState("");
 	const [compliant, setCompliant] = useState(false)
@@ -121,21 +118,21 @@ const RegisterPage = ({ history }: { history: History }) => {
 	}
 
 	const validateNextPassword = (password: string, soureContext: IUserRegContext) => {
-		if (password != context.password) {
+		if (password != regState.password) {
 			return "Passwords do not match";
 		}
 		return "";
 	}
 
 	const validatePhoneNumber = (num: string, sourceContext: IUserRegContext) => {
-		if (!RegularExpressions.phone.test(context.phoneNumber)) {
+		if (!RegularExpressions.phone.test(regState.phoneNumber)) {
 			return "Please enter a valid phone number";
 		}
 		return "";
 	}
 
 	const validateEmail = (email: string, sourceContext: IUserRegContext) => {
-		if (!RegularExpressions.email.test(context.email)) {
+		if (!RegularExpressions.email.test(regState.email)) {
 			return "Please enter a valid email address";
 		}
 
@@ -143,7 +140,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 	}
 
 	const validateStateOfOrigin = (state: string, soureContext: IUserRegContext) => {
-		if (!context.stateOfOrigin) {
+		if (!regState.stateOfOrigin) {
 			return "Please select your state of origin";
 		}
 
@@ -151,7 +148,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 	}
 
 	const validateDateOfBirth = (date: Date, sourceContext: IUserRegContext) => {
-		if (!context.dateOfBirth) {
+		if (!regState.dateOfBirth) {
 			return "Please enter your date of birth";
 		}
 
@@ -169,7 +166,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 		
 		verificationContext.verifyingEmail = true;
 		Axios.get<boolean>("/api/auth/user/exists", { cancelToken: new Axios.CancelToken((c) => verificationContext.emailCancelRequest = c),
-			params: { email: context.email } })
+			params: { email: regState.email } })
 			.then((res) => {
 				verificationContext.emailValid = !res.data;
 				//setEmailValid(!res.data);
@@ -189,7 +186,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 		_verifyingPhone = true;
 		setVerifyingPhone(true);
 		Axios.get<boolean>("/api/auth/user/exists", { cancelToken: new Axios.CancelToken((c) => phoneCancelRequest = c),
-			params: { userName: context.username } })
+			params: { userName: regState.userName } })
 			.then((res) => {
 				setPhoneValid(!res.data);
 			}).catch((error) => {
@@ -206,8 +203,8 @@ const RegisterPage = ({ history }: { history: History }) => {
 
 	const submit = () => {
 		setLoading(true);
-
-		Axios.post("api/auth/register", context).then(async (response) => {
+		console.log(regState);
+		Axios.post("api/auth/register", regState).then(async (response) => {
 			if (response.status === 200){
 				// TODO: Save the name of this token properly. Use AccessToken something more professional
 				localStorage.setItem("__sheghuntk__", response.data.accessToken);
@@ -281,7 +278,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 						swipe={false} draggable={false} swipeToSlide={false}
 						touchMove={false} arrows={false}>
 						<Box pad="small">
-							<Form value={context} onSubmit={(event: any) => gotoPage(1)}>
+							<Form value={regState} onSubmit={(event: any) => gotoPage(1)}>
 								<Box id="register1" margin={{ top: size === "small" ? "5px" : "50px"}}>
 									<Box direction={size === "small" ? "column" : "row"} justify="between" gap={size === "small" ? "none" : "large"}>
 										<Box width="100%">
@@ -289,7 +286,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 												required
 												label="First Name"
 												name="firstName"
-												onChange={(event) => context.firstName = event.target.value}
+												onChange={(event) => regState.firstName = event.target.value}
 											/>
 										</Box>
 
@@ -298,7 +295,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 												required
 												label="Last Name"
 												name="lastName"
-												onChange={(event) => context.lastName = event.target.value}
+												onChange={(event) => regState.lastName = event.target.value}
 											/>
 										</Box>
 									</Box>
@@ -311,8 +308,8 @@ const RegisterPage = ({ history }: { history: History }) => {
 											validate={validatePhoneNumber}
 											//validate={{ regexp: /^[0-9]{11}$/, message: "Please enter a valid phone number" }}
 											onChange={(event: any) => {
-												context.phoneNumber = event;
-												context.username = event;
+												regState.phoneNumber = event;
+												regState.userName = event;
 												console.log(event);
 											}}
 										>
@@ -321,7 +318,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 													let num = event.target.value;
 													num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
 													num = "0" + num;
-													context.phoneNumber = num;
+													regState.phoneNumber = num;
 													phoneField.props.onChange(num);
 												}}
 											/>
@@ -332,7 +329,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											name="email"
 											validate={validateEmail}
 											onChange={(event: any) => {
-												context.email = event;
+												regState.email = event;
 											}}
 										>
 											<MaskedInput
@@ -393,11 +390,11 @@ const RegisterPage = ({ history }: { history: History }) => {
 										<Box width="100%">
 											<FormField
 												required
-												value={context.password}
+												value={regState.password}
 												label="Password"
 												name="password"
 												type="password"
-												onChange={(event) => context.password = event.target.value}
+												onChange={(event) => regState.password = event.target.value}
 												validate={validatePassword}
 											/>
 										</Box>
@@ -405,11 +402,11 @@ const RegisterPage = ({ history }: { history: History }) => {
 										<Box width="100%">
 											<FormField
 												required
-												value={context.confirmPassword}
+												value={regState.confirmPassword}
 												label="Confirm Password"
 												name="confirmPassword"
 												type="password"
-												onChange={(event) => context.confirmPassword = event.target.value}
+												onChange={(event) => regState.confirmPassword = event.target.value}
 												validate={validateNextPassword}
 											/>
 										</Box>
@@ -440,7 +437,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											required
 											label="Username"
 											name="username"
-											onChange={(event) => context.username = event.target.value}
+											onChange={(event) => regState.username = event.target.value}
 										/>
 									</Box>
 									*/}
@@ -449,7 +446,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 										<FormField 
 											label="Date Of Birth"
 											name="dateOfBirth"
-											onChange={(event) => context.dateOfBirth = event}
+											onChange={(event) => regState.dateOfBirth = event}
 											ref={(el: any) => dateField = el}
 											validate={validateDateOfBirth}
 										>
@@ -502,7 +499,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 												name="stateOfOrigin"
 												placeholder="Select a state"
 												onChange={(event: any) => {
-													context.stateOfOrigin = event;
+													regState.stateOfOrigin = event;
 													console.log(event);
 												}}
 											>
@@ -526,7 +523,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											label="Address"
 											name="address"
 											component={TextArea}
-											onChange={(event) => context.address = event.target.value}
+											onChange={(event) => regState.address = event.target.value}
 										/>
 									</Box>
 
@@ -534,7 +531,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 										<FormField
 											label="Coupon Code"
 											name="couponCode"
-											onChange={(event) => context.couponCode = event.target.value}
+											onChange={(event) => regState.couponCode = event.target.value}
 										/>
 									</Box>
 
@@ -543,7 +540,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											checked={compliant}
 											label="I agree that I am over 18 years and I accept Chop9ja's Terms and conditions"
 											onChange={(event: any) => {
-												context.compliant = event.target.checked;
+												regState.compliant = event.target.checked;
 												setCompliant(event.target.checked);
 											}}
 										/>

@@ -74,6 +74,8 @@ export interface UserContextAction {
 	}
 }
 
+
+
 //#region Extra Types
 export interface IState {
 	name: string;
@@ -116,7 +118,7 @@ export interface IUserBanks {
 }
 
 export interface IUserRegContext {
-	username: string;
+	userName: string;
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -131,4 +133,23 @@ export interface IUserRegContext {
 	compliant: boolean;
 }
 
-//#end region
+export interface RegContextAction {
+	type: "UPDATE"
+	payload?: {
+		userName?: string;
+		firstName?: string;
+		lastName?: string;
+		email?: string;
+		gender?: string = "Empty";
+		phoneNumber?: string;
+		stateOfOrigin?: string;
+		address?: string;
+		couponCode?: string;
+		dateOfBirth?: date;
+		password?: string;
+		confirmPassword?: string;
+		compliant?: boolean;
+	}
+}
+
+//#endregion

@@ -12,6 +12,7 @@ const Links = styled(NavLink)`
 	font-size: 40px;
 	color: #444444;
 	transition all 1s;
+	text-decoration: none !important;
 	&:hover {
 		background-color: #BAD23B;
 	}
@@ -73,14 +74,14 @@ const SideBar = ({ show, location, history, isPc }: { show: boolean; isPc: boole
 						<Text>Bet Insure</Text>
 					</Links>
 					<Links
-						to="/dashboard/claim"
+						to="/dashboard/claims"
 						activeStyle={{
 							backgroundColor: "#BAD23B",
 							color: "white",
 						}}
 					>
 						<i className="zwicon-money-bill" />
-						<Text>Claim</Text>
+						<Text>Bet Claims</Text>
 					</Links>
 					<Links
 						to="/dashboard/settings"
