@@ -19,7 +19,7 @@ import banksData from "../../_data/banks.json";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import { UserContext } from "../../Context/Context";
-import { IBank, IUserBanks } from "../../Types/index.js";
+import { IBank, IUserBank } from "../../Types/index.js";
 
 const Wrapper = styled(Box)`
 	width: 100vw;

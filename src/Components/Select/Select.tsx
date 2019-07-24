@@ -14,7 +14,9 @@ const SelectWrapper = styled(Box)`
 
 const Select = (props: SelectProps) => {
 	return (
-		<SelectWrapper>
+		<SelectWrapper
+			width="100%"
+		>
 			{
 				// @ts-ignore
 				<Dropdown

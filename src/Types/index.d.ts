@@ -24,7 +24,7 @@ export interface UserContextState {
 	phoneNumberConfirmed: boolean;
 	stateOfOrigin: string;
 	username: string;
-	banks: IUserBanks[];
+	banks: IUserBank[];
 	paymentChannels: Array<
 		{
 			description: string;
@@ -82,7 +82,7 @@ export interface IBank {
 	name: string;
 };
 
-export interface IUserBanks {
+export interface IUserBank {
 	accountName: string;
 	accountNumber: string;
 	bankId: number;

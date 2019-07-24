@@ -9,7 +9,9 @@ import Select from "../../Components/Select/Select";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
+import BankList from "../../_data/banks.json";
 import { UserContext } from "../../Context/Context";
+import { IUserBank, IBank } from "../../Types";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -418,22 +420,69 @@ const Bank = () => {
 
 	const size = useContext(ResponsiveContext);
 
-	const { userState } = useContext(UserContext);
+	const { userState, userDispatch } = useContext(UserContext);
 
 	const [loading, setLoading] = useState(false);
 
 	const [amount, setAmount] = useState("" as any as number);
 	const [fee, setFee] = useState("" as any as number);
 	const [total, setTotal] = useState("" as any as number);
+	const [platformBankAccounts, setPlatformBankAccounts] = useState([] as IUserBank[]);
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
 	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Bank");
+	const [fromBank, setFromBank] = useState({
+		accountName: "",
+		accountNumber: "",
+		bankId: 0,
+		id: 0,
+		logo: "",
+	} as IUserBank & { logo: string });
+	const [toBank, setToBank] = useState({
+		accountName: "",
+		accountNumber: "",
+		bankId: 0,
+		id: 0,
+		logo: "",
+	} as IUserBank & { logo: string });
 
 
 	useEffect(() => {
+		if (userState.banks.length === 0) {
+			(async () => {
+				try {
+					const response = await Axios.get("/api/Account/bankAccounts");
+					userDispatch({ type: "UPDATE", payload: { banks: response.data } });
+				} catch (error) { /* NO code */ }
+
+			})();
+		}
+
+		(async () => {
+			try {
+				const res = await Axios.get("/api/account/Wallet/deposit/platformBankAccounts");
+				setPlatformBankAccounts(res.data);
+			} catch (error) { /* No code */ }
+		})();
 
 	}, []);
+
+	const changeFromBank = (name: string) => {
+		let accountNumber: string | string[] = name.split(" ");
+		accountNumber = accountNumber[accountNumber.length - 1];
+		const userBank = userState.banks.find((b) => b.accountNumber === accountNumber) as IUserBank;
+		const bank = BankList.find((b) => b.id === (userBank as IUserBank).bankId.toString()) as any as IBank;
+		setFromBank({ ...userBank, logo: bank.logo } as IUserBank & { logo: string });
+	};
+
+	const changeToBank = (name: string) => {
+		let accountNumber: string | string[] = name.split(" ");
+		accountNumber = accountNumber[accountNumber.length - 1];
+		const platformBank = platformBankAccounts.find((b) => b.accountNumber === accountNumber) as IUserBank;
+		const bank = BankList.find((b) => b.id === (platformBank as IUserBank).bankId.toString()) as any as IBank;
+		setToBank({ ...platformBank, logo: bank.logo } as IUserBank & { logo: string });
+	}
 
 	return (
 		<>
@@ -519,16 +568,46 @@ const Bank = () => {
 					<Box
 						direction="column"
 						align="start"
-						width={size !== "small" ? "100px" : "40%"}
+						width="100%"
 					>
-							<Text>From</Text>
-							<Select
-								options={["okay"]}
-							/>
-							<Text margin={{top: "small"}}>To</Text>
-							<Select
-								options={["okay"]}
-							/>
+						<Text>From</Text>
+						{fromBank.logo && (
+							<Box
+								width="100%"
+								justify="center"
+								height="150px"
+
+							>
+								<Image
+									fit="contain"
+									src={fromBank.logo}
+								/>
+							</Box>
+						)}
+						<Select
+							value={`${fromBank.accountName} ${fromBank.accountNumber}`}
+							options={userState.banks.map((b) => `${b.accountName} ${b.accountNumber}`)}
+							onChange={({ option }) => changeFromBank(option)}
+						/>
+						<Text margin={{ top: "small" }}>To</Text>
+						{toBank.logo && (
+							<Box
+								width="100%"
+								justify="center"
+								height="150px"
+
+							>
+								<Image
+									fit="contain"
+									src={toBank.logo}
+								/>
+							</Box>
+						)}
+						<Select
+							value={`${toBank.accountName} ${toBank.accountNumber}`}
+							options={platformBankAccounts.map((p) => `${p.accountName} ${p.accountNumber}`)}
+							onChange={({ option }) => changeToBank(option)}
+						/>
 					</Box>
 
 					<Box
