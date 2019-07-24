@@ -29,7 +29,7 @@ const Spinner = ({ show }: { show: any }) => {
 	);
 
 	return (
-		show && (
+		show ? (
 			<Box
 				align="center"
 				direction="row"
@@ -43,7 +43,9 @@ const Spinner = ({ show }: { show: any }) => {
 			>
 				{spinning}
 			</Box>
-		)
+		) : (
+				null
+			)
 	);
 };
 

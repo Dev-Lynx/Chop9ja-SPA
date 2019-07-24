@@ -39,17 +39,6 @@ const Gateways = styled(Box)`
 	}
 
 `;
-interface Bank {
-	description: string;
-	feePercentage: number;
-	fixedFee: number;
-	logo: string;
-	name: string;
-	paymentRange: string;
-	type: string;
-	usesFeePercentage: boolean;
-	usesFixedFee: boolean;
-}
 
 const Deposit = () => {
 
@@ -58,7 +47,6 @@ const Deposit = () => {
 	// Get the user state
 	const { userState, userDispatch } = useContext(UserContext);
 
-	const [banks, setBanks] = useState([] as Bank[]);
 	const [loading, setLoading] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
@@ -98,8 +86,12 @@ const Deposit = () => {
 			>
 				<Spinner show={loading as any as Element | null} />
 				<Route
-					path="/dashboard/wallet/deposit/:paymentChannel"
-					component={FormToFill}
+					path="/dashboard/wallet/deposit/Paystack"
+					component={Paystack}
+				/>
+				<Route
+					path="/dashboard/wallet/deposit/Bank"
+					component={Bank}
 				/>
 				<Route
 					path="/dashboard/wallet/deposit"
@@ -182,7 +174,7 @@ const Deposit = () => {
 
 export default Deposit;
 
-const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
+const Paystack = () => {
 
 	const size = useContext(ResponsiveContext);
 
@@ -196,7 +188,7 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
-	const paymentChannel = paymentChannels.find((channel) => channel.name === match.params.paymentChannel);
+	const paymentChannel = paymentChannels.find((channel) => channel.name === "Paystack");
 
 	const setPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
@@ -251,7 +243,7 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 					message: "Deposit was successful and will be reviewed within 24 hours",
 					show: true,
 					variant: "success",
-				})
+				});
 			}
 		} catch (error) {
 			const err = error as AxiosError;
@@ -259,7 +251,6 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 		}
 		setLoading(false);
 	};
-
 
 	return (
 		<>
@@ -389,6 +380,231 @@ const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 				</Box>
 			</Box>
 
+		</>
+	);
+};
+
+const bankPayments = [
+	{
+		amount: 6000,
+		date: Date.now(),
+		platformBank: "Fidelity BankChop9ja",
+		status: "Pending",
+		userBank: "FCMB Prince Owen 0102029175",
+	},
+	{
+		amount: 6000,
+		date: Date.now(),
+		platformBank: "Fidelity BankChop9ja",
+		status: "Approved",
+		userBank: "FCMB Prince Owen 0102029175",
+	},
+	{
+		amount: 6000,
+		date: Date.now(),
+		platformBank: "Fidelity BankChop9ja",
+		status: "Pending",
+		userBank: "FCMB Prince Owen 0102029175",
+	},
+	{
+		amount: 6000,
+		date: Date.now(),
+		platformBank: "Fidelity BankChop9ja",
+		status: "Approved",
+		userBank: "FCMB Prince Owen 0102029175",
+	},
+];
+
+const Bank = () => {
+
+	const size = useContext(ResponsiveContext);
+
+	const { paymentChannels } = useContext(UserContext).userState;
+
+	const [loading, setLoading] = useState(false);
+
+	const [amount, setAmount] = useState("" as any as number);
+	const [fee, setFee] = useState("" as any as number);
+	const [total, setTotal] = useState("" as any as number);
+	const [error, setError] = useState(false);
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
+
+	const paymentChannel = paymentChannels.find((channel) => channel.name === "Bank");
+
+	return (
+		<>
+			<Box
+				pad="large"
+				width={size !== "small" ? "50vw" : "100vw"}
+				margin={{ top: "small" }}
+				round={true}
+			>
+				<SnackBarComponent
+					message={snackbar.message}
+					show={snackbar.show}
+					variant={snackbar.variant}
+					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
+				/>
+				<ProgressBar show={loading as any} />
+				{paymentChannel && (
+					<>
+						<Box
+							width="100%"
+							align="center"
+							direction="row"
+						>
+							<Box
+								style={{
+									flexBasis: "100px",
+								}}
+								height="100px"
+								direction="row"
+								justify="center"
+								round="small"
+								background="white"
+								margin={{ right: "medium" }}
+								pad="medium"
+								elevation="medium"
+							>
+								<Image
+									fit="contain"
+									src={paymentChannel.logo}
+								/>
+							</Box>
+							<Text
+								size={size !== "small" ? "48px" : "16px"}
+							>
+								{paymentChannel.name}
+							</Text>
+						</Box>
+					</>
+
+				)}
+				<Box
+					pad="large"
+					margin={{ vertical: "large" }}
+					background="white"
+					round="small"
+					width="80vw"
+					elevation="medium"
+				>
+					<Box
+						direction="column"
+						align="start"
+						margin={{ bottom: "small" }}
+						width="100%"
+					>
+						<Form
+							style={{
+								width: "100%",
+							}}
+						>
+							<Text
+								size="16px"
+								weight={100}
+							>
+								Amount
+							</Text>
+							<TextInput
+								focusIndicator={true}
+								value={amount}
+							/>
+						</Form>
+					</Box>
+
+					<Box
+						direction="column"
+						align="start"
+						width={size !== "small" ? "100px" : "40%"}
+					>
+						<Form
+							style={{
+								width: size !== "small" ? "100px" : "40%",
+							}}
+						>
+							<Text
+								size="16px"
+								weight={100}
+							>
+								Fee
+							</Text>
+							<TextInput
+								value={fee}
+								onFocus={(event) => {
+									event.target.blur();
+								}}
+							/>
+						</Form>
+					</Box>
+
+					<Box
+						direction="row"
+						justify="end"
+					>
+						<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
+					</Box>
+					<Box width="100%" round={true} direction="row" justify="end">
+						<Button
+							style={{
+								color: "white",
+								marginTop: "1rem",
+							}}
+							label={"Proceed"}
+							color="secondary"
+							primary={true}
+						/>
+					</Box>
+				</Box>
+			</Box>
+			<Header margin={{ bottom: "medium" }}>Bank Payments</Header>
+			{bankPayments.map((b, i) => (
+				<Box
+					key={i}
+					background="white"
+					elevation="small"
+					round="small"
+					direction="row"
+					pad={{ vertical: "medium", horizontal: "medium" }}
+					margin={{ bottom: "medium" }}
+					justify={size !== "small" ? "evenly" : "between"}
+					align="center"
+					width={size !== "small" ? "70vw" : "95vw"}
+				>
+					<Text
+						style={{
+							width: size !== "small" ? "20%" : "14%",
+						}}
+					>
+						Aug 7 {size !== "small" && ("2019")}
+					</Text>
+					<Text>
+						N6, 000
+					</Text>
+					<Text
+						style={{
+							width: "10%",
+						}}
+					>
+						FCMB Prince Owen 0102029175
+						</Text>
+					{size !== "small" && (
+						<Text
+							style={{
+								width: "10%",
+							}}
+							color="secondary"
+						>
+							Fidelity Bank
+							Chop9ja
+							</Text>
+					)}
+					<Text
+						color={b.status === "Pending" ? "status-warning" : "secondary"}
+					>
+						{b.status}
+					</Text>
+				</Box>
+			))}
 		</>
 	);
 };
