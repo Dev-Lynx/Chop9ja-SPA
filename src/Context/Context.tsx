@@ -6,7 +6,8 @@ import {
 	RegContextAction,
 	UserContextAction,
 	UserContextState,
-} from "../Types";
+	IUserBank,
+} from "../Types/index";
 
 const loginState: LoginContextState = { loggedIn: false };
 const loginDispatch = (action: LoginContextAction) => {/* Login implemented in App.tsx */ };
@@ -17,7 +18,7 @@ export const LoginContext = React.createContext({ loginState, loginDispatch });
 const userState: UserContextState = {
 	availableBalance: 0,
 	balance: 0,
-	banks: [],
+	banks: [] as IUserBank[],
 	dateOfBirth: "",
 	email: "",
 	emailConfirmed: false,

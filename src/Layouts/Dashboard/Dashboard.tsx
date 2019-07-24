@@ -1,5 +1,5 @@
 import loadable from "@loadable/component";
-import Axios, { AxiosError } from "axios";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 import { Box, Layer, ResponsiveContext, Text } from "grommet";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
@@ -9,7 +9,7 @@ import NavFooter from "../../Components/NavFooter/NavFooter";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SideBar from "../../Components/SideBar/SideBar";
 import { LoginContext, UserContext } from "../../Context/Context";
-import { UserContextAction, UserContextState, ITransaction } from "../../Types";
+import { UserContextAction, UserContextState, ITransaction } from "../../Types/index";
 import CashOut from "../../Views/CashOut/CashOut";
 
 const Main = styled(Box)`
@@ -139,7 +139,7 @@ const Dashboard = ({ history }: props) => {
 				// console.log(response.data);
 
 				// Get Transactions
-				const transactionResponse = await Axios.get<ITransaction[]>("/api/account/wallet/transactions");
+				const transactionResponse : AxiosResponse<ITransaction[]> = await Axios.get<ITransaction[]>("/api/account/wallet/transactions");
 				const transactions = transactionResponse.data.sort((a, b) => {
 					var dateA = new Date(a.addedAt), dateB = new Date(b.addedAt);
     				return dateA > dateB ? -1 : dateA < dateB ? 1 : 0;

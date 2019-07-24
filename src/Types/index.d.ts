@@ -11,6 +11,7 @@ export interface LoginContextState {
 
 export interface UserContextState {
 	balance: number;
+	banks: IUserBank[],
 	availableBalance: number;
 	transactions: any[];
 	dateOfBirth: string;
@@ -47,6 +48,7 @@ export interface UserContextAction {
 		availableBalance?: number;
 		transactions?: any[];
 		dateOfBirth?: string;
+		banks?: IUserBank[],
 		email?: string;
 		emailConfirmed?: boolean,
 		firstName?: string;
@@ -57,7 +59,6 @@ export interface UserContextAction {
 		phoneNumberConfirmed?: boolean;
 		stateOfOrigin?: string;
 		username?: string;
-		banks: IUserBank[];
 		paymentChannels?: Array<
 			{
 				description: string;

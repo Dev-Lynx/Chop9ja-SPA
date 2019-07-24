@@ -9,11 +9,12 @@ import NavBar from "../../Components/NavBar/NavBar";
 import { LoginContext } from "../../Context/Context";
 
 import { Masks, RegularExpressions } from "../../constants";
+import NavAnchor from "../../Components/_Grommet/Text/NavAnchor ";
 
 const LoginPage = ({ history }: { history: History }) => {
     const [loading, setLoading] = useState(false);
     const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
-
+    
     const size = useContext(ResponsiveContext);
     const { loginState, loginDispatch } = useContext(LoginContext);
     const [context, setContext] = useState({
@@ -60,15 +61,15 @@ const LoginPage = ({ history }: { history: History }) => {
                     menuActive={false}
 				/>
 
-                <Box margin={{
-						horizontal: size==="small" ? "20px" : "25%",
-						top: size==="small" ? "40px" : "60px"
+                <Box margin={{ 
+						horizontal: size == "small" ? "20px" : "25%", 
+						top: size == "small" ? "40px" : "60px"
                     }}
                 >
                     <Heading textAlign="center" level={size === "small" ? "5" : "2"}>Sign In</Heading>
 
-                    <Box margin={{
-						top: size==="small" ? "40px" : "80px"
+                    <Box margin={{ 
+						top: size == "small" ? "40px" : "80px"
                     }}>
                         <Form value={context} onSubmit={submit}>
                             {/*
@@ -80,7 +81,7 @@ const LoginPage = ({ history }: { history: History }) => {
                             />
 
 */}
-                            <FormField ref={(el: any) => phoneField = el}
+                            <FormField ref={(el: any) => phoneField = el} 
                                 label="Mobile Number"
                                 name="username"
                                 onChange={(event: any) => context.username = event}
@@ -108,12 +109,12 @@ const LoginPage = ({ history }: { history: History }) => {
                             </Box>
 
                             <Box align="center">
-                                <Anchor href="/forgot-password">
+                                <NavAnchor path="/forgot-password">
                                     Forgot Password?
-                                </Anchor>
+                                </NavAnchor>
 
                                 <br/>
-                                <Text>Don't have an account yet? <Anchor href="/register">Create one</Anchor>
+                                <Text>Don't have an account yet? <NavAnchor path="/register">Create one</NavAnchor>
                                 </Text>
                             </Box>
                         </Form>
