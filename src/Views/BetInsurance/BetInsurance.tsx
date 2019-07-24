@@ -163,7 +163,7 @@ const BetInsurance = () => {
 					setSnackbar({
 						// Don't output API errors to the user.
 						// TODO: Improve error message
-						message: "An unexpected error occured. Please try again later", // err.response.data
+						message: "An unexpected error occurred. Please try again later", // err.response.data
 						show: true,
 						variant: "error",
 					});

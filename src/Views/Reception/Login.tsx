@@ -13,7 +13,7 @@ import { Masks, RegularExpressions } from "../../constants";
 const LoginPage = ({ history }: { history: History }) => {
     const [loading, setLoading] = useState(false);
     const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
-    
+
     const size = useContext(ResponsiveContext);
     const { loginState, loginDispatch } = useContext(LoginContext);
     const [context, setContext] = useState({
@@ -60,15 +60,15 @@ const LoginPage = ({ history }: { history: History }) => {
                     menuActive={false}
 				/>
 
-                <Box margin={{ 
-						horizontal: size == "small" ? "20px" : "25%", 
-						top: size == "small" ? "40px" : "60px"
+                <Box margin={{
+						horizontal: size==="small" ? "20px" : "25%",
+						top: size==="small" ? "40px" : "60px"
                     }}
                 >
                     <Heading textAlign="center" level={size === "small" ? "5" : "2"}>Sign In</Heading>
 
-                    <Box margin={{ 
-						top: size == "small" ? "40px" : "80px"
+                    <Box margin={{
+						top: size==="small" ? "40px" : "80px"
                     }}>
                         <Form value={context} onSubmit={submit}>
                             {/*
@@ -80,7 +80,7 @@ const LoginPage = ({ history }: { history: History }) => {
                             />
 
 */}
-                            <FormField ref={(el: any) => phoneField = el} 
+                            <FormField ref={(el: any) => phoneField = el}
                                 label="Mobile Number"
                                 name="username"
                                 onChange={(event: any) => context.username = event}

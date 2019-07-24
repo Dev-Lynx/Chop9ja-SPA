@@ -1,17 +1,16 @@
 import Axios, { AxiosError } from "axios";
-import { Box, Button, Form, FormField, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
+import { Box, Button, Form, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Route, RouteComponentProps } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import styled from "styled-components";
-import { WithdrawButton } from "../../Components/Buttons/Buttons";
+import BankList from "../../_data/banks.json";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import Select from "../../Components/Select/Select";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
-import BankList from "../../_data/banks.json";
 import { UserContext } from "../../Context/Context";
-import { IUserBank, IBank } from "../../Types";
+import { IBank, IUserBank } from "../../Types";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -64,8 +63,6 @@ const Deposit = () => {
 			})();
 		}
 	}, []);
-
-	console.log(userState);
 
 	return (
 		<Wrapper direction="column">
@@ -248,7 +245,6 @@ const Paystack = () => {
 			}
 		} catch (error) {
 			const err = error as AxiosError;
-			console.log(error);
 		}
 		setLoading(false);
 	};
@@ -385,36 +381,13 @@ const Paystack = () => {
 	);
 };
 
-const bankPayments = [
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Pending",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Approved",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Pending",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Approved",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-];
+interface IBankPayments {
+	amount: number;
+	date: Date;
+	platformBank: string;
+	status: string;
+	userBank: string;
+}
 
 const Bank = () => {
 
@@ -424,11 +397,12 @@ const Bank = () => {
 
 	const [loading, setLoading] = useState(false);
 
-	const [amount, setAmount] = useState("" as any as number);
+	const [amount, setAmount] = useState("" as string | number);
 	const [fee, setFee] = useState("" as any as number);
 	const [total, setTotal] = useState("" as any as number);
 	const [platformBankAccounts, setPlatformBankAccounts] = useState([] as IUserBank[]);
-	const [error, setError] = useState(false);
+	const [bankPayments, setBankPayments] = useState([] as IBankPayments[]);
+	const [canSubmit, setCanSubmit] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
 	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Bank");
@@ -438,15 +412,14 @@ const Bank = () => {
 		bankId: 0,
 		id: 0,
 		logo: "",
-	} as IUserBank & { logo: string });
+	} as IUserBank & IBank);
 	const [toBank, setToBank] = useState({
 		accountName: "",
 		accountNumber: "",
 		bankId: 0,
 		id: 0,
 		logo: "",
-	} as IUserBank & { logo: string });
-
+	} as IUserBank & IBank);
 
 	useEffect(() => {
 		if (userState.banks.length === 0) {
@@ -466,22 +439,79 @@ const Bank = () => {
 			} catch (error) { /* No code */ }
 		})();
 
+		(async () => {
+			try {
+				const res = await Axios.get("/api/account/Wallet/deposit/requests");
+				console.log(res);
+			} catch (error) { /* No code */ }
+		})();
+
 	}, []);
 
 	const changeFromBank = (name: string) => {
 		let accountNumber: string | string[] = name.split(" ");
 		accountNumber = accountNumber[accountNumber.length - 1];
 		const userBank = userState.banks.find((b) => b.accountNumber === accountNumber) as IUserBank;
-		const bank = BankList.find((b) => b.id === (userBank as IUserBank).bankId.toString()) as any as IBank;
-		setFromBank({ ...userBank, logo: bank.logo } as IUserBank & { logo: string });
+		// Take out the id so as not to conflict with the id of bank
+		// Id supplied from the database, the UUID
+		// Is what will be used to make the payment request
+		const { id, ...restBankDetails } = BankList.find((b) =>
+			b.id === (userBank as IUserBank).bankId.toString(),
+		) as any as IBank;
+		setFromBank({ ...userBank, ...restBankDetails } as IUserBank & IBank);
 	};
 
 	const changeToBank = (name: string) => {
 		let accountNumber: string | string[] = name.split(" ");
 		accountNumber = accountNumber[accountNumber.length - 1];
 		const platformBank = platformBankAccounts.find((b) => b.accountNumber === accountNumber) as IUserBank;
-		const bank = BankList.find((b) => b.id === (platformBank as IUserBank).bankId.toString()) as any as IBank;
-		setToBank({ ...platformBank, logo: bank.logo } as IUserBank & { logo: string });
+		// Take out the id so as not to conflict with the id of bank
+		// Id supplied from the database, the UUID
+		// Is what will be used to make the payment request
+		const { id, ...restBankDetails } = BankList.find((b) =>
+			b.id === (platformBank as IUserBank).bankId.toString(),
+		) as any as IBank;
+		setToBank({ ...platformBank, ...restBankDetails } as IUserBank & IBank);
+	};
+
+	const changeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const value = Number(event.target.value);
+		if (isNaN(value)) {
+			return;
+		}
+		setAmount(value);
+	};
+
+	const submit = async () => {
+		setLoading(true);
+		try {
+			const data = {
+				amount,
+				paymentChannel: paymentChannel && paymentChannel.name,
+				platformBankAccountId: toBank.id,
+				userBankAccountId: fromBank.id,
+			};
+			const res = await Axios.post("/api/account/Wallet/deposit", data);
+			if (res.status === 202) {
+				setSnackbar({
+					message: "Successful",
+					show: true,
+					variant: "success",
+				});
+			}
+		} catch (error) {/* No code */ }
+		setLoading(false);
+	};
+
+	// Check if input ;can be submitted before updating the state
+	if (fromBank.accountNumber === "" || toBank.accountNumber === "" || amount === "") {
+		if (canSubmit) {
+			setCanSubmit(false);
+		}
+	} else {
+		if (!canSubmit) {
+			setCanSubmit(true);
+		}
 	}
 
 	return (
@@ -561,6 +591,7 @@ const Bank = () => {
 							<TextInput
 								focusIndicator={true}
 								value={amount}
+								onChange={changeAmount}
 							/>
 						</Form>
 					</Box>
@@ -610,22 +641,79 @@ const Bank = () => {
 						/>
 					</Box>
 
-					<Box
-						direction="row"
-						justify="end"
-					>
-						<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
-					</Box>
+					{canSubmit && (
+						<Box
+							direction="column"
+							align="start"
+						>
+							<Heading level="3">Summary</Heading>
+							<Box
+								direction="column"
+							>
+								<Box
+									direction="row"
+									justify="between"
+
+								>
+									<Text
+										margin={{ right: "2rem", bottom: "medium" }}
+									>
+										<strong>Bank Name:</strong>
+									</Text>
+									<Text>{toBank.name}</Text>
+								</Box>
+								<Box
+									direction="row"
+									justify="between"
+
+								>
+									<Text
+										margin={{ right: "2rem", bottom: "medium" }}
+									>
+										<strong>Account Name</strong>
+									</Text>
+									<Text>{toBank.accountName}</Text>
+								</Box>
+								<Box
+									direction="row"
+									justify="between"
+
+								>
+									<Text
+										margin={{ right: "2rem", bottom: "medium" }}
+									>
+										<strong>Account Number</strong>
+									</Text>
+									<Text>{toBank.accountNumber}</Text>
+								</Box>
+								<Box
+									direction="row"
+									justify="between"
+
+								>
+									<Text
+										margin={{ right: "2rem", bottom: "medium" }}
+									>
+										<strong>Amount paid:</strong>
+									</Text>
+									<Text>{amount}</Text>
+								</Box>
+							</Box>
+						</Box>
+					)}
 					<Box width="100%" round={true} direction="row" justify="end">
-						<Button
-							style={{
-								color: "white",
-								marginTop: "1rem",
-							}}
-							label={"Proceed"}
-							color="secondary"
-							primary={true}
-						/>
+						{canSubmit && (
+							<Button
+								style={{
+									color: "white",
+									marginTop: "1rem",
+								}}
+								onClick={submit}
+								label="Proceed"
+								color="secondary"
+								primary={true}
+							/>
+						)}
 					</Box>
 				</Box>
 			</Box>
@@ -659,17 +747,16 @@ const Bank = () => {
 						}}
 					>
 						FCMB Prince Owen 0102029175
-						</Text>
+					</Text>
 					{size !== "small" && (
 						<Text
 							style={{
 								width: "10%",
 							}}
-							color="secondary"
 						>
 							Fidelity Bank
 							Chop9ja
-							</Text>
+						</Text>
 					)}
 					<Text
 						color={b.status === "Pending" ? "status-warning" : "secondary"}
