@@ -9,11 +9,10 @@ import ProgressBar from "./Components/ProgressBar/ProgressBar";
 import { LoginContext } from "./Context/Context";
 import theme from "./theme";
 import { LoginContextAction, LoginContextState } from "./Types";
-import LandingPage from "./Views/Landing/Landing";
 import LoginPage from "./Views/Login/Login";
-import RegisterTest from "./Views/Reception/Register";
-import LoginTest from "./Views/Reception/Login";
 import ForgotPasswordTest from "./Views/Reception/ForgotPassword";
+import LoginTest from "./Views/Reception/Login";
+import RegisterTest from "./Views/Reception/Register";
 
 import LandingPageTest from "./Views/Reception/Landing";
 
@@ -32,9 +31,7 @@ const routes = [
 	{ path: "/register", component: RegisterTest },
 	{ path: "/login", component: LoginTest },
 	{ path: "/dashboard", component: Dashboard },
-	{ path: "/forgot-password", component: ForgotPasswordTest }
-	//{ path: "/reception", component: ReceptionTest },
-	//{ path: "/loginPage", component: LoginTest },
+	{ path: "/forgot-password", component: ForgotPasswordTest },
 ];
 
 // Initial IState

@@ -1,10 +1,9 @@
 import Axios, { AxiosError } from "axios";
-import { Box, Button, Form, FormField, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
+import { Box, Button, Form, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Route, RouteComponentProps } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import styled from "styled-components";
 import BankList from "../../_data/banks.json";
-import { WithdrawButton } from "../../Components/Buttons/Buttons";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import Select from "../../Components/Select/Select";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";

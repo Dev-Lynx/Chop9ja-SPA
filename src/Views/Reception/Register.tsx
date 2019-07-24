@@ -61,7 +61,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 		emailCancelRequest: Canceler;
 		phoneCancelRequest: Canceler;
 	}
-	
+
 	const [verificationContext, setVerificationContext] = useState({
 		verifyingEmail: true
 	} as VerificationContext);
@@ -163,7 +163,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 	const verifyEmail = () => {
 		console.log(verificationContext);
 		console.log("Verification Context");
-		
+
 		verificationContext.verifyingEmail = true;
 		Axios.get<boolean>("/api/auth/user/exists", { cancelToken: new Axios.CancelToken((c) => verificationContext.emailCancelRequest = c),
 			params: { email: regState.email } })
@@ -237,21 +237,21 @@ const RegisterPage = ({ history }: { history: History }) => {
 					toggleSideBar={true}
 				/>
 
-				<Box 
-					margin={{ 
+				<Box
+					margin={{
 						horizontal: size === "small" || size === "medium?" ? "5%" : "20%",
 						top: "50px"
 					}}
 				>
 					<Heading alignSelf="center" level={size === "small" ? "5" : "2"}>Register Account</Heading>
 
-					<Box 
+					<Box
 						direction="row"
 						justify="center"
 						gap={ size === "small" ? "50px" : "150px" }
 						margin={ size === "small" ? { top: "-20px" } : {} }
 					>
-						<ToggleBall 
+						<ToggleBall
 							onClick={(event: any) => gotoPage(0)}
 							active={page === 0}
 							width={size === "small" ? "20px" : "30px"}
@@ -260,7 +260,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 							<Text color="light-1">1</Text>
 						</ToggleBall>
 
-						<ToggleBall 
+						<ToggleBall
 							active={page === 1}
 							width={size === "small" ? "20px" : "30px"}
 							height={size === "small" ? "20px" : "30px"}
@@ -301,8 +301,8 @@ const RegisterPage = ({ history }: { history: History }) => {
 									</Box>
 
 									<Box>
-										
-										<FormField ref={(el: any) => phoneField = el} 
+
+										<FormField ref={(el: any) => phoneField = el}
 											label="Phone Number"
 											name="phoneNumber"
 											validate={validatePhoneNumber}
@@ -324,7 +324,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											/>
 										</FormField>
 
-										<FormField ref={(el: any) => emailField = el} 
+										<FormField ref={(el: any) => emailField = el}
 											label="Email Address"
 											name="email"
 											validate={validateEmail}
@@ -367,20 +367,20 @@ const RegisterPage = ({ history }: { history: History }) => {
 											</Box>
 
 											<Box align="baseline" justify="evenly"
-												margin={size == "small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
+												margin={size==="small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
 													{
 														verificationContext.verifyingEmail ? (
-															<img src={spinner} width={size == "small" ? "24px" : "32px"}
-																height={size == "small" ? "24px" : "32px"}/>
+															<img src={spinner} width={size==="small" ? "24px" : "32px"}
+																height={size==="small" ? "24px" : "32px"}/>
 														) : (
-															<img src={verificationContext.emailValid ? check : cross} width={size == "small" ? "24px" : "32px"}
-																height={size == "small" ? "24px" : "32px"}/>
+															<img src={verificationContext.emailValid ? check : cross} width={size==="small" ? "24px" : "32px"}
+																height={size==="small" ? "24px" : "32px"}/>
 														)
 													}
 											</Box>
 										</Box>
 										*/}
-										
+
 									</Box>
 
 									<Box
@@ -441,9 +441,9 @@ const RegisterPage = ({ history }: { history: History }) => {
 										/>
 									</Box>
 									*/}
-									
+
 									<Box direction={size === "small" ? "column" : "row"} justify="between" gap="small">
-										<FormField 
+										<FormField
 											label="Date Of Birth"
 											name="dateOfBirth"
 											onChange={(event) => regState.dateOfBirth = event}
@@ -466,7 +466,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 																length: daysInMonth(parseInt(dob.split("/")[0], 10))
 															},
 															(v, k) => (k + 1).toString()
-															
+
 													),
 														regexp: /^[1-2][0-9]$|^3[0-1]$|^0?[1-9]$|^0$/,
 														placeholder: "DD"
@@ -561,7 +561,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 							</Form>
 						</Box>
 
-						
+
 					</Slider>
 				</Box>
 			</Grommet>

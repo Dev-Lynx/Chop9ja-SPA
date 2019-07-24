@@ -223,9 +223,9 @@ const CashOut = () => {
 								{
 									loadingBet ? (
 									<Box align="baseline" justify="evenly"
-										margin={size == "small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
-										 <img src={spinner} width={size == "small" ? "24px" : "32px"}
-										  height={size == "small" ? "24px" : "32px"}/>
+										margin={size==="small" ? {top: "1.8rem", left: "3px"} : {top: "1rem"}}>
+										 <img src={spinner} width={size==="small" ? "24px" : "32px"}
+										  height={size==="small" ? "24px" : "32px"}/>
 									</Box>) : null
 								}
 
@@ -363,7 +363,7 @@ const CashOut = () => {
 									</Box>
 
 									<Box justify="end" pad={{top: "medium"}}>
-										<Button 
+										<Button
 											primary={true}
 											color="secondary"
 											label={"Claim"}

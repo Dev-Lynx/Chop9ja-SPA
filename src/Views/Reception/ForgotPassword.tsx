@@ -30,8 +30,8 @@ const ForgotPasswordPage = ({ history }: { history: History }) => {
                     toggleSideBar={true}
                 />
 
-                <Box margin={{ 
-						horizontal: size == "small" || size == "medium?" ? "5%" : "20%",
+                <Box margin={{
+						horizontal: size==="small" || size==="medium?" ? "5%" : "20%",
 						top: "50px"
                     }}
                 >
@@ -39,7 +39,7 @@ const ForgotPasswordPage = ({ history }: { history: History }) => {
                     <Heading alignSelf="center" level={size === "small" ? "5" : "2"}>Password Recovery</Heading>
 
                     <Text>
-                        We are sorry to hear about your missing password. Please select a method from the options 
+                        We are sorry to hear about your missing password. Please select a method from the options
                         below that will make your recovery process smoother.
                     </Text>
 
@@ -61,7 +61,7 @@ const ForgotPasswordPage = ({ history }: { history: History }) => {
                                         bottom: "large"
                                     }} width="auto">
                                         <Form>
-                                            <FormField 
+                                            <FormField
                                                 label="Email Address"
                                                 placeholder="Enter your email address"/>
 
@@ -93,7 +93,7 @@ const ForgotPasswordPage = ({ history }: { history: History }) => {
                                         bottom: "large"
                                     }}>
                                         <Form>
-                                            <FormField 
+                                            <FormField
                                                 label="Phone number"
                                                 placeholder="Enter your phone number"/>
 
