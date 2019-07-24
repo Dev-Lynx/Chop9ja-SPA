@@ -259,7 +259,6 @@ const Settings = () => {
 		}
 		setLoading(false);
 	};
-	console.log(userState.banks)
 
 	return (
 		<>
