@@ -53,6 +53,7 @@ const routes = [
 const initialState: UserContextState = {
 	availableBalance: 0,
 	balance: 0,
+	banks: [],
 	dateOfBirth: "",
 	email: "",
 	emailConfirmed: false,
@@ -105,18 +106,17 @@ const Dashboard = ({ history }: props) => {
 		firstName: "",
 		gender: "",
 		lastName: "",
-		wallet: "",
+		loginStateOfOrigin: "",
 		phoneNumber: "",
 		phoneNumberConfirmed: false,
-		loginStateOfOrigin: "",
 		username: "",
+		wallet: "",
 	});
 
 	useEffect(() => {
 		// Run the check function
 		if (window.screen.width > 768) {
 			setIsPc(true);
-			//setShowSideBar(true);
 		}
 		(async () => {
 			try {

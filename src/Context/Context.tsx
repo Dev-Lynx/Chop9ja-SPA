@@ -1,5 +1,12 @@
 import React from "react";
-import { LoginContextAction, LoginContextState, UserContextState, UserContextAction, IBet, IUserRegContext, RegContextAction } from "../Types";
+import {
+	IUserRegContext,
+	LoginContextAction,
+	LoginContextState,
+	RegContextAction,
+	UserContextAction,
+	UserContextState,
+} from "../Types";
 
 const loginState: LoginContextState = { loggedIn: false };
 const loginDispatch = (action: LoginContextAction) => {/* Login implemented in App.tsx */ };
@@ -8,45 +15,46 @@ const loginDispatch = (action: LoginContextAction) => {/* Login implemented in A
 export const LoginContext = React.createContext({ loginState, loginDispatch });
 
 const userState: UserContextState = {
-	dateOfBirth: "",
-	email: "",
 	availableBalance: 0,
 	balance: 0,
-	transactions: [],
+	banks: [],
+	dateOfBirth: "",
+	email: "",
 	emailConfirmed: false,
 	firstName: "",
 	gender: "",
 	initials: "",
 	lastName: "",
+	paymentChannels: [],
 	phoneNumber: "",
 	phoneNumberConfirmed: false,
 	stateOfOrigin: "",
+	transactions: [],
 	username: "",
-	paymentChannels: [],
 	// bets: [],
 };
 
 const regState: IUserRegContext = {
-	userName: "",
-	firstName: "",
-	lastName: "",
-	email: "",
-	gender: "Empty",
-	phoneNumber: "",
-	stateOfOrigin: "",
 	address: "",
+	compliant: false,
+	confirmPassword: "",
 	couponCode: "",
 	dateOfBirth: new Date(),
+	email: "",
+	firstName: "",
+	gender: "Empty",
+	lastName: "",
 	password: "",
-	confirmPassword: "",
-	compliant: false,
+	phoneNumber: "",
+	stateOfOrigin: "",
+	userName: "",
 };
 
-const regDispatch = (action: RegContextAction) => { };
+const regDispatch = (action: RegContextAction) => {/* No code */};
 
 export const RegContext = React.createContext({ regState, regDispatch });
 
-const userDispatch = (action: UserContextAction) => { };
+const userDispatch = (action: UserContextAction) => { /* No code */ };
 
 // For saving the users information
 export const UserContext = React.createContext({ userState, userDispatch });

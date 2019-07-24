@@ -1,5 +1,5 @@
 import { Box, Select as Dropdown, SelectProps } from "grommet";
-import React from "react"
+import React from "react";
 import styled from "styled-components";
 
 const SelectWrapper = styled(Box)`

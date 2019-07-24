@@ -82,7 +82,7 @@ const FormFieldWrapper = styled(Box)`
 const Settings = () => {
 
 	// Get the user context
-	const { userState } = useContext(UserContext);
+	const { userState, userDispatch } = useContext(UserContext);
 
 	// Get the size context for checking the width screen
 	const size = useContext(ResponsiveContext);
@@ -101,7 +101,6 @@ const Settings = () => {
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [dateOfBirth, setDateOFBirth] = useState("");
 
-	const [banks, setBanks] = useState([] as IUserBanks[]);
 	const [accountName, setAccountName] = useState("");
 	const [accountNo, setAccountNo] = useState("");
 	const [newBank, setNewBank] = useState({
@@ -136,13 +135,16 @@ const Settings = () => {
 	}, [userState.email, userState.firstName]);
 
 	useEffect(() => {
-		(async () => {
-			try {
-				const response = await Axios.get("/api/Account/bankAccounts");
-				setBanks(response.data);
-			} catch (error) { /* NO code */ }
+		if (userState.banks.length === 0) {
+			(async () => {
+				try {
+					const response = await Axios.get("/api/Account/bankAccounts");
+					userDispatch({ type: "UPDATE", payload: {banks: response.data }});
+				} catch (error) { /* NO code */ }
 
-		})();
+			})();
+
+		}
 	}, [bankChangedToggle]);
 
 	const submitAddBank = async () => {
@@ -257,6 +259,7 @@ const Settings = () => {
 		}
 		setLoading(false);
 	};
+	console.log(userState.banks)
 
 	return (
 		<>
@@ -412,7 +415,7 @@ const Settings = () => {
 								<Box
 									margin={{ bottom: "large" }}
 								>
-									{banks.map((b) => (
+									{userState.banks.map((b) => (
 										<Box
 											width="100%"
 											round={true}

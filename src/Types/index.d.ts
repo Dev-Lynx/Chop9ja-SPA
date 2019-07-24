@@ -24,6 +24,7 @@ export interface UserContextState {
 	phoneNumberConfirmed: boolean;
 	stateOfOrigin: string;
 	username: string;
+	banks: IUserBanks[];
 	paymentChannels: Array<
 		{
 			description: string;
@@ -42,36 +43,7 @@ export interface UserContextState {
 
 export interface UserContextAction {
 	type: "UPDATE"
-	payload?: {
-		balance?: number;
-		availableBalance?: number;
-		transactions?: any[];
-		dateOfBirth?: string;
-		email?: string;
-		emailConfirmed?: boolean,
-		firstName?: string;
-		gender?: string;
-		initials?: string;
-		lastName?: string;
-		phoneNumber?: string;
-		phoneNumberConfirmed?: boolean;
-		stateOfOrigin?: string;
-		username?: string;
-		paymentChannels?: Array<
-			{
-				description: string;
-				feePercentage: number;
-				fixedFee: number;
-				logo: string;
-				name: string;
-				paymentRange: string;
-				type: string;
-				usesFeePercentage: boolean;
-				usesFixedFee: boolean;
-			}
-		>;
-		bets?: IBet[];
-	}
+	payload?: Partial<UserContextState>
 }
 
 

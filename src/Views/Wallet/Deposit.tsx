@@ -5,6 +5,7 @@ import { Link, Route, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { WithdrawButton } from "../../Components/Buttons/Buttons";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
+import Select from "../../Components/Select/Select";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
@@ -178,7 +179,7 @@ const Paystack = () => {
 
 	const size = useContext(ResponsiveContext);
 
-	const { paymentChannels } = useContext(UserContext).userState;
+	const { userState } = useContext(UserContext);
 
 	const [loading, setLoading] = useState(false);
 
@@ -188,7 +189,7 @@ const Paystack = () => {
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
-	const paymentChannel = paymentChannels.find((channel) => channel.name === "Paystack");
+	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Paystack");
 
 	const setPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
@@ -231,8 +232,6 @@ const Paystack = () => {
 				paymentChannel: paymentChannel && paymentChannel.name,
 			};
 			const response = await Axios.post("/api/account/Wallet/deposit", data);
-			console.log(response);
-
 			if (response.status === 202) {
 				const tab = window.open(response.data, "_blank");
 				if (tab) {
@@ -419,7 +418,7 @@ const Bank = () => {
 
 	const size = useContext(ResponsiveContext);
 
-	const { paymentChannels } = useContext(UserContext).userState;
+	const { userState } = useContext(UserContext);
 
 	const [loading, setLoading] = useState(false);
 
@@ -429,7 +428,12 @@ const Bank = () => {
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
-	const paymentChannel = paymentChannels.find((channel) => channel.name === "Bank");
+	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Bank");
+
+
+	useEffect(() => {
+
+	}, []);
 
 	return (
 		<>
@@ -503,7 +507,7 @@ const Bank = () => {
 								size="16px"
 								weight={100}
 							>
-								Amount
+								Amount Paid
 							</Text>
 							<TextInput
 								focusIndicator={true}
@@ -517,24 +521,14 @@ const Bank = () => {
 						align="start"
 						width={size !== "small" ? "100px" : "40%"}
 					>
-						<Form
-							style={{
-								width: size !== "small" ? "100px" : "40%",
-							}}
-						>
-							<Text
-								size="16px"
-								weight={100}
-							>
-								Fee
-							</Text>
-							<TextInput
-								value={fee}
-								onFocus={(event) => {
-									event.target.blur();
-								}}
+							<Text>From</Text>
+							<Select
+								options={["okay"]}
 							/>
-						</Form>
+							<Text margin={{top: "small"}}>To</Text>
+							<Select
+								options={["okay"]}
+							/>
 					</Box>
 
 					<Box

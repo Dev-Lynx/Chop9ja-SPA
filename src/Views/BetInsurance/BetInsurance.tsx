@@ -141,7 +141,7 @@ const BetInsurance = () => {
 			date,
 			odds: Number(odds.trim()),
 			platformId: platform.id,
-			potentialWinnings: "0", //Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
+			potentialWinnings: "0", // Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
 			slipNumber,
 			stake: Number(stake.replace("₦", "").replace(/,/g, "").trim()),
 		};
