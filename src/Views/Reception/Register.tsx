@@ -6,7 +6,7 @@ import { History } from "history";
 import moment from "moment";
 
 
-import { IUserRegContext, IState } from "../../Types";
+import { IUserRegContext, IState, RegContextAction } from "../../Types";
 import { RegContext, LoginContext } from "../../Context/Context";
 
 import NavBar from "../../Components/NavBar/NavBar";
@@ -30,9 +30,12 @@ import PatientInput from "../../Components/_Grommet/Inputs/PatientInput";
 const states = StateData as IState[];
 const daysInMonth = (month: number) => new Date(2019, month, 0).getDate();
 
+
+
+
 const RegisterPage = ({ history }: { history: History }) => {
 	const [loading, setLoading] = useState(false);
-	const { regState, regDispatch } = useContext(RegContext);
+	const { regState } = useContext(RegContext);
 
 	const [stateOfOrgin, setStateOfOrigin] = useState("");
 	const [compliant, setCompliant] = useState(false)
@@ -159,6 +162,10 @@ const RegisterPage = ({ history }: { history: History }) => {
 	}
 	//#endregion
 
+	useEffect(() => {
+		console.log(regState);
+	})
+
 	//#region Verification
 	const verifyEmail = () => {
 		console.log(verificationContext);
@@ -257,7 +264,9 @@ const RegisterPage = ({ history }: { history: History }) => {
 							width={size === "small" ? "20px" : "30px"}
 							height={size === "small" ? "20px" : "30px"}
 						>
-							<Text color="light-1">1</Text>
+							<Text color="light-1" size={size === "small" ? "small" : "medium"}>
+								1
+							</Text>
 						</ToggleBall>
 
 						<ToggleBall 
@@ -266,7 +275,9 @@ const RegisterPage = ({ history }: { history: History }) => {
 							height={size === "small" ? "20px" : "30px"}
 							onClick={(event: any) => submitPage1.click()}
 						>
-							<Text color="light-1">2</Text>
+							<Text color="light-1" size={size === "small" ? "small" : "medium"}>
+								2
+							</Text>
 						</ToggleBall>
 					</Box>
 
@@ -430,18 +441,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 
 						<Box pad="small">
 							<Form onSubmit={submit}>
-								<Box id="register2" margin={{ top: size === "small" ? "5px" : "50px"}}>
-									{/*
-									<Box>
-										<FormField
-											required
-											label="Username"
-											name="username"
-											onChange={(event) => regState.username = event.target.value}
-										/>
-									</Box>
-									*/}
-									
+								<Box id="register2" margin={{ top: size === "small" ? "5px" : "50px"}}>									
 									<Box direction={size === "small" ? "column" : "row"} justify="between" gap="small">
 										<FormField 
 											label="Date Of Birth"
@@ -500,7 +500,6 @@ const RegisterPage = ({ history }: { history: History }) => {
 												placeholder="Select a state"
 												onChange={(event: any) => {
 													regState.stateOfOrigin = event;
-													console.log(event);
 												}}
 											>
 												<Select
@@ -527,6 +526,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 										/>
 									</Box>
 
+									{/*
 									<Box>
 										<FormField
 											label="Coupon Code"
@@ -534,6 +534,7 @@ const RegisterPage = ({ history }: { history: History }) => {
 											onChange={(event) => regState.couponCode = event.target.value}
 										/>
 									</Box>
+									*/}
 
 									<Box margin={{top: "20px"}}>
 										<CheckBox
@@ -551,10 +552,8 @@ const RegisterPage = ({ history }: { history: History }) => {
 									</Box>
 
 									<Box margin={{top: "20px"}}>
-										<Text textAlign="center" weight="bold">
-											Already have an account? <Anchor><strong>Log In
-												</strong>
-											</Anchor>
+										<Text textAlign="center" weight="normal">
+											Already have an account? <Anchor href="/login">Log In</Anchor>
 										</Text>
 									</Box>
 								</Box>

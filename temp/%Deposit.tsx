@@ -5,13 +5,10 @@ import { Link, Route, RouteComponentProps } from "react-router-dom";
 import styled from "styled-components";
 import { WithdrawButton } from "../../Components/Buttons/Buttons";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
-import Select from "../../Components/Select/Select";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
-import BankList from "../../_data/banks.json";
 import { UserContext } from "../../Context/Context";
-import { IUserBank, IBank } from "../../Types";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -42,6 +39,17 @@ const Gateways = styled(Box)`
 	}
 
 `;
+interface Bank {
+	description: string;
+	feePercentage: number;
+	fixedFee: number;
+	logo: string;
+	name: string;
+	paymentRange: string;
+	type: string;
+	usesFeePercentage: boolean;
+	usesFixedFee: boolean;
+}
 
 const Deposit = () => {
 
@@ -50,6 +58,7 @@ const Deposit = () => {
 	// Get the user state
 	const { userState, userDispatch } = useContext(UserContext);
 
+	const [banks, setBanks] = useState([] as Bank[]);
 	const [loading, setLoading] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
@@ -89,12 +98,8 @@ const Deposit = () => {
 			>
 				<Spinner show={loading as any as Element | null} />
 				<Route
-					path="/dashboard/wallet/deposit/Paystack"
-					component={Paystack}
-				/>
-				<Route
-					path="/dashboard/wallet/deposit/Bank"
-					component={Bank}
+					path="/dashboard/wallet/deposit/:paymentChannel"
+					component={FormToFill}
 				/>
 				<Route
 					path="/dashboard/wallet/deposit"
@@ -177,11 +182,11 @@ const Deposit = () => {
 
 export default Deposit;
 
-const Paystack = () => {
+const FormToFill = ({ match }: RouteComponentProps<any, any>) => {
 
 	const size = useContext(ResponsiveContext);
 
-	const { userState } = useContext(UserContext);
+	const { paymentChannels } = useContext(UserContext).userState;
 
 	const [loading, setLoading] = useState(false);
 
@@ -191,7 +196,7 @@ const Paystack = () => {
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
-	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Paystack");
+	const paymentChannel = paymentChannels.find((channel) => channel.name === match.params.paymentChannel);
 
 	const setPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setError(false);
@@ -234,6 +239,8 @@ const Paystack = () => {
 				paymentChannel: paymentChannel && paymentChannel.name,
 			};
 			const response = await Axios.post("/api/account/Wallet/deposit", data);
+			console.log(response);
+
 			if (response.status === 202) {
 				const tab = window.open(response.data, "_blank");
 				if (tab) {
@@ -244,7 +251,7 @@ const Paystack = () => {
 					message: "Deposit was successful and will be reviewed within 24 hours",
 					show: true,
 					variant: "success",
-				});
+				})
 			}
 		} catch (error) {
 			const err = error as AxiosError;
@@ -252,6 +259,7 @@ const Paystack = () => {
 		}
 		setLoading(false);
 	};
+
 
 	return (
 		<>
@@ -381,303 +389,6 @@ const Paystack = () => {
 				</Box>
 			</Box>
 
-		</>
-	);
-};
-
-const bankPayments = [
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Pending",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Approved",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Pending",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-	{
-		amount: 6000,
-		date: Date.now(),
-		platformBank: "Fidelity BankChop9ja",
-		status: "Approved",
-		userBank: "FCMB Prince Owen 0102029175",
-	},
-];
-
-const Bank = () => {
-
-	const size = useContext(ResponsiveContext);
-
-	const { userState, userDispatch } = useContext(UserContext);
-
-	const [loading, setLoading] = useState(false);
-
-	const [amount, setAmount] = useState("" as any as number);
-	const [fee, setFee] = useState("" as any as number);
-	const [total, setTotal] = useState("" as any as number);
-	const [platformBankAccounts, setPlatformBankAccounts] = useState([] as IUserBank[]);
-	const [error, setError] = useState(false);
-	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
-
-	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Bank");
-	const [fromBank, setFromBank] = useState({
-		accountName: "",
-		accountNumber: "",
-		bankId: 0,
-		id: 0,
-		logo: "",
-	} as IUserBank & { logo: string });
-	const [toBank, setToBank] = useState({
-		accountName: "",
-		accountNumber: "",
-		bankId: 0,
-		id: 0,
-		logo: "",
-	} as IUserBank & { logo: string });
-
-
-	useEffect(() => {
-		if (userState.banks.length === 0) {
-			(async () => {
-				try {
-					const response = await Axios.get("/api/Account/bankAccounts");
-					userDispatch({ type: "UPDATE", payload: { banks: response.data } });
-				} catch (error) { /* NO code */ }
-
-			})();
-		}
-
-		(async () => {
-			try {
-				const res = await Axios.get("/api/account/Wallet/deposit/platformBankAccounts");
-				setPlatformBankAccounts(res.data);
-			} catch (error) { /* No code */ }
-		})();
-
-	}, []);
-
-	const changeFromBank = (name: string) => {
-		let accountNumber: string | string[] = name.split(" ");
-		accountNumber = accountNumber[accountNumber.length - 1];
-		const userBank = userState.banks.find((b) => b.accountNumber === accountNumber) as IUserBank;
-		const bank = BankList.find((b) => b.id === (userBank as IUserBank).bankId.toString()) as any as IBank;
-		setFromBank({ ...userBank, logo: bank.logo } as IUserBank & { logo: string });
-	};
-
-	const changeToBank = (name: string) => {
-		let accountNumber: string | string[] = name.split(" ");
-		accountNumber = accountNumber[accountNumber.length - 1];
-		const platformBank = platformBankAccounts.find((b) => b.accountNumber === accountNumber) as IUserBank;
-		const bank = BankList.find((b) => b.id === (platformBank as IUserBank).bankId.toString()) as any as IBank;
-		setToBank({ ...platformBank, logo: bank.logo } as IUserBank & { logo: string });
-	}
-
-	return (
-		<>
-			<Box
-				pad="large"
-				width={size !== "small" ? "50vw" : "100vw"}
-				margin={{ top: "small" }}
-				round={true}
-			>
-				<SnackBarComponent
-					message={snackbar.message}
-					show={snackbar.show}
-					variant={snackbar.variant}
-					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
-				/>
-				<ProgressBar show={loading as any} />
-				{paymentChannel && (
-					<>
-						<Box
-							width="100%"
-							align="center"
-							direction="row"
-						>
-							<Box
-								style={{
-									flexBasis: "100px",
-								}}
-								height="100px"
-								direction="row"
-								justify="center"
-								round="small"
-								background="white"
-								margin={{ right: "medium" }}
-								pad="medium"
-								elevation="medium"
-							>
-								<Image
-									fit="contain"
-									src={paymentChannel.logo}
-								/>
-							</Box>
-							<Text
-								size={size !== "small" ? "48px" : "16px"}
-							>
-								{paymentChannel.name}
-							</Text>
-						</Box>
-					</>
-
-				)}
-				<Box
-					pad="large"
-					margin={{ vertical: "large" }}
-					background="white"
-					round="small"
-					width="80vw"
-					elevation="medium"
-				>
-					<Box
-						direction="column"
-						align="start"
-						margin={{ bottom: "small" }}
-						width="100%"
-					>
-						<Form
-							style={{
-								width: "100%",
-							}}
-						>
-							<Text
-								size="16px"
-								weight={100}
-							>
-								Amount Paid
-							</Text>
-							<TextInput
-								focusIndicator={true}
-								value={amount}
-							/>
-						</Form>
-					</Box>
-
-					<Box
-						direction="column"
-						align="start"
-						width="100%"
-					>
-						<Text>From</Text>
-						{fromBank.logo && (
-							<Box
-								width="100%"
-								justify="center"
-								height="150px"
-
-							>
-								<Image
-									fit="contain"
-									src={fromBank.logo}
-								/>
-							</Box>
-						)}
-						<Select
-							value={`${fromBank.accountName} ${fromBank.accountNumber}`}
-							options={userState.banks.map((b) => `${b.accountName} ${b.accountNumber}`)}
-							onChange={({ option }) => changeFromBank(option)}
-						/>
-						<Text margin={{ top: "small" }}>To</Text>
-						{toBank.logo && (
-							<Box
-								width="100%"
-								justify="center"
-								height="150px"
-
-							>
-								<Image
-									fit="contain"
-									src={toBank.logo}
-								/>
-							</Box>
-						)}
-						<Select
-							value={`${toBank.accountName} ${toBank.accountNumber}`}
-							options={platformBankAccounts.map((p) => `${p.accountName} ${p.accountNumber}`)}
-							onChange={({ option }) => changeToBank(option)}
-						/>
-					</Box>
-
-					<Box
-						direction="row"
-						justify="end"
-					>
-						<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
-					</Box>
-					<Box width="100%" round={true} direction="row" justify="end">
-						<Button
-							style={{
-								color: "white",
-								marginTop: "1rem",
-							}}
-							label={"Proceed"}
-							color="secondary"
-							primary={true}
-						/>
-					</Box>
-				</Box>
-			</Box>
-			<Header margin={{ bottom: "medium" }}>Bank Payments</Header>
-			{bankPayments.map((b, i) => (
-				<Box
-					key={i}
-					background="white"
-					elevation="small"
-					round="small"
-					direction="row"
-					pad={{ vertical: "medium", horizontal: "medium" }}
-					margin={{ bottom: "medium" }}
-					justify={size !== "small" ? "evenly" : "between"}
-					align="center"
-					width={size !== "small" ? "70vw" : "95vw"}
-				>
-					<Text
-						style={{
-							width: size !== "small" ? "20%" : "14%",
-						}}
-					>
-						Aug 7 {size !== "small" && ("2019")}
-					</Text>
-					<Text>
-						N6, 000
-					</Text>
-					<Text
-						style={{
-							width: "10%",
-						}}
-					>
-						FCMB Prince Owen 0102029175
-						</Text>
-					{size !== "small" && (
-						<Text
-							style={{
-								width: "10%",
-							}}
-							color="secondary"
-						>
-							Fidelity Bank
-							Chop9ja
-							</Text>
-					)}
-					<Text
-						color={b.status === "Pending" ? "status-warning" : "secondary"}
-					>
-						{b.status}
-					</Text>
-				</Box>
-			))}
 		</>
 	);
 };

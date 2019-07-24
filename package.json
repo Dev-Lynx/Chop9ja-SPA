@@ -61,6 +61,7 @@
   "devDependencies": {
     "@types/react-router-dom": "^4.3.4",
     "@types/react-transition-group": "^2.9.2",
+    "tslint-config-prettier": "^1.18.0",
     "tslint-react-hooks": "^2.1.1"
   }
 }

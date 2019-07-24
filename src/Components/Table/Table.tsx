@@ -1,5 +1,5 @@
-import React from 'react'
-import { Table as GroTable, Box, Text, TableBody, TableRow, TableCell } from "grommet";
+import React, { useContext } from 'react'
+import { Table as GroTable, Box, ResponsiveContext, Text, TableBody, TableRow, TableCell } from "grommet";
 import styled from 'styled-components';
 import moment from "moment";
 
@@ -10,6 +10,7 @@ const Wrapper = styled(Box)`
 
 const Table = ({ transactions }: { transactions: { id: number, addedAt: string, type: string, amount: number }[] }) => {
 
+	const size = useContext(ResponsiveContext);
 	const setWidth = () => {
 		if (window.innerWidth > 720) {
 			return 680;
@@ -32,7 +33,10 @@ const Table = ({ transactions }: { transactions: { id: number, addedAt: string, 
 					{transactions.map(transaction => (
 						<TableRow key={transaction.id}>
 							<TableCell align="left" style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
-								{moment(transaction.addedAt).format("llll")}
+								{
+									size == "small" ? (moment(transaction.addedAt).format("l"))
+									: (moment(transaction.addedAt).format("llll"))
+								}
 							</TableCell>
 							<TableCell style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
 								{transaction.type}

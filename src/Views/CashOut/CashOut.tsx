@@ -106,7 +106,8 @@ const CashOut = () => {
 		try {
 			const res = await Axios.get<IBet[]>("api/bet/cashout/all");
 			if (res.status === 200) {
-				setCashOuts(res.data);
+				console.log(res.data as IBet[]);
+				setCashOuts(res.data as IBet[]);
 			}
 		} catch (error) {/* No Code */}
 	};
@@ -139,6 +140,7 @@ const CashOut = () => {
 				variant: "error",
 			})
 		}).finally(() => {
+			setForceUpdate((f) => f + 1);
 			setLoading(false);
 		});
 	};
@@ -174,7 +176,7 @@ const CashOut = () => {
 			{/* TODO: Move this to the highest level */}
 				<Hero
 					image={CashOutImage}
-					text="Claim"
+					text="Bet Claims"
 				/>
 				<Spinner show={_loadingBet} />
 				<SnackBarComponent
@@ -366,7 +368,7 @@ const CashOut = () => {
 										<Button 
 											primary={true}
 											color="secondary"
-											label={"Claim"}
+											label={"Claim Bet"}
 											onClick={cashOut}
 										/>
 									</Box>
@@ -498,7 +500,7 @@ const CashOut = () => {
 						direction="row"
 						margin={{ top: "xlarge", bottom: "medium" }}
 					>
-						<Text size="xxlarge" weight={100}>Claims</Text>
+						<Text size="xxlarge" weight={100}>Bet Claims</Text>
 					</Box>
 
 					<Box
@@ -506,22 +508,19 @@ const CashOut = () => {
 						width={size !== "small" ? "960px" : "80vw"}
 						background="white"
 						overflow={{ horizontal: "auto" }}
-						direction="row"
 						align="center"
+						justify="center"
 						round="small"
-						elevation="small"
+						elevation="medium"
 					>
-						<Table
-							style={{ width: size !== "small" ? "920px" : "80vw" }}
-						>
-							<TableHeader>
-								<TableRow
-									style={{
-										borderBottom: "solid 1px #ccc",
-										fontSize: "14px !important",
-										width: size !== "small" ? "720px" : "80vw",
-									}}
-								>
+						<Table>
+							<TableHeader
+								style={{
+									borderBottom: "solid 1px #ccc",
+									fontSize: "14px !important",
+								}}
+							>
+								<TableRow>
 									<TableCell>
 										Date
 									</TableCell>
@@ -547,43 +546,45 @@ const CashOut = () => {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{cashOuts.map((bet, index) => (
-									<TableRow
-										key={index}
-									>
-										<TableCell
-											scope="row"
+								{cashOuts && (
+									cashOuts.map((bet, index) => (
+										<TableRow
+											key={index}
 										>
-											{new Date(bet.date as Date).toDateString()}
-										</TableCell>
-										<TableCell>
-											{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
-										</TableCell>
-										<TableCell>
-											{bet.slipNumber}
-										</TableCell>
-										<TableCell>
-											{bet.odds}
-										</TableCell>
-										<TableCell>
-											<strong>
-												{bet.stake.toLocaleString()}
-											</strong>
-										</TableCell>
-										<TableCell>
-											<Text
-												color={
-													bet.status === 0 ?
-														"status-warning" : bet.status === 2 ?
-															"status-error" : "secondary"
-												}
+											<TableCell
+												scope="row"
 											>
-												{bet.status}
-											</Text>
-										</TableCell>
-									</TableRow>
-
-								))}
+												{new Date(bet.date as Date).toDateString()}
+											</TableCell>
+											<TableCell>
+												{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
+											</TableCell>
+											<TableCell>
+												{bet.slipNumber}
+											</TableCell>
+											<TableCell>
+												{bet.odds}
+											</TableCell>
+											<TableCell>
+												<strong>
+													{bet.stake.toLocaleString()}
+												</strong>
+											</TableCell>
+											<TableCell>
+												<Text
+													color={
+														bet.status === 0 ?
+															"status-warning" : bet.status === 2 ?
+																"status-error" : "secondary"
+													}
+												>
+													{bet.status}
+												</Text>
+											</TableCell>
+										</TableRow>
+	
+									))
+								)}
 							</TableBody>
 						</Table>
 					</Box>

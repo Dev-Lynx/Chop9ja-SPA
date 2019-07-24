@@ -23,7 +23,7 @@ import Hero from "../../Components/Hero/Hero";
 
 import BetPlatformData from "../../_data/betPlatforms.json";
 import BetInsuranceImage from "../../assets/images/white-piggy-bank.jpg";
-import { IBet, IBetPlatform } from "../../Types";
+import { IBet, IBetPlatform } from "../../Types/index";
 
 import CalendarDropButton from "../../Components/_Grommet/Selects/Calendar";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
@@ -315,7 +315,7 @@ const BetInsurance = () => {
 
 					<Box direction="row" width="90%" justify="end">
 						<Box
-							width="25%"
+							width={size === "small" ? "100px" : "25%"}
 							round={true}
 							direction="column"
 							alignContent="start"
@@ -349,35 +349,33 @@ const BetInsurance = () => {
 				width={size !== "small" ? "960px" : "80vw"}
 				background="white"
 				overflow={{ horizontal: "auto" }}
-				direction="row"
 				align="center"
+				justify="center"
 				round="small"
-				elevation="small"
+				elevation="medium"
 			>
-				<Table
-					style={{ width: size !== "small" ? "920px" : "80vw" }}
+				<Table cellPadding="medium"
 				>
-					<TableHeader>
-						<TableRow
-							style={{
-								borderBottom: "solid 1px #ccc",
-								fontSize: "14px !important",
-								width: size !== "small" ? "720px" : "80vw",
-							}}
-						>
-							<TableCell>
+					<TableHeader
+						style={{
+							borderBottom: "solid 1px #ccc",
+							fontSize: "14px !important",
+						}}
+					>
+						<TableRow>
+							<TableCell scope="col">
 								Date
 							</TableCell>
-							<TableCell>
+							<TableCell scope="col">
 								Platform
 							</TableCell>
-							<TableCell>
+							<TableCell scope="col">
 								Slip Number
 							</TableCell>
-							<TableCell>
+							<TableCell scope="col">
 								Odds
 							</TableCell>
-							<TableCell>
+							<TableCell scope="col">
 								<strong>
 									Stake
 								</strong>

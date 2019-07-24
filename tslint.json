@@ -1,8 +1,9 @@
 {
 	"extends": [
-		"tslint:recommended",
-		"tslint-react-hooks",
-		"tslint-react"
+		"tslint:latest",
+		"tslint-react",
+		"tslint-eslint-rules",
+		"tslint-config-prettier"
 	],
 	"rules": {
 		"indent": [true, "tabs"],

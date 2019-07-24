@@ -1,4 +1,4 @@
-import { Box, Button, Image, Layer, Menu, Text } from "grommet";
+import { Box, Button, Image, Layer, Menu, Text, ResponsiveContext } from "grommet";
 import React, { useContext, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ const Wrapper = styled(Box)`
 	color: #24501F !important;
 `;
 
-const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: boolean } & RouteComponentProps) => {
+const NavBar = ({ toggleSideBar, isPc, menuActive, history }: { toggleSideBar: any, isPc: boolean, menuActive?: boolean } & RouteComponentProps) => {
 
 	// Get the user context
 	const { userState } = useContext(UserContext);
@@ -19,6 +19,7 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 	// Get the login context
 	const { loginDispatch } = useContext(LoginContext);
 
+	const size = useContext(ResponsiveContext);
 	const [confirmSignOut, setConfirmSignOut] = useState(false);
 
 	const signOut = () => {
@@ -39,12 +40,12 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 			}}
 			elevation="small"
 			align="center"
-			justify="between"
+			justify={!menuActive ? "center" : "between"}
 			width="100%"
 			background="white"
 		>
 			
-			{isPc && (
+			{isPc && menuActive && (
 				<Box
 					direction="row"
 					style={{ cursor: "pointer" }}
@@ -63,17 +64,23 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 				height="40px"
 				pad={{ vertical: "-2rem" }}
 			>
-				<Image
-					fit="contain"
-					src={Logo}
-				/>
-			</Box>
+				<Box direction="row" align="center" gap={size == "small" ? "4px" : "small"} pad={{horizontal: "medium"}}>
+					<Image height={size == "small" ? "32px" : "48px"}
+						fit="contain"
+						src={Logo}
+					/>
 
-				<Box
-					direction="row"
-					style={{ textTransform: "uppercase" }}
-					align="center"
-				>
+					<Text weight="bold" size={size == "small" ? "24px" : "32px"} color="#00863D">Chop9ja</Text>
+				</Box>
+				
+			</Box>
+			
+			<Box
+				direction="row"
+				style={{ textTransform: "uppercase" }}
+				align="center"
+			>
+				{menuActive && (
 					<Menu
 						label={<Text size="small">Hello, {userState.firstName}</Text>}
 						items={[
@@ -93,7 +100,8 @@ const NavBar = ({ toggleSideBar, isPc, history }: { toggleSideBar: any, isPc: bo
 							},
 						]}
 					/>
-				</Box>
+				)}
+			</Box>
 
 			{confirmSignOut && (
 				<Layer

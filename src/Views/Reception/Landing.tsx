@@ -1,5 +1,5 @@
 import Axios, { AxiosError } from 'axios';
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useReducer } from "react";
 import background from "../../assets/images/LiveMatch.jpg";
 import { Box, Grommet, Text, Heading, TextInput, Button, Accordion, AccordionPanel, Anchor, Form, MaskedInput, FormField } from "grommet";
 import "./Landing.css";
@@ -12,6 +12,7 @@ import SnackBar from "../../Components/SnackBar/SnackBar";
 import History from "history";
 import { RouteComponentProps } from 'react-router';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
+import { IUserRegContext, RegContextAction } from '../../Types';
 
 
 
@@ -35,6 +36,34 @@ const customTheme = deepMerge(grommet, {
       }
   });
 
+  /**
+ * @params IState, IAction
+ */
+const reducer = (state: IUserRegContext, action: RegContextAction): IUserRegContext => {
+	switch (action.type) {
+		case "UPDATE":
+			return { ...state, ...action.payload };
+		default:
+			return state;
+	}
+};
+
+const initialRegState: IUserRegContext = {
+    userName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "EMPTY",
+    phoneNumber: "",
+    stateOfOrigin: "",
+    address: "",
+    couponCode: "",
+    password: "",
+    confirmPassword: "",
+    dateOfBirth: new Date(),
+    compliant: false
+}
+
 const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
 
     const { loginDispatch } = useContext(LoginContext);
@@ -43,9 +72,11 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
     const [phone, setPhone] = useState("");
     const [busy, setBusy] = useState(false);
 
-    const { regState, regDispatch } = useContext(RegContext);
+    const [regState, regDispatch] = useReducer(reducer, initialRegState);
 
     const [regContext, setRegContext ] = useState({userName: ""})
+
+    
 
     
 
@@ -72,8 +103,12 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
 
     const register = () => {
         setBusy(true);
+
+        // TODO: This doesn't work, fix it.
         regDispatch({ type: "UPDATE", payload: { userName: regContext.userName, phoneNumber: regContext.userName} });
+        
         console.log(regState);
+        console.log(regContext);
         history.push("/register");
         setBusy(false);
     }
@@ -169,7 +204,10 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
                                         </FormField>
                                     </Box>
 
-                                    <Button primary={true} type="submit" label="Sign Up" />
+                                    <Box margin={{ bottom: "12px"}}>
+                                        <Button primary={true} type="submit" label="Sign Up" />
+                                    </Box>
+                                    
                                 </Box>
                             </Form>
                         </Box>

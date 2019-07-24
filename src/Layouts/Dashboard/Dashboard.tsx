@@ -9,7 +9,7 @@ import NavFooter from "../../Components/NavFooter/NavFooter";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SideBar from "../../Components/SideBar/SideBar";
 import { LoginContext, UserContext } from "../../Context/Context";
-import { UserContextAction, UserContextState } from "../../Types";
+import { UserContextAction, UserContextState, ITransaction } from "../../Types";
 import CashOut from "../../Views/CashOut/CashOut";
 
 const Main = styled(Box)`
@@ -109,8 +109,8 @@ const Dashboard = ({ history }: props) => {
 		loginStateOfOrigin: "",
 		phoneNumber: "",
 		phoneNumberConfirmed: false,
-		username: "",
 		wallet: "",
+		username: "",
 	});
 
 	useEffect(() => {
@@ -139,10 +139,15 @@ const Dashboard = ({ history }: props) => {
 				// console.log(response.data);
 
 				// Get Transactions
-				response = await Axios.get("/api/account/wallet/transactions");
+				const transactionResponse = await Axios.get<ITransaction[]>("/api/account/wallet/transactions");
+				const transactions = transactionResponse.data.sort((a, b) => {
+					var dateA = new Date(a.addedAt), dateB = new Date(b.addedAt);
+    				return dateA > dateB ? -1 : dateA < dateB ? 1 : 0;
+				})
 				// console.log(response.data);
 
-				userDispatch({ type: "UPDATE", payload: { transactions: response.data } });
+				
+				userDispatch({ type: "UPDATE", payload: { transactions } });
 			} catch (error) {
 				const err = error as AxiosError;
 			}
@@ -161,6 +166,7 @@ const Dashboard = ({ history }: props) => {
 			<NavBar
 				isPc={isPc}
 				toggleSideBar={toggleSideBar}
+				menuActive={true}
 			/>
 
 			<Box direction="row">

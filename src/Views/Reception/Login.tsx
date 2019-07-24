@@ -56,7 +56,8 @@ const LoginPage = ({ history }: { history: History }) => {
 
                 <NavBar
 					isPc={size === "small"}
-					toggleSideBar={true}
+                    toggleSideBar={true}
+                    menuActive={false}
 				/>
 
                 <Box margin={{ 
