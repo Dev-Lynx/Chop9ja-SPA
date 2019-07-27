@@ -1,7 +1,7 @@
 import Axios, { AxiosError } from 'axios';
 import React, { useContext, useState, useReducer } from "react";
 import background from "../../assets/images/LiveMatch.jpg";
-import { Box, Grommet, Text, Heading, TextInput, Button, Accordion, AccordionPanel, Anchor, Form, MaskedInput, FormField } from "grommet";
+import { Box, Grommet, Image, Text, Heading, TextInput, Button, Accordion, AccordionPanel, Anchor, Form, MaskedInput, FormField, ResponsiveContext } from "grommet";
 import "./Landing.css";
 import productLogo from "../../assets/images/chop9ja.png";
 import { grommet } from "grommet/themes";
@@ -13,9 +13,8 @@ import History from "history";
 import { RouteComponentProps } from 'react-router';
 import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { IUserRegContext, RegContextAction } from '../../Types';
-
-
-
+import NavAnchor from '../../Components/_Grommet/Text/NavAnchor ';
+import Typed from 'react-typed';
 
 const customTheme = deepMerge(grommet, {
     textInput: {
@@ -33,6 +32,26 @@ const customTheme = deepMerge(grommet, {
           border-radius: 4px;
           background: #FFFFFF;
         `,
+    },
+    global: {
+        breakpoints: {
+          xsmall: {
+            value: 360
+          },
+          small: {
+            value: 768
+          },
+          medium: {
+            value: 992
+          },
+          xmedium: {
+            value: 1024
+          },
+          large: {
+            value: 1440
+          },
+          xlarge: undefined
+        }
       }
   });
 
@@ -64,8 +83,11 @@ const initialRegState: IUserRegContext = {
     compliant: false
 }
 
+
+
 const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
 
+    const size = useContext(ResponsiveContext);
     const { loginDispatch } = useContext(LoginContext);
     const [snackBar, setSnackBar] = useState({ show: false, message: "Okay Now", variant: "success" });
     const [context, setContext] = useState({userName: "", password: ""});
@@ -75,8 +97,6 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
     const [regState, regDispatch] = useReducer(reducer, initialRegState);
 
     const [regContext, setRegContext ] = useState({userName: ""})
-
-    
 
     
 
@@ -126,6 +146,257 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
                 <div className="zero">
                     <div className="background"/>
 
+                    <Box className="alpha">
+                        <Box 
+                            className="main" width="100%" height="100%" 
+                            direction={size !== "small" ? "row" : "column" }
+                            justify="start"
+                        >
+                            <Box width="100%" height="100%" direction={size !== "small" ? "row" : "column"} align="stretch">
+                                <Box 
+                                    alignSelf={size == "small" ? "center" : "start"} 
+                                    background="#FFF" width={size === "small" ? "85%" : size === "medium" ? "700px" : "50%"} 
+                                    height="100%" pad="40px"
+                                    overflow={{
+                                        vertical: "auto"
+                                    }}
+                                    style={{
+                                        minWidth: size === "medium" ? "700px" : undefined
+                                    }}
+                                >
+                                    <Box 
+                                        className="header"
+                                        width="100%" 
+                                        height={size == "small" ? "auto" : "100px"} 
+                                        direction={size == "small" ? "column" : "row"}
+                                        justify="between" align="center"
+                                    >
+                                        <Box 
+                                            direction={size == "small" ? "column" : "row"} 
+                                            align="center" gap="small" justify="center"
+                                        >
+                                            <Image src={productLogo} height="64px" fit="contain"/>
+                                            <Text 
+                                                weight="bold"
+                                                color="#00863D"
+                                                size={size == "small" ? "40px" : "48px"}
+                                            >
+                                                Chop9ja
+                                            </Text>
+                                        </Box>
+
+                                        {!(size == "small") && (
+                                        <Box justify="between" direction="row" gap="large" align="center">
+                                            <NavAnchor path="#" color="#009746">Become An Agent</NavAnchor>
+                                            <NavAnchor path="#" color="#009746">Whatsapp</NavAnchor>
+                                        </Box>
+                                        )}
+                                    </Box>
+
+                                    <Box margin={{top: size === "small" ? "40px" : "100px"}}>
+                                        <Box width="100%" height="128px">
+                                            <Text 
+                                                weight="bold" size={size === "small" ? "24px" : size === "medium" ? "40px" : "48px"} 
+                                                color="#000000"
+                                                style={{
+                                                    minHeight: "128px"
+                                                }}>
+                                                <Typed 
+                                                    strings={[
+                                                        'Next Generation Insurance For <span style="color: #009746">Bets.<span/>',
+                                                        'Stop <span style="color: #009746">Loosing</span> on Sport Bets.',
+                                                        'Get 40 - 50% of <span style="color: #009746">potential winnings</span> on any lost ticket.',
+                                                        'Stop <span style="color: #009746">tearing</span> your tickets.'
+                                                    ]}
+                                                    typeSpeed={60}
+                                                    backSpeed={30} 
+                                                    shuffle={true}
+                                                    startDelay={500}
+                                                    backDelay={5000}
+                                                    loop 
+                                                />
+                                            </Text>
+
+                                        <Box 
+                                            height="35px"
+                                            margin={{top: size === "small" ? "20px" : "50px"}}
+                                        >
+                                            <Form value={regContext} onSubmit={register}>
+                                                <Box direction={size == "small" ? "column" : "row"}
+                                                    align="center" gap="small">
+                                                    <Box width="100%">
+                                                        <FormField
+                                                            name="userName"
+                                                            placeholder="Mobile Number"
+                                                            style={{
+                                                                margin: 0
+                                                            }}
+                                                        >
+                                                            <MaskedInput 
+                                                                mask={Masks.phone}
+                                                                onChange={(event: any) => {
+                                                                    let num: string = event.target.value as string;
+                                                                    num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
+                                                                    num = "0" + num;
+                                                                    regContext.userName = num;
+                                                                    //regState.userName = num;
+                                                                    //phoneField.props.onChange(num);
+                                                                }}
+                                                            />
+                                                        </FormField>
+                                                    </Box>
+
+                                                    <Box width="200px">
+                                                        <Button primary={true} type="submit" label="Sign Up" />
+                                                        
+                                                        {size === "small" && (
+                                                            <Box margin={{top: "30px"}}>
+                                                                <Text textAlign="center">
+                                                                    Already have an account? <NavAnchor path="/login">Log In</NavAnchor>
+                                                                </Text>
+                                                            </Box>
+                                                        )}
+                                                    </Box>
+                                                    
+                                                </Box>
+                                            </Form>
+                                        </Box>
+
+                                            <Box width="100%" margin={{top: size === "small" ? "200px" : "100px"}}>
+                                                <Accordion>
+                                                    <AccordionPanel label="About Us"/>
+                                                    <AccordionPanel label="How it works"/>
+                                                    <AccordionPanel label="Terms and Conditions"/>
+                                                </Accordion>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            
+                                {size !== "small" && size != "xsmall" && (
+                                    <Box height="100%" flex={{grow: 1, shrink: 1}} style={{zIndex: 3}}>
+                                        <Box height="100px"
+                                            direction="column"
+                                            width="100%"
+                                            pad="40px"
+                                        >
+                                        <Form value={context} onSubmit={submit}>
+                                            <Box 
+                                                direction={size !== "xmedium" && size !== "large" ? "column" : "row" }
+                                                width="100%" 
+                                                align="center" justify="between" gap="small"
+                                            >
+                                                <Box width={size !== "medium" ? "40%" : "100%"}>
+                                                    <FormField
+                                                        ref={(el: any) => phoneField = el} 
+                                                        placeholder="Mobile Number"
+                                                        name="userName"
+                                                        style={{
+                                                            margin: 0
+                                                        }}
+                                                    >
+                                                        <MaskedInput 
+                                                            mask={Masks.phone}
+                                                            onChange={(event: any) => {
+                                                                let num = event.target.value;
+                                                                num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
+                                                                num = "0" + num;
+                                                                context.userName = num;
+                                                                //phoneField.props.onChange(num);
+                                                            }}
+                                                        />
+                                                    </FormField>
+                                                </Box>
+                                            
+                                                <Box width={size !== "medium" ? "40%" : "100%"}>
+                                                    <FormField
+                                                        placeholder="Password"
+                                                        name="password"
+                                                        type="password"
+                                                        onChange={(event: any) => {
+                                                            context.password = event.target.value;
+                                                        }}
+                                                        style={{
+                                                            margin: 0
+                                                        }}
+                                                    />
+                                                </Box>
+                                                
+                                                <Box alignSelf="end">
+                                                    <Button primary={true} type="submit" alignSelf="start" label="Login" />
+                                                </Box>
+                                            </Box>
+                                        </Form>
+                                    </Box>
+                                </Box>
+                                )}
+                            </Box>                        
+                            
+                            
+                        </Box>
+                        
+                        {/*
+                            {size !== "small" && (
+                                <Box height="100%" flex={{grow: 1, shrink: 1}} style={{zIndex: 3}}>
+                                    <Box height="100px"
+                                        direction="column"
+                                        width="100%"
+                                        pad="40px"
+                                    >
+                                        <Form value={context} onSubmit={submit}>
+                                            <Box 
+                                                direction={size !== "xmedium" && size !== "large" ? "column" : "row" }
+                                                width="100%" 
+                                                align="center" justify="between" gap="small"
+                                            >
+                                                <Box width="100%">
+                                                    <FormField
+                                                        ref={(el: any) => phoneField = el} 
+                                                        placeholder="Mobile Number"
+                                                        name="userName"
+                                                        style={{
+                                                            margin: 0
+                                                        }}
+                                                    >
+                                                        <MaskedInput 
+                                                            mask={Masks.phone}
+                                                            onChange={(event: any) => {
+                                                                let num = event.target.value;
+                                                                num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
+                                                                num = "0" + num;
+                                                                context.userName = num;
+                                                                //phoneField.props.onChange(num);
+                                                            }}
+                                                        />
+                                                    </FormField>
+                                                </Box>
+                                               
+                                                <Box width="100%">
+                                                    <FormField
+                                                        placeholder="Password"
+                                                        name="password"
+                                                        type="password"
+                                                        onChange={(event: any) => {
+                                                            context.password = event.target.value;
+                                                        }}
+                                                        style={{
+                                                            margin: 0
+                                                        }}
+                                                    />
+                                                </Box>
+                                                
+                                                <Box alignSelf="end">
+                                                    <Button primary={true} type="submit" alignSelf="start" label="Login" />
+                                                </Box>
+                                            </Box>
+                                        </Form>
+                                    </Box>
+                                </Box>
+                            )}
+                            */}
+                    </Box>
+
+                    {/*
                     <div className="header">
                         <Box direction="row" align="center" justify="between" pad="32px">
                             <Box direction="row" width="750px" align="center" justify="between">
@@ -174,7 +445,9 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
                             
                         </Box>
                     </div>
+                    */}
 
+                    {/*
                     <Box className="alpha">
                         <Box margin={{top: "200px"}}>
                             <Box width="588px">
@@ -220,6 +493,10 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
                             </Accordion>
                         </Box>
                     </Box>
+                    */}
+
+
+                    
                 </div>
             </Grommet>
         </>

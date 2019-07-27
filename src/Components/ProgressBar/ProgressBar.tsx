@@ -3,7 +3,7 @@ import { Heading } from "grommet";
 import React from "react";
 import "./ProgressBar.css";
 
-const ProgressBar = ({ show }: { show: boolean }) => {
+const ProgressBar = ({ show, message = "Please Wait" }: { show: boolean, message?: string }) => {
 	return (
 		show ? (
 			<div className="wrapper">
@@ -11,7 +11,7 @@ const ProgressBar = ({ show }: { show: boolean }) => {
 					<div className="lds-roller">
 						<div /><div /><div /><div /><div /><div /><div /><div />
 					</div>
-					<Heading level="3">Please Wait</Heading>
+					<Heading level="3">{message}</Heading>
 				</div>
 			</div>
 		) : (

@@ -13,6 +13,7 @@ import LoginPage from "./Views/Login/Login";
 import ForgotPasswordTest from "./Views/Reception/ForgotPassword";
 import LoginTest from "./Views/Reception/Login";
 import RegisterTest from "./Views/Reception/Register";
+import PasswordRecovery from "./Views/Verification/Email";
 
 import LandingPageTest from "./Views/Reception/Landing";
 
@@ -32,6 +33,7 @@ const routes = [
 	{ path: "/login", component: LoginTest },
 	{ path: "/dashboard", component: Dashboard },
 	{ path: "/forgot-password", component: ForgotPasswordTest },
+	{ path: "/passwordRecovery", component: PasswordRecovery }
 ];
 
 // Initial IState

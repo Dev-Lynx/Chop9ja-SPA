@@ -3,7 +3,6 @@ import { Anchor, Box, Button, Form, FormField, Grommet, Heading, MaskedInput, Se
 import { grommet } from "grommet/themes";
 import React, { useState, useContext, useEffect } from "react";
 import { History } from "history";
-import moment from "moment";
 
 
 import { IUserRegContext, IState, RegContextAction } from "../../Types";
