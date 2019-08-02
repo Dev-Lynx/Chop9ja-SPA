@@ -49,6 +49,7 @@ const DateSelector = styled(CustomSelect)`
 	font-weight: 700;
 `;
 
+
 const BetInsurance = () => {
 	const size = useContext(ResponsiveContext);
 

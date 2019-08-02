@@ -37,6 +37,7 @@ const PasswordRecovery = ({ history, location }: RouteComponentProps) => {
     let params: props;
     useEffect(() => {
         params = getQueryStringParams(location.search) as props;
+        console.log(params);
         verifyToken(params);
 
     }, []);
@@ -44,11 +45,13 @@ const PasswordRecovery = ({ history, location }: RouteComponentProps) => {
     const verifyToken = (params: props) => {
         setBusy(true);
         let path = "api/Auth/password/reset/verify/token";
+        let token = params.token;
         if (params.otp) {
             path = "api/Auth/password/reset/verify/otp";
+            token = params.otp;
         }
 
-        Axios.get<boolean>(path, { params: { username: params.username, token: params.token }}).then((res) => {
+        Axios.get<boolean>(path, { params: { username: params.username, token }}).then((res) => {
             if (res.status === 200) {
                 setBusy(false);
                 
@@ -87,17 +90,17 @@ const PasswordRecovery = ({ history, location }: RouteComponentProps) => {
     const resetPassword = () => {
         let path = "api/Auth/password/reset";
         params = getQueryStringParams(location.search) as props;
-        // if (params.otp) {
-        //     // TODO: Add reset for Otp
-        //     //path = "api/auth/paw"
-        // }
+        //params.token = decodeURI(params.token as string);
+        let data = { username: params.username, oneTimePassword: "", token: params.token,  newPassword: context.password }
+
+        if (params.otp) {
+            data.token = "";
+            data.oneTimePassword = params.otp;
+            path = "api/Auth/password/otpReset";
+        }
 
         setBusy(true);
-        Axios.post("api/Auth/password/reset", {
-            username: params.username, 
-            token: params.token, 
-            newPassword: context.password
-        }).then(async (res) => {
+        Axios.post(path, data).then(async (res) => {
             if (res.status === 200) {
                 setSnackbar({ message: "Your account password has been successfully updated", show: true, variant: "success" });
                 // TODO: Save the name of this token properly. Use AccessToken something more professional

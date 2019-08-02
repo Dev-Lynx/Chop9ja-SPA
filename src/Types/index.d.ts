@@ -99,7 +99,7 @@ export interface IBet {
 	odds: number;
 	stake: number;
 	potentialWinnings: number;
-	status?: Status;
+	status?: string;
 }
 
 

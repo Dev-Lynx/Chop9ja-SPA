@@ -88,6 +88,8 @@ const CashOut = () => {
 	const [currentBet, setCurrentBet] = useState<IBet>({
 		platformId: 1,
 	} as IBet);
+	
+	// TODO: Cashout page crashes when casting to IBet. Fix this.
 	const [cashOuts, setCashOuts] = useState([] as IBet[]);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
@@ -100,16 +102,17 @@ const CashOut = () => {
 		(async () => {
 			await loadCashOuts();
 		})();
-	}, [forceUpdate]);
+	}, []);
 
 	const loadCashOuts = async () => {
 		try {
-			const res = await Axios.get<IBet[]>("api/bet/cashout/all");
+			const res = await Axios.get<IBet[]>("/api/bet/cashout/all");
 			if (res.status === 200) {
-				console.log(res.data as IBet[]);
-				setCashOuts(res.data as IBet[]);
+				setCashOuts(Array.from(res.data));
 			}
-		} catch (error) {/* No Code */}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const cashOut = () => {
@@ -161,7 +164,6 @@ const CashOut = () => {
 			const data = res.data;
 			data.platform = BetPlatformData[data.platformId - 1];
 			setCurrentBet(data);
-			console.log(data);
 		}).catch((reason) => {
 			// TODO: Cashout Error Handling
 			console.log(reason);
@@ -173,7 +175,6 @@ const CashOut = () => {
 
 	return (
 		<Wrapper>
-			{/* TODO: Move this to the highest level */}
 				<Hero
 					image={CashOutImage}
 					text="Bet Claims"
@@ -546,8 +547,9 @@ const CashOut = () => {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{cashOuts && (
-									cashOuts.map((bet, index) => (
+								{/* I hate js */}
+								{cashOuts && cashOuts.length > 0 && (
+									Array.from(cashOuts).map((bet: any, index: number) => (
 										<TableRow
 											key={index}
 										>
@@ -557,7 +559,9 @@ const CashOut = () => {
 												{new Date(bet.date as Date).toDateString()}
 											</TableCell>
 											<TableCell>
-												{BetPlatformData.find((f) => f.id === bet.platformId)!.name}
+												{ BetPlatformData && BetPlatformData.length > 0 
+													? BetPlatformData.find((f) => f.id === bet.platformId)!.name 
+													: "" }
 											</TableCell>
 											<TableCell>
 												{bet.slipNumber}
@@ -574,8 +578,8 @@ const CashOut = () => {
 												<Text
 													color={
 														bet.status === 0 ?
-															"status-warning" : bet.status === 2 ?
-																"status-error" : "secondary"
+															"warning" : bet.status === 2 ?
+																"error" : "secondary"
 													}
 												>
 													{bet.status}
@@ -584,7 +588,8 @@ const CashOut = () => {
 										</TableRow>
 	
 									))
-								)}
+									
+								)} 
 							</TableBody>
 						</Table>
 					</Box>

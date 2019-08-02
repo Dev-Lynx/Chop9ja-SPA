@@ -11,6 +11,8 @@ import Spinner from "../../Components/Spinner/Spinner";
 import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 import { IBank, IUserBank } from "../../Types";
+import Popup from "reactjs-popup";
+import Iframe from 'react-iframe'
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -41,6 +43,44 @@ const Gateways = styled(Box)`
 	}
 
 `;
+
+const PaystackPopup = ({ open, url } : { open: boolean; url: string }) => {
+	const size = useContext(ResponsiveContext);
+
+	return (
+		<Popup position="center center" open={open} modal
+		closeOnDocumentClick={size === "large"}
+        contentStyle={{
+			width: size === "small" ? "90%" : "600px",
+			height: size === "small" ? "400px" : "550px",
+            borderRadius: "20px",
+            boxShadow: "6px 7px 13px -3px rgba(0,0,0,0.5)"
+		}}
+		>
+			<Box width="100%" height="100%">
+				<Box pad={{
+						vertical: "10px",
+						horizontal: size === "small" ? "10px" : "20px"	
+					}} align="center"
+					width="100%"
+					height="100%"
+				>
+						<Box margin={{top: size === "small" ? "0" : "-50px"}} width="100%"
+							height="100%">
+							<Iframe width="100%" height="100%" 
+								frameBorder={0}
+								overflow="hidden" 
+								scrolling={size === "small" ? "auto" : "no"}
+								url={url} 
+							/>
+						</Box>
+						
+					</Box>
+			</Box>
+		</Popup>
+	);
+}
+
 
 const Deposit = () => {
 
@@ -188,6 +228,9 @@ const Paystack = () => {
 	const [error, setError] = useState(false);
 	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
 
+	const [checkoutWithPaystack, setCheckoutWithPaystack] = useState(false);
+	const [checkoutLocation, setCheckoutLocation] = useState("");
+
 	const paymentChannel = userState.paymentChannels.find((channel) => channel.name === "Paystack");
 
 	const setPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -232,10 +275,13 @@ const Paystack = () => {
 			};
 			const response = await Axios.post("/api/account/Wallet/deposit", data);
 			if (response.status === 202) {
-				const tab = window.open(response.data, "_blank");
-				if (tab) {
-					tab.focus();
-				}
+				setCheckoutWithPaystack(true);
+				setCheckoutLocation(response.data);
+				
+				// const tab = window.open(response.data, "_blank");
+				// if (tab) {
+				// 	tab.focus();
+				// }
 			} else if (response.status === 200) {
 				setSnackbar({
 					message: "Deposit was successful and will be reviewed within 24 hours",
@@ -263,6 +309,7 @@ const Paystack = () => {
 					variant={snackbar.variant}
 					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 				/>
+
 				<ProgressBar show={loading as any} />
 				{paymentChannel && (
 					<>
@@ -306,6 +353,8 @@ const Paystack = () => {
 					width="80vw"
 					elevation="medium"
 				>
+					<PaystackPopup open={checkoutWithPaystack} url={checkoutLocation}/>
+					
 					<Box
 						direction="column"
 						align="start"
@@ -341,7 +390,7 @@ const Paystack = () => {
 								width: size !== "small" ? "100px" : "40%",
 							}}
 						>
-							<Text
+							{/* <Text
 								size="16px"
 								weight={100}
 							>
@@ -352,7 +401,7 @@ const Paystack = () => {
 								onFocus={(event) => {
 									event.target.blur();
 								}}
-							/>
+							/> */}
 						</Form>
 					</Box>
 
@@ -360,7 +409,8 @@ const Paystack = () => {
 						direction="row"
 						justify="end"
 					>
-						<Heading level="3">Total: ₦{total.toLocaleString()}</Heading>
+						{/* <Heading level="3">Total: ₦{total.toLocaleString()}</Heading> */}
+						<Heading level="3">Total: ₦{amount.toLocaleString()}</Heading>
 					</Box>
 					<Box width="100%" round={true} direction="row" justify="end">
 						<Button
