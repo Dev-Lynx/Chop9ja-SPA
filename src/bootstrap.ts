@@ -1,8 +1,20 @@
 import Axios from "axios";
 
-// TODO: Find a better way to toggle this during development and releases
-Axios.defaults.baseURL = "http://chop9ja.appspot.com/";
-Axios.defaults.baseURL = "http://localhost:5000/";
+let baseUrl = "";
+
+switch (process.env.REACT_APP_HOST_ENV)
+{
+	case "local": baseUrl = "http://localhost:5000/"; break;
+
+	default:
+	case "staging": 
+	case "development":
+		baseUrl = "http://chop9ja.appspot.com/"; break;
+
+	case "production": baseUrl = ""; break;
+}
+
+Axios.defaults.baseURL = baseUrl;
 
 Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
 Axios.interceptors.request.use((value) => {

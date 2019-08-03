@@ -44,10 +44,13 @@
     "typescript": "3.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-env --env-file=config/development.env start",
+    "start:local": "react-app-env --env-file=config/local.env start",
+    "start:staging": "react-app-env --env-file=config/staging.env start",
+    "start:production": "react-app-env --env-file=config/production.env start",
+    "build": "react-app-env --env-file=config/production.env build",
+    "test": "react-app-env --env-file=config/development.env test",
+    "eject": "react-app-env --env-file=config/development.env eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -67,6 +70,7 @@
   "devDependencies": {
     "@types/react-router-dom": "^4.3.4",
     "@types/react-transition-group": "^2.9.2",
+    "react-app-env": "^1.2.3",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react-hooks": "^2.1.1"
   }
