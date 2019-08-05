@@ -9,14 +9,28 @@ import ProgressBar from "./Components/ProgressBar/ProgressBar";
 import { LoginContext } from "./Context/Context";
 import theme from "./theme";
 import { LoginContextAction, LoginContextState } from "./Types";
-import LoginPage from "./Views/Login/Login";
-import ForgotPasswordTest from "./Views/Reception/ForgotPassword";
-import LoginTest from "./Views/Reception/Login";
-import RegisterTest from "./Views/Reception/Register";
-import PasswordRecovery from "./Views/Verification/Email";
 
-import LandingPageTest from "./Views/Reception/Landing";
 
+
+/**
+ * For lazy loading the pages
+ * The bundles/pages will be downloaded when needed
+ * To reduce the size a visitor has to download when the homepage
+ * Only download the requested script
+ */
+const ForgotPasswordTest = loadable(() => import("./Views/Reception/ForgotPassword"), {
+	fallback: <ProgressBar show={true} />,
+});
+const LoginTest = loadable(() => import("./Views/Reception/Login"), {
+	fallback: <ProgressBar show={true} />,
+});
+const RegisterTest = loadable(() => import("./Views/Reception/Register"), {
+	fallback: <ProgressBar show={true} />,
+});
+const PasswordRecovery = loadable(() => import("./Views/Verification/Email"), {
+	fallback: <ProgressBar show={true} />,
+});
+const LandingPageTest = loadable(() => import("./Views/Reception/Landing"));
 const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
 	fallback: <ProgressBar show={true} />,
 });
@@ -81,7 +95,6 @@ const App = (props: IProps) => {
 						),
 					)}
 				</Switch>
-				{isModal && <Route path="/login" component={LoginPage} />}
 			</LoginContext.Provider>
 		</GrommetWrapper >
 	);
