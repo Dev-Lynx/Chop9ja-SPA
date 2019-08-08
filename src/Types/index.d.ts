@@ -116,7 +116,7 @@ export interface IUserBank {
 	accountName: string;
 	accountNumber: string;
 	bankId: number;
-	id: number;
+	id: string;
 }
 
 export interface IUserRegContext {
