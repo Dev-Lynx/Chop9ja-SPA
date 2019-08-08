@@ -100,6 +100,7 @@ export interface IBet {
 	stake: number;
 	potentialWinnings: number;
 	status?: string;
+	cashedOut?: boolean;
 }
 
 

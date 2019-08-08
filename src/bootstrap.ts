@@ -26,6 +26,7 @@ Axios.interceptors.response.use((response) => {
 	return response;
 }, (error) => {
 	if (!error.response) {
+		console.log(error);
 		// alert("Bad network connection try again");
 	}
 	return Promise.reject(error);

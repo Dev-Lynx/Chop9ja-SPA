@@ -17,11 +17,12 @@ const Wrapper = styled(Box)`
 	}
 `;
 
-interface IProps {
+export interface SnackBarProps {
 	variant: "success" | "error" | "warning" | string;
 	message: string;
 	onClose: (event: React.MouseEvent<HTMLElement, MouseEvent> | null) => void;
 	show: boolean;
+	duration?: number;
 }
 
 const iconVariant = {
@@ -30,7 +31,7 @@ const iconVariant = {
 	warning: Alert,
 };
 
-const SnackBarComponent = ({ show, message, variant, onClose }: IProps) => {
+const SnackBarComponent = ({ show = false, message = "Okay now", variant = "success", onClose, duration = 5000 }: SnackBarProps) => {
 	// @ts-ignore
 	const Icon = iconVariant[variant] as any;
 
@@ -39,7 +40,7 @@ const SnackBarComponent = ({ show, message, variant, onClose }: IProps) => {
 			// Wait for 4 seconds after displaying message then call the close function
 			setTimeout(() => {
 				onClose(null);
-			}, 5000);
+			}, duration);
 		}
 	}, [show]);
 

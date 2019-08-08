@@ -91,7 +91,7 @@ const CashOut = () => {
 	
 	// TODO: Cashout page crashes when casting to IBet. Fix this.
 	const [cashOuts, setCashOuts] = useState([] as IBet[]);
-	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success" });
+	const [snackbar, setSnackbar] = useState({ show: false, message: "Okay now", variant: "success", duration: 5000 });
 
 
 	let slipNumber: string = "";
@@ -116,6 +116,10 @@ const CashOut = () => {
 	};
 
 	const cashOut = () => {
+		if (currentBet.cashedOut) {
+			return;
+		}
+
 		setLoading(true);
 
 		const model = {
@@ -132,6 +136,7 @@ const CashOut = () => {
 						+ ". Your request will be reviewed and validated within 48 hours",
 					show: true,
 					variant: "success",
+					duration: 10000,
 				})
 				slipNumber = "";
 			}
@@ -141,6 +146,7 @@ const CashOut = () => {
 				" slip number has not been cashed out before.",
 				show: true,
 				variant: "error",
+				duration: 7000
 			})
 		}).finally(() => {
 			setForceUpdate((f) => f + 1);
@@ -284,7 +290,7 @@ const CashOut = () => {
 											}}
 										>
 											<strong>
-												{new Date(currentBet.date as Date).toLocaleDateString()}
+												{moment(currentBet.date as Date).format("lll")}
 											</strong>
 										</Text>
 									</Box>
@@ -369,7 +375,8 @@ const CashOut = () => {
 										<Button
 											primary={true}
 											color="secondary"
-											label={"Claim Bet"}
+											disabled={currentBet.cashedOut}
+											label={!currentBet.cashedOut ? "Claim Bet" : "Already Claimed"}
 											onClick={cashOut}
 										/>
 									</Box>

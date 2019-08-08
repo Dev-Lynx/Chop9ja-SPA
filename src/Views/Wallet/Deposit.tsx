@@ -262,7 +262,7 @@ const Paystack = () => {
 	const submitAmount = async () => {
 		setLoading(true);
 		setError(false);
-		if (amount < 500) {
+		if (amount < 100) {
 			setError(true);
 			setLoading(false);
 			return;

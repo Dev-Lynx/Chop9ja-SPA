@@ -136,7 +136,7 @@ const Dashboard = ({ history }: props) => {
 				// Get wallet
 				let response = await Axios.get("/api/account/wallet");
 				userDispatch({ type: "UPDATE", payload: response.data });
-				// console.log(response.data);
+				console.log(response.data);
 
 				// Get Transactions
 				const transactionResponse : AxiosResponse<ITransaction[]> = await Axios.get<ITransaction[]>("/api/account/wallet/transactions");
@@ -144,7 +144,7 @@ const Dashboard = ({ history }: props) => {
 					var dateA = new Date(a.addedAt), dateB = new Date(b.addedAt);
     				return dateA > dateB ? -1 : dateA < dateB ? 1 : 0;
 				})
-				// console.log(response.data);
+				console.log(transactionResponse.data);
 
 				
 				userDispatch({ type: "UPDATE", payload: { transactions } });
