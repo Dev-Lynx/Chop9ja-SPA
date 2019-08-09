@@ -31,6 +31,25 @@ export const Masks = {
             regexp: /^[0-9]{1,4}$/,
         }
     ],
+    date: [
+        { 
+            length: [1, 2],
+            regexp: /^[1-2][0-9]$|^3[0-1]$|^0?[1-9]$|^0$/,
+            placeholder: "dd"
+        }, 
+        { fixed: "/" },
+        { 
+            length: [1, 2],
+            regexp: /^1[0,1-2]$|^0?[1-9]$|^0$/,
+            placeholder: "mm"
+        }, 
+        { fixed: "/" },
+        {
+            length: 4,
+            regexp: /^[1-2]$|^19$|^20$|^19[0-9]$|^20[0-9]$|^19[0-9][0-9]$|^20[0-9][0-9]$/,
+            placeholder: "yyyy"
+        }
+    ]
 }
 
 export const RegularExpressions = {

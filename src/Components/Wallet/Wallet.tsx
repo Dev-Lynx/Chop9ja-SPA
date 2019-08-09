@@ -46,7 +46,7 @@ const Wallet = () => {
 						marginBottom: "-1.5rem",
 					}}
 				>
-					WALLET
+					ACCOUNT
 				</Heading>
 				<Heading
 					level="1"

@@ -210,7 +210,7 @@ const CashOut = () => {
 							<Box direction="row">
 								<Box width="100%" align="stretch">
 									<PatientInput
-										label="Slip Number"
+										label="Bet Slip Number"
 										placeholder={size !== "small" ? "Enter your slip number"
 										: "Enter slip Number"}
 										value={slipNumber}

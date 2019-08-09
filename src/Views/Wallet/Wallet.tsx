@@ -42,7 +42,7 @@ const Wallet = ({ history }: { history: History }) => {
 							direction="row"
 							margin="medium"
 							width="100%"
-							justify={size !== "small" ? "end" : "between"}
+							justify={size !== "small" ? "end" : "center"}
 							pad={{ horizontal: "xlarge" }}
 							gap="medium"
 						>

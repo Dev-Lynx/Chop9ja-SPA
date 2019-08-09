@@ -128,7 +128,7 @@ const BetInsurance = () => {
 		// Check if the user can submit
 		if (
 			slipNumber.length > 1 && platform.id >= 0 && odds.length >= 1 &&
-			stake.length > 1 && date // && potentialWinnings.length > 1
+			stake.length > 1 && date && potentialWinnings.length > 1
 		) {
 			setCanSubmit(true);
 		} else {
@@ -142,7 +142,7 @@ const BetInsurance = () => {
 			date,
 			odds: Number(odds.trim()),
 			platformId: platform.id,
-			potentialWinnings: "0", // Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
+			potentialWinnings: Number(potentialWinnings.replace("₦ ", "").replace(/,/g, "").trim()),
 			slipNumber,
 			stake: Number(stake.replace("₦", "").replace(/,/g, "").trim()),
 		};
@@ -155,6 +155,12 @@ const BetInsurance = () => {
 					show: true,
 					variant: "success",
 				});
+				
+
+				setSlipNumber("");
+				setStake("");
+				setOdds("");
+				setPotentialWinnings("");
 			}
 		} catch (error) {
 			const err = error as AxiosError;
@@ -178,7 +184,7 @@ const BetInsurance = () => {
 		<Wrapper direction="column">
 			<Hero
 				image={BetInsuranceImage}
-				text="Bet Insurance"
+				text="Bet Backup"
 			/>
 			<Spinner show={loading} />
 			<SnackBarComponent
@@ -199,7 +205,7 @@ const BetInsurance = () => {
 				>
 
 					<Box width={size !== "small" ? "40%" : "100%"} direction="column" align="start" justify="between">
-						<Text weight="bold" size="small">Date</Text>
+						<Text weight="bold" size="small">Date Created</Text>
 						<CalendarDropButton
 							date={date}
 							setDate={setDate}
@@ -270,11 +276,11 @@ const BetInsurance = () => {
 								flex={true}
 							>
 								<Text>
-									Enter the amount
+									Stake Amount
 								</Text>
 								<TextInput
 									onBlur={checkIfInputsCanBeSubmitted}
-									placeholder="Enter the amount"
+									placeholder="Enter the stake amount"
 									value={stake}
 									onChange={changeInputs("stake")}
 								/>
@@ -292,7 +298,6 @@ const BetInsurance = () => {
 							</Box>
 						</Box>
 
-						{/*
 						<Box
 							width="100%"
 							align="baseline"
@@ -311,7 +316,7 @@ const BetInsurance = () => {
 								/>
 							</Box>
 						</Box>
-						*/}
+						
 					</Box>
 
 					<Box direction="row" width="90%" justify="end">
@@ -328,7 +333,7 @@ const BetInsurance = () => {
 									primary={true}
 									color="secondary"
 									disabled={!canSubmit}
-									label={"Insure"}
+									label={"Backup"}
 									onClick={submit}
 									gap="xlarge"
 							/>
@@ -371,7 +376,7 @@ const BetInsurance = () => {
 								Platform
 							</TableCell>
 							<TableCell scope="col">
-								Slip Number
+								Bet Slip Number
 							</TableCell>
 							<TableCell scope="col">
 								Odds
@@ -381,13 +386,11 @@ const BetInsurance = () => {
 									Stake
 								</strong>
 							</TableCell>
-							{/*
 							<TableCell>
 								<strong>
 									Potential Winnings
 								</strong>
 							</TableCell>
-							*/}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -415,13 +418,11 @@ const BetInsurance = () => {
 										{"₦ " + bet.stake.toLocaleString()}
 									</strong>
 								</TableCell>
-								{/*
 								<TableCell>
 									<strong>
 										{"₦ " + bet.potentialWinnings.toLocaleString()}
 									</strong>
 								</TableCell>
-								*/}
 							</TableRow>
 
 						))}

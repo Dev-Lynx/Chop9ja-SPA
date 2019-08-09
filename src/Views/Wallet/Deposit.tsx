@@ -1,6 +1,6 @@
 import Axios, { AxiosError } from "axios";
 import { Box, Button, Form, Heading, Image, ResponsiveContext, Text, TextInput } from "grommet";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Link, Route } from "react-router-dom";
 import styled from "styled-components";
 import BankList from "../../_data/banks.json";
@@ -12,7 +12,8 @@ import Wallet from "../../Components/Wallet/Wallet";
 import { UserContext } from "../../Context/Context";
 import { IBank, IUserBank } from "../../Types";
 import Popup from "reactjs-popup";
-import Iframe from 'react-iframe'
+import Iframe from 'react-iframe';
+import { History } from "history";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -82,7 +83,7 @@ const PaystackPopup = ({ open, url } : { open: boolean; url: string }) => {
 }
 
 
-const Deposit = () => {
+const Deposit = ({ history }: { history: History }) => {
 
 	const size = useContext(ResponsiveContext);
 
@@ -191,13 +192,10 @@ const Deposit = () => {
 												color: "white",
 												marginTop: "1rem",
 											}}
-											label={
-												<Link
-													to={`/dashboard/wallet/deposit/${bank.name}`}
-												>
-													Continue
-												</Link>
-											}
+											onClick={() => {
+												history.push(`/dashboard/wallet/deposit/${bank.name}`)
+											}}
+											label="Continue"
 											color="secondary"
 											primary={true}
 										/>
@@ -222,6 +220,8 @@ const Paystack = () => {
 
 	const [loading, setLoading] = useState(false);
 
+	const [amountValid, setAmountValid] = useState(false);
+	const [szAmount, setSzAmount] = useState("");
 	const [amount, setAmount] = useState("" as any as number);
 	const [fee, setFee] = useState("" as any as number);
 	const [total, setTotal] = useState("" as any as number);
@@ -295,8 +295,27 @@ const Paystack = () => {
 		setLoading(false);
 	};
 
+	const onChange = useCallback((name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (name === "amount") {
+			let val = event.target.value.replace("₦ ", "").replace(/,/g, "");
+			if (val === "") { val = "0"; }
+
+			const num = Number(val);
+
+			if (Number.isNaN(num) || num > 500000) {
+				setAmountValid(false);
+				return;
+			}
+
+			setAmount(num);
+			setSzAmount("₦ " + num.toLocaleString());
+			setAmountValid(num >= 100);
+		}
+	}, [amount, szAmount]);
+
 	return (
 		<>
+
 			<Box
 				pad="large"
 				width={size !== "small" ? "50vw" : "100vw"}
@@ -374,8 +393,8 @@ const Paystack = () => {
 							</Text>
 							<TextInput
 								focusIndicator={true}
-								value={amount}
-								onChange={setPrice}
+								value={szAmount}
+								onChange={onChange("amount")}
 							/>
 						</Form>
 					</Box>
@@ -422,6 +441,7 @@ const Paystack = () => {
 							color="secondary"
 							onClick={submitAmount}
 							primary={true}
+							disabled={!amountValid}
 						/>
 					</Box>
 				</Box>
@@ -460,14 +480,14 @@ const Bank = () => {
 		accountName: "",
 		accountNumber: "",
 		bankId: 0,
-		id: 0,
+		id: "",
 		logo: "",
 	} as IUserBank & IBank);
 	const [toBank, setToBank] = useState({
 		accountName: "",
 		accountNumber: "",
 		bankId: 0,
-		id: 0,
+		id: "",
 		logo: "",
 	} as IUserBank & IBank);
 

@@ -30,27 +30,30 @@ const Table = ({ transactions }: { transactions: { id: number, addedAt: string, 
 				}}
 			>
 				<TableBody>
-					{transactions.map(transaction => (
-						<TableRow key={transaction.id}>
-							<TableCell align="left" style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
-								{
-									size == "small" ? (moment(transaction.addedAt).format("l"))
-									: (moment(transaction.addedAt).format("llll"))
-								}
-							</TableCell>
-							<TableCell style={{ borderBottom: "solid 1px rgba(0, 0, 0, 0.3)" }}>
-								{transaction.type}
-							</TableCell>
-							<TableCell
-								style={{
-									color: transaction.type === "Withdrawal" || transaction.type === "Debit" ? "#D9251B" : "#009746",
-									borderBottom: "solid 1px rgba(0, 0, 0, 0.3)"
-								}}
-							>
-								{transaction.type === "Withdrawal" || transaction.type === "Debit" ? "-" + transaction.amount.toLocaleString() : transaction.amount.toLocaleString()}
-							</TableCell>
-						</TableRow>
-					))}
+					{transactions.slice(0, 10).map((transaction, index, array) => {
+						let lastOne = (index === array.length - 1);
+						return (
+							<TableRow key={transaction.id}>
+								<TableCell align="left" style={{ borderBottom: !lastOne ? "solid 1px rgba(0, 0, 0, 0.3)" : "none" }}>
+									{
+										size == "small" ? (moment(transaction.addedAt).format("l"))
+										: (moment(transaction.addedAt).format("llll"))
+									}
+								</TableCell>
+								<TableCell style={{ borderBottom: !lastOne ? "solid 1px rgba(0, 0, 0, 0.3)" : "none" }}>
+									{transaction.type}
+								</TableCell>
+								<TableCell
+									style={{
+										color: transaction.type === "Withdrawal" || transaction.type === "Debit" ? "#D9251B" : "#009746",
+										borderBottom: !lastOne ? "solid 1px rgba(0, 0, 0, 0.3)" : "none"
+									}}
+								>
+									{transaction.type === "Withdrawal" || transaction.type === "Debit" ? "-" + transaction.amount.toLocaleString() : transaction.amount.toLocaleString()}
+								</TableCell>
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</GroTable>
 		</Wrapper>

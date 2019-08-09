@@ -4,10 +4,12 @@ import React from "react";
 interface IProps extends BoxProps {
 	heading: string | JSX.Element;
 	body: string | JSX.Element;
+	actionLabel?: string;
+	action?: any;
 	image: string;
 }
 
-const CardImage = ({ heading, body, image, ...props }: IProps) => {
+const CardImage = ({ heading, body, image, actionLabel = "Continue", action, ...props }: IProps) => {
 
 	return (
 		<Box
@@ -26,7 +28,7 @@ const CardImage = ({ heading, body, image, ...props }: IProps) => {
 				<Heading
 					level="3"
 					color="white"
-					margin={{ top: "-2rem", left: "large" }}
+					margin={{ top: "-3rem", left: "large" }}
 				>
 					{heading}
 				</Heading>
@@ -48,22 +50,13 @@ const CardImage = ({ heading, body, image, ...props }: IProps) => {
 				direction="row"
 				justify="end"
 			>
-				<Button
-					style={{
-						color: "white",
-						textAlign: "center",
-						width: "150px",
-					}}
-					color="secondary"
-					primary={true}
-					label={
-						<Text
-							size="small"
-						>
-							Continue
-						</Text>
-					}
-				/>
+				<Box>
+					<Button primary={true} 
+						color="secondary" 
+						label={actionLabel}
+						onClick={action}
+					 />
+				</Box>
 			</Box>
 
 		</Box>

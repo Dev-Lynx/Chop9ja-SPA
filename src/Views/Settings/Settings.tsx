@@ -20,6 +20,7 @@ import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import SnackBarComponent from "../../Components/SnackBar/SnackBar";
 import { UserContext } from "../../Context/Context";
 import { IBank, IUserBank } from "../../Types/index.js";
+import Popup from "reactjs-popup";
 
 const Wrapper = styled(Box)`
 	width: 100vw;
@@ -111,6 +112,9 @@ const Settings = () => {
 		name: "",
 	} as IBank);
 	const [bankChangedToggle, setBankChangedToggle] = useState(false);
+
+	const [assertingDelete, setAssertingDelete] = useState(false);
+	const [deleteAccount, setDeleteAccount] = useState({} as IUserBank);
 
 	// For changing the password
 	const [currentPassword, setCurrentPassword] = useState("");
@@ -260,6 +264,34 @@ const Settings = () => {
 		setLoading(false);
 	};
 
+	const removeBank = () => {
+		setAssertingDelete(false)
+		setLoading(true);
+
+		 Axios.post("/api/Account/manage/bankAccounts/remove", {
+			id: deleteAccount.id
+		  }).then((res) => {
+				if (res.status === 200) {
+					setSnackbar({
+						message: "Successful",
+						show: true,
+						variant: "success",
+					});
+
+					
+				}
+			}).catch((err) => {
+				setSnackbar({
+					message: "The operation failed, please try again later",
+					show: true,
+					variant: "error",
+				});
+			}).finally(() => {
+				setBankChangedToggle((toggle) => !toggle); // What does this do?
+				setLoading(false);
+			});
+	}
+
 	return (
 		<>
 			<ProgressBar
@@ -276,6 +308,47 @@ const Settings = () => {
 					variant={snackbar.variant}
 					onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 				/>
+
+				<Popup position="center center" open={assertingDelete} modal
+					closeOnDocumentClick={true}
+					onClose={() => setAssertingDelete(false)}
+					contentStyle={{
+						width: size === "small" ? "60%" : "400px",
+						height: size === "small" ? "200px" : "300px",
+						borderRadius: "20px",
+						boxShadow: "6px 7px 13px -3px rgba(0,0,0,0.5)"
+					}}
+					>
+					<Box width="100%" height="100%">
+						<Box pad={{
+								vertical: "10px",
+								horizontal: size === "small" ? "10px" : "20px"	
+							}} align="center"
+							width="100%"
+							height="100%"
+							justify="between"
+						>
+							<Heading level="3">
+								Are you sure ? 
+							</Heading>
+
+							<Text>
+								This action cannot be reversed
+							</Text>		
+
+							<Box direction="row" width="100%" justify="between" pad={{horizontal: "large"}}>
+								<Button primary={true} label="Yes"
+									onClick={removeBank}
+								/>
+								<Button primary={false} label="No"
+									onClick={() => setAssertingDelete(false)}
+								/>
+							</Box>
+						</Box>
+					</Box>
+				</Popup>
+
+
 				<Card
 					background="white"
 					pad={size !== "small" ? "large" : "medium"}
@@ -283,7 +356,7 @@ const Settings = () => {
 					width="720px"
 					elevation="small"
 				>
-					<Edit
+					{/* <Edit
 						direction="row"
 						align="baseline"
 					>
@@ -303,7 +376,7 @@ const Settings = () => {
 							style={{ border: "none" }}
 							label="Edit"
 						/>
-					</Edit>
+					</Edit> */}
 					<Box
 						width="100%"
 						align="start"
@@ -414,53 +487,66 @@ const Settings = () => {
 								<Box
 									margin={{ bottom: "large" }}
 								>
-									{userState.banks.map((b) => (
-										<Box
-											width="100%"
-											round={true}
-											background="white"
-											elevation="small"
-											pad={{ vertical: "small", right: "large", left: "small" }}
-											margin={{ vertical: "medium" }}
-											align="center"
-											direction="row"
-											justify="between"
-											key={b.id}
-										>
-											<i
-												className="zwicon-close"
-											/>
-											<Text
-												textAlign="center"
-												weight={100}
+									<Box justify="start"
+										align="center"
+										gap="small"
+									>
+										{userState.banks.map((b) => (
+											<Box
+												width="100%"
+												height="50px"
+												round={true}
+												background="white"
+												elevation="small"
+												pad={{ vertical: "small", right: "large", left: "small" }}
+												align="center"
+												direction="row"
+												justify="between"
+												key={b.id}
 											>
-												{b.accountName}
-											</Text>
-											<Text
-												textAlign="center"
-												weight={100}
-											>
-												{b.accountNumber}
-											</Text>
-											<Text
-												textAlign="center"
-												weight={100}
-												style={{
-													alignItems: "center",
-													display: "flex",
-													flexDirection: "column",
-												}}
-											>
-												<Image
-													fit="contain"
-													width="20px"
-													height="50px"
-													src={banksData[b.bankId - 1].logo}
-												/>
-												{banksData[b.bankId - 1].name}
-											</Text>
-										</Box>
-									))}
+												<Button primary={true} onClick={() => {
+													setDeleteAccount(b);
+													setAssertingDelete(true);
+												}}>
+													<i className="zwicon-close" />
+												</Button>
+												
+												<Text
+													textAlign="center"
+													weight={100}
+												>
+													{b.accountName}
+												</Text>
+												<Text
+													textAlign="center"
+													weight={100}
+												>
+													{b.accountNumber}
+												</Text>
+
+												<Box direction="row" gap="medium" align="center">
+													<Image
+														fit="contain"
+														height="20px"
+														src={banksData[b.bankId - 1].logo}
+													/>
+
+													<Text
+														textAlign="center"
+														weight={100}
+														style={{
+															alignItems: "center",
+															display: "flex",
+															flexDirection: "column",
+														}}
+													>
+														{banksData[b.bankId - 1].name}
+													</Text>
+												</Box>
+											</Box>
+										))}
+									</Box>
+
 									<Box
 										margin={{ vertical: "medium" }}
 										elevation="small"
@@ -587,7 +673,7 @@ const Settings = () => {
 								}
 							>
 								<Box
-									width={size !== "small" ? "50%" : "100%"}
+									width="100%"
 									as="form"
 									pad={{ bottom: "medium" }}
 								>
@@ -662,6 +748,7 @@ const Settings = () => {
 									</Box>
 									<Box
 										width="100%"
+										margin={{top: "small"}}
 									>
 										<Button
 											label="Update"

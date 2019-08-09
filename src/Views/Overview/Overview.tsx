@@ -6,8 +6,9 @@ import MacHandsKeyBoard from "../../assets/images/mac-hands-keyboard.jpg";
 import PocketCreditCards from "../../assets/images/pocket-credit-cards.jpg";
 import CardImage from "../../Components/CardImage/CardImage";
 import { UserContext } from "../../Context/Context";
+import { History } from "history";
 
-const Overview = () => {
+const Overview = ({ history }: { history: History }) => {
 
 	const size = useContext(ResponsiveContext);
 
@@ -56,7 +57,7 @@ const Overview = () => {
 				align="start"
 				justify="between"
 			>
-				<CardImage
+				{/* <CardImage
 					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
 					margin={{ bottom: "medium" }}
@@ -68,15 +69,33 @@ const Overview = () => {
 					Didn’t get the mail? Check your spam folder, or click on resend.
 				`}
 				/>
+				*/}
 				<CardImage
 					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
-					heading="Insure your bet"
+					heading="Start backing up your bets"
 					image={DiceControlImage}
 					margin={{ bottom: "medium" }}
-					body="Never loose a bet. Control the odds, be a boss."
+					body="Never loose a bet. Control the odds, be the boss."
+					actionLabel="Get started"
+					action={() => {
+						// TO-DO: Change bet insurance to bet backup
+						history.push("/dashboard/bet-insurance");
+					}}
 				/>
 
+				<CardImage
+					round="medium"
+					width={size !== "small" ? "49%" : "100%"}
+					heading="Make a deposit"
+					margin={{ bottom: "medium" }}
+					image={HandCreditCard}
+					body="Securely deposit into our online wallet. "
+					actionLabel="Deposit"
+					action={() => {
+						history.push("/dashboard/wallet/deposit");
+					}}
+				/>
 			</Box>
 			<Box
 				width={size !== "small" ? "70vw" : "100vw"}
@@ -85,24 +104,19 @@ const Overview = () => {
 				align="end"
 				justify="between"
 			>
-				<CardImage
-					round="medium"
-					width={size !== "small" ? "49%" : "100%"}
-					heading="Make a deposit"
-					margin={{ bottom: "medium" }}
-					image={HandCreditCard}
-					body="Securely deposit into our online wallet. "
-				/>
+				
 				<CardImage
 					round="medium"
 					width={size !== "small" ? "49%" : "100%"}
 					heading="Add bank account"
 					margin={{ bottom: "medium" }}
 					image={PocketCreditCards}
-					body={`
-						Add all your bank account details in the settings page
-						to ensure a smooth withdrawal process.
-				`}
+					body={`Add your bank account details in the settings page
+						to ensure a smooth withdrawal process.`}
+					actionLabel="Go to settings"
+					action={() => {
+						history.push("/dashboard/settings");
+					}}
 				/>
 
 			</Box>
