@@ -30,10 +30,13 @@ const RegisterTest = loadable(() => import("./Views/Reception/Register"), {
 const PasswordRecovery = loadable(() => import("./Views/Verification/Email"), {
 	fallback: <ProgressBar show={true} />,
 });
-const LandingPageTest = loadable(() => import("./Views/Reception/Landing"));
+const LandingPageTest = loadable(() => import("./Views/Reception/Landing"), {
+	fallback: <ProgressBar show={true} />,
+});
 const Dashboard = loadable(() => import("./Layouts/Dashboard/Dashboard"), {
 	fallback: <ProgressBar show={true} />,
 });
+const Admin = loadable(() => import("./Layouts/Admin/Admin"));
 
 type IProps = {} & RouteComponentProps;
 
@@ -47,7 +50,8 @@ const routes = [
 	{ path: "/login", component: LoginTest },
 	{ path: "/dashboard", component: Dashboard },
 	{ path: "/forgot-password", component: ForgotPasswordTest },
-	{ path: "/passwordRecovery", component: PasswordRecovery }
+	{ path: "/passwordRecovery", component: PasswordRecovery },
+	{ path: "/adminBackend", component: Admin }
 ];
 
 // Initial IState
