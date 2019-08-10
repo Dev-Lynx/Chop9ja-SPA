@@ -105,40 +105,6 @@ const Dashboard = ({ history }: props) => {
 		if (window.screen.width > 768) {
 			setIsPc(true);
 		}
-		(async () => {
-			try {
-				const response = await Axios.get("/api/Account/user");
-				// const data = response.data;
-				userDispatch({ type: "UPDATE", payload: response.data });
-			} catch (error) {
-				const err = error as AxiosError;
-				if (err.response) {
-					// Token failed
-					history.push("/login");
-				}
-			}
-		})();
-		(async () => {
-			try {
-				// Get wallet
-				let response = await Axios.get("/api/account/wallet");
-				userDispatch({ type: "UPDATE", payload: response.data });
-				console.log(response.data);
-
-				// Get Transactions
-				const transactionResponse: AxiosResponse<ITransaction[]> = await Axios.get<ITransaction[]>("/api/account/wallet/transactions");
-				const transactions = transactionResponse.data.sort((a, b) => {
-					var dateA = new Date(a.addedAt), dateB = new Date(b.addedAt);
-					return dateA > dateB ? -1 : dateA < dateB ? 1 : 0;
-				})
-				console.log(transactionResponse.data);
-
-
-				userDispatch({ type: "UPDATE", payload: { transactions } });
-			} catch (error) {
-				const err = error as AxiosError;
-			}
-		})();
 	}, []);
 
 	const toggleSideBar = () => {
