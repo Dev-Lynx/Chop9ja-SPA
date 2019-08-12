@@ -7,7 +7,7 @@ import styled from "styled-components";
 import NavBar from "../../../Components/NavBar/NavBar";
 import NavFooter from "../../../Components/NavFooter/NavFooter";
 import ProgressBar from "../../../Components/ProgressBar/ProgressBar";
-import SideBar from "../../../Components/SideBar/SideBar";
+import SideBar from "../../../Components/_BackOffice/SideBar/SideBar";
 import { LoginContext, UserContext } from "../../../Context/Context";
 import { UserContextAction, UserContextState, ITransaction } from "../../../Types/index";
 import CashOut from "../../../Views/CashOut/CashOut";
@@ -26,14 +26,24 @@ background-color: #EDEDED;
 
 // Lazy load the components
 
-const Overview = loadable(() => import("../../../Views/Admin/Overview"), {
+const Overview = loadable(() => import("../../../Views/Admin/Dashboard"), {
+	fallback: <ProgressBar show={true} />,
+});
+
+const UserView = loadable(() => import("../../../Views/Admin/UserView/UserView"), {
+	fallback: <ProgressBar show={true} />,
+});
+
+const Claims = loadable(() => import("../../../Views/Admin/Claims/Claims"), {
 	fallback: <ProgressBar show={true} />,
 });
 
 type props = RouteComponentProps & {};
 
 const routes = [
-	{ path: "/adminBackend/dashboard/overview", component: Overview },
+	{ path: "/backOffice/dashboard", exact: true, component: Overview },
+	{ path: "/backOffice/dashboard/users", component: UserView },
+	{ path: "/backOffice/dashboard/claims", component: Claims },
 ];
 
 // Initial IState
@@ -105,6 +115,21 @@ const Dashboard = ({ history }: props) => {
 		if (window.screen.width > 768) {
 			setIsPc(true);
 		}
+
+		(async () => {
+			try {
+				const response = await Axios.get("/api/Account/user");
+				// const data = response.data;
+				userDispatch({ type: "UPDATE", payload: response.data });
+				console.log(response.data);
+			} catch (error) {
+				const err = error as AxiosError;
+				if (err.response) {
+					// Token failed
+					history.push("/login");
+				}
+			}
+		})();
 	}, []);
 
 	const toggleSideBar = () => {
@@ -128,11 +153,19 @@ const Dashboard = ({ history }: props) => {
 				>
 					<Switch>
 						{routes.map((route, i) => (
-								<Route
-									key={i}
-									path={route.path}
-									component={route.component}
-								/>
+							route.exact ?
+							<Route
+								key={i}
+								exact={true}
+								path={route.path}
+								component={route.component}
+							/>
+							:
+							<Route
+								key={i}
+								path={route.path}
+								component={route.component}
+							/>
 						))}
 					</Switch>
 				</Main>

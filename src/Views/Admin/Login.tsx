@@ -57,12 +57,12 @@ const Login = ({ history }: { history: History }) => {
 		try {
 			const data = { username, password }
 			const res = await Axios.post("/api/backOffice/Auth/login", data);
-			const accessToken = res.data;
+			const accessToken = res.data.accessToken;
 			// Set it to local storage
 			localStorage.setItem("__sheghuntk__", accessToken);
 			// Set the default header to use the token
 			Axios.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem("__sheghuntk__")}`;
-			history.push("/adminBackend/dashboard/overview");
+			history.push("/backOffice/dashboard");
 		} catch (error) {
 			const err = error as AxiosError;
 			if (err.response) {
@@ -101,7 +101,7 @@ const Login = ({ history }: { history: History }) => {
 					top: size == "small" ? "40px" : "60px"
 				}}
 				>
-					<Heading textAlign="center" level={size === "small" ? "5" : "2"}>Admin Sign In</Heading>
+					<Heading textAlign="center" level={size === "small" ? "5" : "2"}>BackOffice Sign In</Heading>
 
 					<Box margin={{
 						top: size == "small" ? "40px" : "80px"
@@ -127,7 +127,7 @@ const Login = ({ history }: { history: History }) => {
 								<Button primary={true} label="Login" type="submit" />
 							</Box>
 
-							<Box align="center">
+							{/* <Box align="center">
 								<NavAnchor path="/forgot-password">
 									Forgot Password?
                                 </NavAnchor>
@@ -135,7 +135,7 @@ const Login = ({ history }: { history: History }) => {
 								<br />
 								<Text>Don't have an account yet? <NavAnchor path="/register">Create one</NavAnchor>
 								</Text>
-							</Box>
+							</Box> */}
 						</Form>
 					</Box>
 				</Box>

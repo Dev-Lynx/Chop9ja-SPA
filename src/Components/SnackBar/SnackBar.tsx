@@ -20,7 +20,7 @@ const Wrapper = styled(Box)`
 export interface SnackBarProps {
 	variant: "success" | "error" | "warning" | string;
 	message: string;
-	onClose: (event: React.MouseEvent<HTMLElement, MouseEvent> | null) => void;
+	onClose?: (event: React.MouseEvent<HTMLElement, MouseEvent> | null) => void;
 	show: boolean;
 	duration?: number;
 }
@@ -39,7 +39,7 @@ const SnackBarComponent = ({ show = false, message = "Okay now", variant = "succ
 		if (show) {
 			// Wait for 4 seconds after displaying message then call the close function
 			setTimeout(() => {
-				onClose(null);
+				onClose!(null);
 			}, duration);
 		}
 	}, [show]);

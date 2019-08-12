@@ -51,7 +51,7 @@ const routes = [
 	{ path: "/dashboard", component: Dashboard },
 	{ path: "/forgot-password", component: ForgotPasswordTest },
 	{ path: "/passwordRecovery", component: PasswordRecovery },
-	{ path: "/adminBackend", component: Admin }
+	{ path: "/backOffice", component: Admin }
 ];
 
 // Initial IState

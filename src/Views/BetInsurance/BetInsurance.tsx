@@ -234,12 +234,12 @@ const BetInsurance = () => {
 									weight="bold"
 									size="small"
 								>
-									Platform
+									Bet Company
 								</Text>
 
 								<Box direction="row" justify="between">
 									<Select
-										placeholder="Select your platform"
+										placeholder="Select the bet company"
 										value={platform.name}
 										options={BetPlatformData.map((b) => b.name)}
 										dropHeight="medium"
@@ -252,12 +252,12 @@ const BetInsurance = () => {
 								flex="grow"
 							>
 								<Text>
-									Slip Number
+									Bet Slip Number
 								</Text>
 								<TextInput
 									value={slipNumber}
 									onBlur={checkIfInputsCanBeSubmitted}
-									placeholder={size !== "small" ? "Enter your slip number" : "Enter slip Number"}
+									placeholder={size !== "small" ? "Enter your bet slip number" : "Enter bet slip Number"}
 									onChange={changeInputs("slipNumber")}
 								/>
 							</Box>
@@ -373,7 +373,7 @@ const BetInsurance = () => {
 								Date
 							</TableCell>
 							<TableCell scope="col">
-								Platform
+								Bet Platform
 							</TableCell>
 							<TableCell scope="col">
 								Bet Slip Number

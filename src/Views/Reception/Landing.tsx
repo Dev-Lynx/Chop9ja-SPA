@@ -11,7 +11,8 @@ import {
 	Form,
 	MaskedInput,
 	FormField,
-	ResponsiveContext
+	ResponsiveContext,
+	Anchor
 } from "grommet";
 import "./Landing.css";
 import productLogo from "../../assets/images/chop9ja.png";
@@ -26,6 +27,7 @@ import ProgressBar from '../../Components/ProgressBar/ProgressBar';
 import { IUserRegContext, RegContextAction } from '../../Types';
 import NavAnchor from '../../Components/_Grommet/Text/NavAnchor ';
 import Typed from 'react-typed';
+import Scrollbars from 'react-custom-scrollbars';
 
 const customTheme = deepMerge(grommet, {
 	textInput: {
@@ -182,308 +184,336 @@ const LandingPageComponent = ({ history, location }: RouteComponentProps) => {
 										<Box
 											alignSelf={size == "small" || size == "xsmall" ? "center" : "start"}
 											background="#FFF" width={size === "small" || size === "xsmall" ? "85%" : size === "medium" || size === "xmedium" ? "700px" : "50%"}
-											height="100%" pad="40px"
-											overflow={{
-												vertical: "auto"
-											}}
+											height="100%"
+											pad="20px"
 											style={{
 												minWidth: size === "medium" ? "700px" : undefined
 											}}
 										>
-											<Box
-												className="header"
-												width="100%"
-												height={size == "small" || size == "xsmall" ? "auto" : "100px"}
-												direction={size == "small" || size == "xsmall" ? "column" : "row"}
-												justify="between" align="center"
-											>
+											<Scrollbars autoHide style={{
+												padding: "40px"
+											}}>
 												<Box
+													className="header"
+													width="100%"
+													height={size == "small" || size == "xsmall" ? "auto" : "100px"}
 													direction={size == "small" || size == "xsmall" ? "column" : "row"}
-													align="center" gap="small" justify="center"
+													justify="between" align="center"
 												>
-													<Image src={productLogo} height="64px" fit="contain" />
-													<Text
-														weight="bold"
-														color="#00863D"
-														size={size == "small" || size == "xsmall" ? "40px" : "48px"}
-													>
-														Chop9ja
-                                                </Text>
-												</Box>
-
-												{!(size == "small" || size == "xsmall") && (
-													<Box justify="between" direction="row" gap="large" align="center">
-														<NavAnchor path="#" color="#009746">Become An Agent</NavAnchor>
-														<NavAnchor path="#" color="#009746">Whatsapp</NavAnchor>
-													</Box>
-												)}
-											</Box>
-
-											<Box margin={{ top: size === "small" ? "40px" : "100px" }}>
-												<Box width="100%" height="128px">
-													<Text
-														weight="bold" size={size === "small" || size === "xsmall" ? "24px" : size === "medium" ? "40px" : "48px"}
-														color="#000000"
-														style={{
-															minHeight: "128px"
-														}}>
-														<Typed
-															strings={[
-																'Next Generation Insurance For <span style="color: #009746">Bets.<span/>',
-																'Stop <span style="color: #009746">Loosing</span> on Sport Bets.',
-																'Get 40 - 50% of <span style="color: #009746">potential winnings</span> on any lost ticket.',
-																'Stop <span style="color: #009746">tearing</span> your tickets.'
-															]}
-															typeSpeed={60}
-															backSpeed={30}
-															shuffle={true}
-															startDelay={500}
-															backDelay={5000}
-															loop
-														/>
-													</Text>
-
 													<Box
-														height="35px"
-														margin={{ top: size === "small" ? "20px" : "50px" }}
+														direction={size == "small" || size == "xsmall" ? "column" : "row"}
+														align="center" gap="small" justify="center"
 													>
-														<Form value={regContext} onSubmit={register}>
-															<Box direction={size == "small" || size == "xsmall" ? "column" : "row"}
-																align="center" gap="small">
-																<Box width="100%">
-																	<FormField
-																		name="userName"
-																		placeholder="Mobile Number"
-																		style={{
-																			margin: 0
-																		}}
-																	>
-																		<MaskedInput
-																			mask={Masks.phone}
-																			onChange={(event: any) => {
-																				let num: string = event.target.value as string;
-																				num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
-																				num = "0" + num;
-																				regContext.userName = num;
-																				//regState.userName = num;
-																				//phoneField.props.onChange(num);
-																			}}
-																		/>
-																	</FormField>
-																</Box>
-
-																<Box width="200px">
-																	<Button primary={true} type="submit" label="Sign Up" />
-
-																	{size === "small" && (
-																		<Box margin={{ top: "30px" }}>
-																			<Text textAlign="center">
-																				Already have an account? <NavAnchor path="/login">Log In</NavAnchor>
-																			</Text>
-																		</Box>
-																	)}
-																</Box>
-
-															</Box>
-														</Form>
+														<Image src={productLogo} height="64px" fit="contain" />
+														<Text
+															weight="bold"
+															color="#00863D"
+															size={size == "small" || size == "xsmall" ? "40px" : "48px"}
+														>
+															Chop9ja
+													</Text>
 													</Box>
 
-													<Box width="100%" margin={{ top: size === "small" ? "200px" : "100px" }}>
-														<Accordion>
-															<AccordionPanel label="About Us">
-																<Text>
-																<div>
-																	<p>
-																		<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>chop9ja.com (ST.ALEX NIGERIA LIMITED), a company duly registered on 25 June 2018 under the COMPANIES AND ALLIED MATTERS ACT 1990 of the Federal Republic of Nigeria with Company Registration No. RC 1505347, and having her Business Office in the City of Abuja</span>
-																		<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444'}}>
-																			<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
-																			<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
-																			<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
-																			<span style={{background: 'white'}}>
-																			<span style={{fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', float: 'none', wordSpacing: '0px'}}>PATENTED OPERATION/BUSINESS RP: NG/P/2018/259 </span>
-																			</span>
-																		</span>
-																	</p>
-																	<p>
-																	<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>DATE: 28/08/2018 </span>
-																	</p>
-																	<p>
-																	<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>SEALING: 02/10/2018</span>
-																	</p>
-																</div>
-																</Text>
-															</AccordionPanel>
-															<AccordionPanel label="Terms and Conditions">
-																<Box>
-																	<Text>
-																		<div>
-																			<p style={{textAlign: 'center'}}>
-																			<strong>
-																				<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: '#00b050'}}>WIN </span>
-																			</strong>
-																			<strong>
-																				<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>MILLIONS ON any 
-																				<span style={{color: 'red'}}> LOST</span> BETS
-																				</span>
-																			</strong>
-																			</p>
-																			<p style={{textAlign: 'center'}}>
-																			<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Terms and conditions</span>
-																			</p>
-																			<ul>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any amount you stake in your bet is the same amount you will use to 
-																				<strong>Backup</strong> your games or else render your backup invalid.
-																				</span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Your possible winning will be base on 
-																				<strong> 40-50%</strong> payment on any 
-																				<span style={{color: 'red'}}> lost </span>games/tickets and you shall be paid accordingly i.e we pay you 
-																				<strong> 40-50%</strong> on your 
-																				<span style={{color: 'red'}}> lost</span>
-																				</span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You cannot 
-																				<strong>Backup</strong> less than 
-																				<strong>6 game accumulations</strong> and 
-																				<strong>30 odds</strong> because we only pay for 
-																				<strong>
-																					<span style={{color: 'red'}}> lost</span> bets
-																				</strong> and not 
-																				<strong>
-																					<span style={{color: '#00b050'}}> winning</span>
-																				</strong>
-																				</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 1 winning</span>
-																				</strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> = Any game between 
-																				<strong> 6-15</strong> minimum of 
-																				<strong> 6 games</strong> and maximum of 
-																				<strong> 15 games</strong> for 
-																				<strong> cut 1.</strong>
-																				</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 2 winning</span>
-																				</strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> = Any game between 
-																				<strong> 16-25 games</strong>e minimum of 
-																				<strong> 16 games</strong> and maximum of 25 for 
-																				<strong> cut 2.</strong>
-																				</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 3 winning</span>
-																				</strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> =Any game between 
-																				<strong> 30-40 games</strong>e minimum of 30 games and maximum of 
-																				<strong> 40 games.</strong>
-																				</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 4 winning</span>
-																				</strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>= any ticket that contains 
-																				<strong> 40 games</strong> on roll 
-																				</span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You can also back up your games in multiple times if you like and also share your tickets/games with friends with same bet ID.</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Ticket with above 20 million potential winning are not allowed.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You must be 18 years and above.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any void game will be removed from your ticket and pay you accordingly.</span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You need to wait for 24 hours for any postponed match to be play before we decide your outcome and if not play shall be removed.</span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cashout does not affect your game with us i.e you can cashout and still get your money from us because it is a different market.</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any qualified ticket must be submitted within 48 hours i.e 2days.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You must place your ticket before the start of the first match on your ticket.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>We pay our winners after 
-																				<strong> 2 days</strong> of submitting their qualified tickets even on weekend after verification. 
-																				</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: 'red'}}>NOTE</span>
-																				</strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>: We will not remove any game that cut your ticket but we only do so if there is void game or if any game with (7) odds above cut your game and we pay you accordingly.</span>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You are liable for any error that arise from your end like incorrect bet details.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Bank account name must be same with registered name.</span>
-																				</strong>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Always ensure that your games have been decided and properly settled before you upload it for your claims </span>
-																			</li>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Double submission of ticket or tickets without double backup is fraud with serious criminal charges </span>
-																			</li>
-																			</ul>
-																			<p style={{marginLeft: '72.0pt', textAlign: 'justify'}}>
-																			<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>&nbsp;</span>
-																			</p>
-																			<p style={{textAlign: 'justify'}}>
-																			<strong>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>CAVEAT:&nbsp; We are not a betting company, we only backup game tickets of any bets company as a means to put an end to your total 
-																				<span style={{color: 'red'}}> lost </span>on bettings
-																				</span>
-																			</strong>
-																			<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>.</span>
-																			</p>
-																			<ul>
-																			<li>
-																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>We are operating under PATENT RIGHT CAP 344 Laws of the Federation of Nigeria with RP:NG/P/2018/259 approved by the Federal Government of Nigeria.</span>
-																			</li>
-																			</ul>
-																			<p style={{marginLeft: '72.0pt', textAlign: 'justify'}}>
-																			<strong>
-																				<span style={{fontSize: '26.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: '#00b050'}}>BEST OF LUCK</span>
-																			</strong>
-																			</p>
-																		</div>
-																	</Text>
+													{!(size == "small" || size == "xsmall") && (
+														<Box justify="between" direction="row" gap="large" align="center">
+															<NavAnchor path="#" color="#009746">Become An Agent</NavAnchor>
+															<Anchor target="_blank" href="https://wa.me/2348038185887" color="#009746">Whatsapp</Anchor>
+														</Box>
+													)}
+												</Box>
+
+												<Box margin={{ top: size === "small" ? "40px" : "100px" }}>
+													<Box width="100%" height="128px">
+														<Text
+															weight="bold" size={size === "small" || size === "xsmall" ? "24px" : size === "medium" ? "40px" : "48px"}
+															color="#000000"
+															style={{
+																minHeight: "128px"
+															}}>
+															<Typed
+																strings={[
+																	'Next Generation Insurance For <span style="color: #009746">Bets.<span/>',
+																	'Stop <span style="color: #009746">Losing</span> on Sport Bets.',
+																	'Get 40 - 50% of <span style="color: #009746">potential winnings</span> on any lost ticket.',
+																	'Stop <span style="color: #009746">tearing</span> your tickets.'
+																]}
+																typeSpeed={60}
+																backSpeed={30}
+																shuffle={true}
+																startDelay={500}
+																backDelay={5000}
+																loop
+															/>
+														</Text>
+
+														<Box
+															height="35px"
+															margin={{ top: size === "small" ? "20px" : "50px" }}
+														>
+															<Form value={regContext} onSubmit={register}>
+																<Box direction={size == "small" || size == "xsmall" ? "column" : "row"}
+																	align="center" gap="small">
+																	<Box width="100%">
+																		<FormField
+																			name="userName"
+																			placeholder="Mobile Number"
+																			style={{
+																				margin: 0
+																			}}
+																		>
+																			<MaskedInput
+																				mask={Masks.phone}
+																				onChange={(event: any) => {
+																					let num: string = event.target.value as string;
+																					num = num.replace(/\s/g, "").replace(/^(\+234)/, "");
+																					num = "0" + num;
+																					regContext.userName = num;
+																					//regState.userName = num;
+																					//phoneField.props.onChange(num);
+																				}}
+																			/>
+																		</FormField>
+																	</Box>
+
+																	<Box width="200px">
+																		<Button primary={true} type="submit" label="Sign Up" />
+
+																		{size === "small" && (
+																			<Box margin={{ top: "30px" }}>
+																				<Text textAlign="center">
+																					Already have an account? <NavAnchor path="/login">Log In</NavAnchor>
+																				</Text>
+																			</Box>
+																		)}
+																	</Box>
+
 																</Box>
-															</AccordionPanel>
-														</Accordion>
+															</Form>
+														</Box>
+
+														<Box width="100%" margin={{ top: size === "small" ? "200px" : "100px" }}>
+															<Accordion>
+																<AccordionPanel label="About Us">
+																	<Text>
+																	<div>
+																		<p>
+																			<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>chop9ja.com (ST.ALEX NIGERIA LIMITED), a company duly registered on 25 June 2018 under the COMPANIES AND ALLIED MATTERS ACT 1990 of the Federal Republic of Nigeria with Company Registration No. RC 1505347, and having her Business Office in the City of Abuja</span>
+																			<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444'}}>
+																				<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
+																				<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
+																				<br style={{boxSizing: 'border-box', fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', wordSpacing: '0px'}} />
+																				<span style={{background: 'white'}}>
+																				<span style={{fontVariantLigatures: 'normal', fontVariantCaps: 'normal', orphans: 2, textAlign: 'start', widows: 2, WebkitTextStrokeWidth: '0px', textDecorationStyle: 'initial', textDecorationColor: 'initial', float: 'none', wordSpacing: '0px'}}>PATENTED OPERATION/BUSINESS RP: NG/P/2018/259 </span>
+																				</span>
+																			</span>
+																		</p>
+																		<p>
+																		<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>DATE: 28/08/2018 </span>
+																		</p>
+																		<p>
+																		<span style={{fontSize: '14.0pt', lineHeight: '107%', fontFamily: '"Tahoma","sans-serif"', color: '#444444', background: 'white'}}>SEALING: 02/10/2018</span>
+																		</p>
+																	</div>
+																	</Text>
+																</AccordionPanel>
+																<AccordionPanel label="How it works">
+																	<p>&bull; Register
+																	<br />&bull; Login to your account
+																	<br />&bull; Fund your account
+																	<br />&bull; Enter your bet slip code to backup
+																	<br />&bull; Click Submit.
+																	<br />&bull; Make Claims after games have been concluded
+																	<br />&bull; We verify your tickets and pay you accordingly</p>
+																</AccordionPanel>
+																<AccordionPanel label="Terms and Conditions">
+																	<Box>
+																		<Text>
+																			<div>
+																				<p style={{textAlign: 'center'}}>
+																				<strong>
+																					<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: '#00b050'}}>WIN </span>
+																				</strong>
+																				<strong>
+																					<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>MILLIONS ON any 
+																					<span style={{color: 'red'}}> LOST</span> BETS
+																					</span>
+																				</strong>
+																				</p>
+																				<p style={{textAlign: 'center'}}>
+																				<span style={{fontSize: '20.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Terms and conditions</span>
+																				</p>
+																				<ul>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any amount you stake in your bet is the same amount you will use to 
+																					<strong>Backup</strong> your games or else render your backup invalid.
+																					</span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Your possible winning will be base on 
+																					<strong> 40-50%</strong> payment on any 
+																					<span style={{color: 'red'}}> lost </span>games/tickets and you shall be paid accordingly i.e we pay you 
+																					<strong> 40-50%</strong> on your 
+																					<span style={{color: 'red'}}> lost</span>
+																					</span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You cannot 
+																					<strong> Backup</strong> less than 
+																					<strong> 6 game accumulations</strong> and 
+																					<strong> 30 odds</strong> because we only pay for 
+																					<strong>
+																						<span style={{color: 'red'}}> lost</span> bets
+																					</strong> and not 
+																					<strong>
+																						<span style={{color: '#00b050'}}> winning</span>
+																					</strong>
+																					</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 1 winning</span>
+																					</strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> = Any game between 
+																					<strong> 6-15</strong> minimum of 
+																					<strong> 6 games</strong> and maximum of 
+																					<strong> 15 games</strong> for 
+																					<strong> cut 1.</strong>
+																					</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 2 winning</span>
+																					</strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> = Any game between 
+																					<strong> 16-25 games</strong> minimum of 
+																					<strong> 16 games</strong> and maximum of 25 for 
+																					<strong> cut 2.</strong>
+																					</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 3 winning</span>
+																					</strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}> =Any game between 
+																					<strong> 30-40 games</strong> minimum of 30 games and maximum of 
+																					<strong> 40 games.</strong>
+																					</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cut 4 winning</span>
+																					</strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>= any ticket that contains 
+																					<strong> 40 games</strong> on roll 
+																					</span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You can also back up your games in multiple times if you like and also share your tickets/games with friends with same bet ID.</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Ticket with above 20 million potential winning are not allowed.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You must be 18 years and above.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any void game will be removed from your ticket and pay you accordingly.</span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You need to wait for 24 hours for any postponed match to be play before we decide your outcome and if not play shall be removed.</span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Cashout does not affect your game with us i.e you can cashout and still get your money from us because it is a different market.</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Any qualified ticket must be submitted within 48 hours i.e 2days.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You must place your ticket before the start of the first match on your ticket.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>We pay our winners after 
+																					<strong> 2 days</strong> of submitting their qualified tickets even on weekend after verification. 
+																					</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: 'red'}}>NOTE</span>
+																					</strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>: We will not remove any game that cut your ticket but we only do so if there is void game or if any game with (7) odds above cut your game and we pay you accordingly.</span>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>You are liable for any error that arise from your end like incorrect bet details.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Bank account name must be same with registered name.</span>
+																					</strong>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Always ensure that your games have been decided and properly settled before you upload it for your claims </span>
+																				</li>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>Double submission of ticket or tickets without double backup is fraud with serious criminal charges </span>
+																				</li>
+																				</ul>
+																				<p style={{marginLeft: '72.0pt', textAlign: 'justify'}}>
+																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>&nbsp;</span>
+																				</p>
+																				<p style={{textAlign: 'justify'}}>
+																				<strong>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>CAVEAT:&nbsp; We are not a betting company, we only backup game tickets of any bets company as a means to put an end to your total 
+																					<span style={{color: 'red'}}> lost </span>on bettings
+																					</span>
+																				</strong>
+																				<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>.</span>
+																				</p>
+																				<ul>
+																				<li>
+																					<span style={{fontSize: '14.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"'}}>We are operating under PATENT RIGHT CAP 344 Laws of the Federation of Nigeria with RP:NG/P/2018/259 approved by the Federal Government of Nigeria.</span>
+																				</li>
+																				</ul>
+																				<p style={{marginLeft: '72.0pt', textAlign: 'justify'}}>
+																				<strong>
+																					<span style={{fontSize: '26.0pt', lineHeight: '115%', fontFamily: '"Tahoma","sans-serif"', color: '#00b050'}}>BEST OF LUCK</span>
+																				</strong>
+																				</p>
+																			</div>
+																		</Text>
+																	</Box>
+																</AccordionPanel>
+
+																<AccordionPanel label="Contact Us">
+																	<div>
+																		<p style={{textAlign: 'justify'}}>
+																			<span style={{fontFamily: 'tahoma, arial, helvetica, sans-serif'}}>
+																				<span style={{fontSize: '14pt', lineHeight: '115%'}}>Hotline 09059446892, 08038185887 Mon-Fri 8am-4pm </span>
+																				<a href="mailto:chop9ja@gmail.com">
+																					<span style={{fontSize: '14pt', lineHeight: '115%'}}>chop9ja@gmail.com</span>
+																				</a>
+																				<span style={{fontSize: '14pt', lineHeight: '115%'}}> Send us your&nbsp; complaints</span>
+																			</span>
+																		</p>
+																		<p style={{textAlign: 'justify'}}>
+																			<span style={{fontSize: '14pt', lineHeight: '115%', fontFamily: 'tahoma, arial, helvetica, sans-serif'}}>We are here to listen and give immediate response</span>
+																		</p>
+																	</div>
+																</AccordionPanel>
+															</Accordion>
+														</Box>
 													</Box>
 												</Box>
-											</Box>
+											</Scrollbars>
 										</Box>
 
 										{size !== "small" && size != "xsmall" && size != "medium" && (

@@ -162,3 +162,22 @@ export interface ITransaction {
 }
 
 //#endregion
+
+
+//#region Admin Types
+// TO-DO Move to admin page
+
+export interface IBackOfficeClaims {
+	id: string;
+	userId: string;
+	platformId: number;
+	date: Date;
+	cashedOutOn: Date;
+	odds: number;
+	stake: number;
+	potentialWinnings: number;
+	slipNumber: string;
+	status: string;
+}
+
+//#endregion

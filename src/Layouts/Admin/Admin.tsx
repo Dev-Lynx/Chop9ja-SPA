@@ -6,8 +6,8 @@ const Login = loadable(() => import("../../Views/Admin/Login"));
 const Dashboard = loadable(() => import("./Dashboard/Dashboard"));
 
 const routes = [
-	{ path: "/adminBackend", exact: true, component: Login },
-	{ path: "/adminBackend/dashboard", component: Dashboard }
+	{ path: "/backOffice", exact: true, component: Login },
+	{ path: "/backOffice/dashboard", component: Dashboard }
 ];
 
 const Admin = () => {
