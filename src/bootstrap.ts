@@ -4,7 +4,7 @@ let baseUrl = "";
 
 switch (process.env.REACT_APP_HOST_ENV)
 {
-	case "local": baseUrl = "http://localhost:5000/"; break;
+	case "local": baseUrl = "https://localhost:5001/"; break;
 
 	default:
 	case "staging": 

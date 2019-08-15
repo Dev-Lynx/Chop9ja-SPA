@@ -13,6 +13,7 @@ import EastWoodNotFound from "../../assets/illustrations/eastwood-page-not-found
 import Countdown, { CountdownRenderProps } from 'react-countdown-now';
 import Popup from "reactjs-popup";
 import spinner from "../../assets/svg/spinner.svg";
+import theme from "../../theme";
 
 
 type EmailContext = {

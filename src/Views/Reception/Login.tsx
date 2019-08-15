@@ -10,6 +10,8 @@ import { LoginContext } from "../../Context/Context";
 
 import { Masks, RegularExpressions } from "../../constants";
 import NavAnchor from "../../Components/_Grommet/Text/NavAnchor ";
+import theme from "../../theme";
+
 
 const LoginPage = ({ history }: { history: History }) => {
     const [loading, setLoading] = useState(false);

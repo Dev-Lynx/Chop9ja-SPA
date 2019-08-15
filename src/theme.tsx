@@ -1,6 +1,8 @@
 import React from "react";
+import { grommet } from "grommet/themes";
+import { deepMerge } from "grommet/utils";
 
-const theme = {
+const theme = deepMerge(grommet, {
 	accordion: {
 		border: undefined,
 		icons: {
@@ -30,9 +32,14 @@ const theme = {
 		},
 	},
 	formField: {
-		extend: () => `
-			font-size: 14px;
-		`,
+				// extend: () => `
+		// 	border: none;
+		// 	border-bottom: 1.5px solid #CCCCCC;
+		// 	font-size: 14px;
+		// 	&:focus {
+		// 		border-bottom-color: #9060EB !important;
+		// 	}
+		// `,
 		label: {
 			margin: {
 				vertical: "small",
@@ -76,11 +83,14 @@ const theme = {
 		body: {
 			align: "center",
 			border: undefined,
-			pad: { vertical: "medium" },
+			pad: { vertical: "small" },
+			row: {
+				color: "red",
+			}
 		},
-		extend: () => `
-			font-size: 14px !important;
-		`,
+		extend: {
+			fontSize: "14px !important",
+		},
 		footer: {
 			align: "start",
 			border: undefined,
@@ -106,13 +116,23 @@ const theme = {
 	textInput: {
 		extend: () => `
 			border: none;
-			border-bottom: 1px solid rgba(0,0,0,0.33);
+			border-bottom: 1.5px solid #CCCCCC !important;
 			font-size: 14px;
 			&:focus {
 				border-bottom-color: #9060EB !important;
 			}
 		`,
 	},
-};
+	maskedInput: {
+		extend: () => `
+			border: none;
+			border-bottom: 1.5px solid #CCCCCC !important;
+			font-size: 14px;
+			&:focus {
+				border-bottom-color: #9060EB !important;
+			}
+		`,
+	},
+});
 
 export default theme;

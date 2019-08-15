@@ -6,6 +6,7 @@ import { History } from "history";
 import React, { useState, useContext } from "react";
 import ProgressBar from "../../Components/ProgressBar/ProgressBar";
 import NavBar from "../../Components/NavBar/NavBar";
+import theme from "../../theme";
 
 import { Masks, RegularExpressions } from "../../constants";
 import NavAnchor from "../../Components/_Grommet/Text/NavAnchor ";
@@ -87,7 +88,7 @@ const Login = ({ history }: { history: History }) => {
 				onClose={() => setSnackbar((s) => ({ ...s, show: false }))}
 			/>
 
-			<Grommet theme={grommet}>
+			<Grommet theme={theme}>
 				<ProgressBar show={loading} />
 
 				<NavBar

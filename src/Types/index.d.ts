@@ -113,6 +113,7 @@ export interface IBank {
 	name: string;
 };
 
+
 export interface IUserBank {
 	accountName: string;
 	accountNumber: string;
@@ -167,10 +168,30 @@ export interface ITransaction {
 //#region Admin Types
 // TO-DO Move to admin page
 
+
+export interface IUserAccount {
+	balance: number;
+	bankAccounts: IUserBank[];
+	username: string;
+    firstName: string;
+    lastName: string;
+    initials: string;
+    dateOfBirth: Date;
+    gender: string;
+    stateOfOrigin: string;
+    phoneNumber: string;
+    phoneNumberConfirmed: boolean;
+    email: string;
+    emailConfirmed: boolean;
+    lockoutEnabled: boolean;
+}
+
 export interface IBackOfficeClaims {
+	createdOn: Date;
 	id: string;
 	userId: string;
 	platformId: number;
+	platform?: IBetPlatform;
 	date: Date;
 	cashedOutOn: Date;
 	odds: number;

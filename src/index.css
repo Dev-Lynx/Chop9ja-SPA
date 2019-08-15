@@ -71,3 +71,19 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 		monospace;
 }
+
+/*#region Table Styles*/
+
+/* Define the hover highlight color for the table row */
+
+.hoverTable tr:hover {
+	background: #cccccc radial-gradient(circle, transparent 1%, #dddddd 1%) center/15000%;
+	cursor: pointer;
+  }
+
+  .hoverTable tr:active {
+	background-color: #dddddd;
+	background-size: 10%;
+	transition: background 0s;
+  }
+/*#endregion*/
